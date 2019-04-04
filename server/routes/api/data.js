@@ -1,0 +1,25 @@
+const express = require('express');
+// const mongodb = require('mongodb');
+
+const router = express.Router();
+
+// Список персонажей
+const personages = require('./personages');
+// Валюты
+const goods = require('./goods');
+
+
+const data = {
+	goods,
+	personages
+};
+
+// Get Data
+router.get('/', (req, res) => {
+	res.send(data);
+});
+
+
+
+
+module.exports = router;
