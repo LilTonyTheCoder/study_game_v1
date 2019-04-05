@@ -4,7 +4,7 @@
         
         <div class="left-bar__item">
           <div class="left-bar__img">
-            <img src="../../assets/img/fist.png" alt="">
+            <img src="~img/fist.png" alt="">
           </div>
           <div class="left-bar__text">
             1:51:34
@@ -13,7 +13,7 @@
 
         <div class="left-bar__item">
           <div class="left-bar__img">
-            <img src="../../assets/img/dragon.png" alt="">
+            <img src="~img/dragon.png" alt="">
           </div>
           <div class="left-bar__text">
             0 / 5
@@ -37,7 +37,7 @@ export default {
 $barWidth: 65px;
 .left-bar {
   position: absolute;
-  top: 20%;
+  top: 0;
   left: 0;
   height: 80%;
   width: $barWidth;

@@ -6,6 +6,7 @@
     <RightMenu />
 
     <MenuMainList v-if="currentMenuScreen === 'MenuMainList'" />
+    <MissionPopup v-if="currentMenuScreen === 'MissionPopup'" />
 
   </div>
 </template>
@@ -16,6 +17,7 @@ import Header from "./interface/Header.vue";
 import RightMenu from "./interface/RightMenu.vue"
 import LeftMenu from "./interface/LeftMenu.vue";
 import MenuMainList from "./interface/MenuMainList.vue";
+import MissionPopup from "./interface/MissionPopup.vue";
 
 export default {
   name: 'MainMenu',
@@ -23,12 +25,18 @@ export default {
     Header,
     RightMenu,
     LeftMenu,
-    MenuMainList
+    MenuMainList,
+    MissionPopup
   },
   data() {
     return {
-      currentMenuScreen: 'MenuMainList'
+      // currentMenuScreen: 'MenuMainList'
     }
+  },
+  computed: {
+    ...mapState({
+      currentMenuScreen: state => state.gameInfo.currentMenuScreen
+    })
   }
 }
 </script>

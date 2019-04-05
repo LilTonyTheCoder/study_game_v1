@@ -1,7 +1,7 @@
 <template>
     <div class="item">
         <div class="item__img">
-          <img src="../../assets/img/rupor.png" alt=""> 
+          <img v-if="iconSrc" :src="iconSrc" alt=""> 
         </div>
         <div class="item__text">{{name}}</div>
         <div v-if="notification" class="item__notification">{{notification}}</div>
@@ -26,7 +26,7 @@ export default {
     },
     computed: {
       iconSrc() {
-        return `../../assets/img/${this.icon}`; // TODO: не работает
+        return this.icon ? require(`img/${this.icon}`) : false;
       }
     }
 };

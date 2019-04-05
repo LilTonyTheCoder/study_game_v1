@@ -2,7 +2,7 @@
     <div class="right-bar">
       <div class="right-bar__wrapper">
         <MenuRightButton :name="`События`" :icon="`rupor.png`" :notification="10" />
-        <MenuRightButton :name="`Новости`" :icon="`rupor.png`" />
+        <MenuRightButton :name="`Новости`" />
         <MenuRightButton :name="`Магазин`" :icon="`rupor.png`" />
         <MenuRightButton :name="`Пригласить`" :icon="`rupor.png`" />
         <MenuRightButton :name="`Сообщения`" :icon="`rupor.png`" />

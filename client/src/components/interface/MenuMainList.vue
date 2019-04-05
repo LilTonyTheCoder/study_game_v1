@@ -19,7 +19,10 @@ export default {
       MenuSection
     },
     props: {},
-    computed: {}
+    computed: {
+      
+    },
+    methods: {}
 };
 </script>
 

@@ -2,7 +2,8 @@
     <div id="app" class="app">
         <div class="app__inner">
           <Loading :message="loadingMessage" v-if="isLoading" />
-          <MainMenu />
+          <MainMenu v-if="currentLocation === 'menu'" />
+          <Arena v-if="currentLocation === 'arena'" />
         </div>
     </div>
 </template>
@@ -12,6 +13,7 @@ import Loading from './components/Loading.vue';
 import DataService from './DataService';
 
 import MainMenu from './components/MainMenu.vue';
+import Arena from './components/Arena.vue';
 
 export default {
     name: 'app',
@@ -22,11 +24,13 @@ export default {
     },
     components: {
         Loading,
-        MainMenu
+        MainMenu,
+        Arena
     },
     computed: {
         ...mapState({
-            isLoading: state => state.gameInfo.isLoading
+            isLoading: state => state.gameInfo.isLoading,
+            currentLocation: state => state.gameInfo.currentLocation
         }),
         ...mapMutations('gameInfo', ['stopLoading'])
     },
@@ -34,6 +38,7 @@ export default {
       async loadServerData() {
         try {
           this.loadingMessage = await DataService.getData();
+          // console.dir(this.loadingMessage); TODO: записывать данные во vuex
           this.stopLoading();
         } catch(err) {
           this.loadingMessage = err.message;
