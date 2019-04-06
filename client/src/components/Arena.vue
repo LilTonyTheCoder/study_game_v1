@@ -11,7 +11,7 @@
 
     <div class="arena__field field">
       <div class="field__wrapper">
-        <FightPersonage v-for="personage in allPersonages" :personage="personage" />
+        <FightPersonage v-for="personage in allPersonages" :key="personage.id" @attack="test" :personage="personage" />
       </div>
     </div>
     
@@ -40,6 +40,8 @@ export default {
   data () {
     return {
       isSelectEnemy: false,
+      enemySelected: '',
+
       enemies: [{
         id: 'test1',
         lvl: 5,
@@ -113,11 +115,33 @@ export default {
         state: {
             animation: '',
         }
+      },
+      {
+        id: 'test4',
+        lvl: 5,
+        index: 1,
+        img: 'pers-test-min.png',
+
+        str: 200,
+        def: 20,
+        dex: 10,
+        crit: 10,
+
+        maxHP: 500,
+        hp: 500,
+        maxMana: 300,
+        mana: 300,
+        maxPower: 100,
+        power: 100,
+
+        type: 'team',
+
+        position: 'default',
+        state: {
+            animation: '',
+        }
       }]
     }
-  },
-  mounted() {
-    this.$on('attack', () => {this.isSelectEnemy = true}); // TODO: не слушается  
   },
   computed: {
     allPersonages() {
@@ -128,6 +152,10 @@ export default {
     }
   },
   methods: {
+    test(enemy) {
+      this.isSelectEnemy = true;
+      this.enemySelected = enemy;
+    },
     startFight() {
       let teamArray = this.allPersonages.filter((personage) => {
         return personage.type === 'team';
@@ -149,23 +177,61 @@ export default {
       return type;
     },
     teamMove(teamArray) {
+      // по очереди ходит вся команда
       if (teamArray.length>0) {
         this.teamMemberMove(teamArray);
+      } else {
+        console.log('Вся команда походила');
       }
     },
     teamMemberMove(team) {
       this.moveToCenter(team[0]);
-      // this.attackEnemy();
 
-      let timer = setInterval(function(){
-        console.log('waiting');
+      // Ждем, пока user нажмет на врага
+      let timer = setInterval(() => {
+        console.log('waiting for user touch');
         if (this.isSelectEnemy) {
+
+          // Сбрасываем данные о клике
+          this.isSelectEnemy = false;
           clearInterval(timer);
-          // ходит оставшаяся часть команды
-          let newArray = team.slice(1);
-          this.teamMove(newArray);
+
+          // Подойти текущим персонажем к выбранному врагу к врагу
+          let currentPersonage = this.allPersonages.find((personage) => {
+            return team[0].id === personage.id;
+          })
+          let currentEnemy = this.allPersonages.find((enemy) => {
+            return this.enemySelected === enemy.id;
+          })
+          currentPersonage.position = 'nearbyenemy';
+          currentPersonage.enemy = currentEnemy;
+          setTimeout(() => {
+
+            // Анимация Удара
+
+            // Отнять хп
+            currentEnemy.hp -= currentPersonage.str;
+
+            // Если враг умер - вырезаем его из массива
+            if (currentEnemy.hp <= 0) {
+              currentEnemy.hp = 0;
+              console.log('враг умер');
+              this.enemies.forEach((personage, index) => {
+                if (personage.hp < 1) {
+                  this.enemies.splice(index, 1);
+                }
+              })
+            }
+
+            // Вернуться на default позицию
+            currentPersonage.enemy = false; currentPersonage.position = 'default';
+
+            // ходит оставшаяся часть команды
+            let newArray = team.slice(1);
+            this.teamMove(newArray);
+          }, 1000);
         }
-      }, 500);
+      }, 500);  // TODO: поменять на меньшее число. 50, 100, например
     },
     moveToCenter(personage) {
       personage.position = 'center';

@@ -1,5 +1,5 @@
 <template>
-  <div class="personage" :class="generatePersClass(personage)" @click="target()">
+  <div class="personage" :class="generatePersClass(personage)" @click="target(personage.id)">
     <div class="personage__wrapper">
       <div class="personage__icon">
         <img :src="require(`img/${personage.img}`)" alt="">
@@ -35,12 +35,15 @@ export default {
 	},
 	methods: {
 		generatePersClass(personage) {
+      let type = personage.type === 'enemy' ? 'enemy' : 'personage';
+
       if (personage.position === 'center') return 'personage--center';
-		  let type = personage.type === 'enemy' ? 'enemy' : 'personage';
+      if (personage.position === 'nearbyenemy') return `${type}--nearbyenemy-${personage.index+1}-${personage.enemy.index+1}`;
+
 		  return `${type}--default-${personage.index+1}`;
 		},
-    target() {
-      this.$emit('attack');
+    target(id) {
+      this.$emit('attack', id);
     }
 	}
 }
@@ -138,15 +141,19 @@ export default {
     left: 17%;
     bottom: 0%;
   }
+  &--default-2 {
+    left: 4%;
+    bottom: 10%;
+  }
   &--center {
     left: 35%;
     bottom: 0;
   }
-  &--nearbyenemy-2-1 {
+  &--nearbyenemy-1-1 {
       left: 43%;
       bottom: 0;
   }
-  &--nearbyenemy-2-2 {
+  &--nearbyenemy-1-2 {
       left: 62%;
       bottom: 10%;
   }
