@@ -15,7 +15,7 @@
       </div>
     </div>
     
-    <div class="test-btn" @click="startFight()">начать бой</div>
+    <div class="test-btn" @click.once="startFight()">начать бой</div>
 	</div>
   <!-- https://www.youtube.com/watch?v=y7Cq-0rXnB0 тут пример боевки -->
 </template>
@@ -72,7 +72,7 @@ export default {
         index: 1,
         img: 'pers-enemy.png',
         
-        str: 20,
+        str: 300,
         def: 20,
         dex: 10,
         crit: 10,
@@ -156,13 +156,18 @@ export default {
       this.isSelectEnemy = true;
       this.enemySelected = enemy;
     },
-    startFight() {
-      let teamArray = this.allPersonages.filter((personage) => {
+    startFight(whosFirst) {
+      let userArray = this.allPersonages.filter((personage) => {
         return personage.type === 'team';
       });
+      let comuterArray = this.allPersonages.filter((personage) => {
+        return personage.type !== 'team';
+      });
 
-      let whosFirst = this.chooseWhosFirstMove();
-      whosFirst === 'team' ? this.teamMove(teamArray) : this.enemyMove();
+      if (!whosFirst) {
+        whosFirst = this.chooseWhosFirstMove();
+      }
+      whosFirst === 'team' ? this.userMove(userArray) : this.computerMove(comuterArray, userArray);
     },
     chooseWhosFirstMove() {
       let maxPower = 0;
@@ -176,17 +181,33 @@ export default {
       })
       return type;
     },
-    teamMove(teamArray) {
+    userMove(userArray) {
       // по очереди ходит вся команда
-      if (teamArray.length>0) {
-        this.teamMemberMove(teamArray);
+      if (userArray.length>0) {
+        this.teamMemberMove(userArray);
       } else {
         console.log('Вся команда походила');
+        this.startFight('enemy');
       }
     },
-    teamMemberMove(team) {
-      this.moveToCenter(team[0]);
+    computerMove(comuterArray, userArray) {
+      if (comuterArray.length > 0 ) {
+        this.teamMemberMove(comuterArray, userArray);
+      } else {
+        console.log('Все враги походили');
+        this.startFight('team');
+      }
+    },
+    teamMemberMove(team, otherTeam) {
+      let isComputerTurn = team[0].type === 'enemy' ? true : false;
 
+      // Выходит в центр
+      if (!isComputerTurn) {
+        this.moveToCenter(team[0]);
+      }
+      if (isComputerTurn) {
+        this.isSelectEnemy = true; // Не ждем хода человека
+      }
       // Ждем, пока user нажмет на врага
       let timer = setInterval(() => {
         console.log('waiting for user touch');
@@ -196,7 +217,13 @@ export default {
           this.isSelectEnemy = false;
           clearInterval(timer);
 
-          // Подойти текущим персонажем к выбранному врагу к врагу
+          // Выбор рандомного соперника, когда ходит противник
+          if (isComputerTurn) {
+            let opponentTeamLength = otherTeam.length;
+            this.enemySelected = otherTeam[opponentTeamLength-1].id; // TODO: исправить на рандомный. сейчас бьет последнего
+          }
+
+          // Подойти текущим персонажем к выбранному врагу
           let currentPersonage = this.allPersonages.find((personage) => {
             return team[0].id === personage.id;
           })
@@ -207,7 +234,7 @@ export default {
           currentPersonage.enemy = currentEnemy;
           setTimeout(() => {
 
-            // Анимация Удара
+            // TODO: Анимация Удара
 
             // Отнять хп
             currentEnemy.hp -= currentPersonage.str;
@@ -216,19 +243,32 @@ export default {
             if (currentEnemy.hp <= 0) {
               currentEnemy.hp = 0;
               console.log('враг умер');
-              this.enemies.forEach((personage, index) => {
-                if (personage.hp < 1) {
-                  this.enemies.splice(index, 1);
-                }
-              })
+              if (isComputerTurn) {
+                this.team.forEach((personage, index) => {
+                  if (personage.hp < 1) {
+                    this.team.splice(index, 1);
+                  }
+                });
+              } else {
+                this.enemies.forEach((personage, index) => {
+                  if (personage.hp < 1) {
+                    this.enemies.splice(index, 1);
+                  }
+                });
+              }
             }
 
             // Вернуться на default позицию
-            currentPersonage.enemy = false; currentPersonage.position = 'default';
+            currentPersonage.enemy = false;
+            currentPersonage.position = 'default';
 
             // ходит оставшаяся часть команды
             let newArray = team.slice(1);
-            this.teamMove(newArray);
+            if (!isComputerTurn) {
+              this.userMove(newArray);
+            } else {
+              this.computerMove(newArray, otherTeam);
+            }
           }, 1000);
         }
       }, 500);  // TODO: поменять на меньшее число. 50, 100, например

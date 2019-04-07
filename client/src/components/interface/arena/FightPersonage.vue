@@ -38,7 +38,7 @@ export default {
       let type = personage.type === 'enemy' ? 'enemy' : 'personage';
 
       if (personage.position === 'center') return 'personage--center';
-      if (personage.position === 'nearbyenemy') return `${type}--nearbyenemy-${personage.index+1}-${personage.enemy.index+1}`;
+      if (personage.position === 'nearbyenemy') return `${type}--nearbyenemy-${personage.enemy.index+1}`;
 
 		  return `${type}--default-${personage.index+1}`;
 		},
@@ -140,22 +140,26 @@ export default {
   &--default-1 {
     left: 17%;
     bottom: 0%;
+    z-index: 1;
   }
   &--default-2 {
     left: 4%;
     bottom: 10%;
+    z-index: 1;
   }
   &--center {
     left: 35%;
     bottom: 0;
   }
-  &--nearbyenemy-1-1 {
+  &--nearbyenemy-1 {
       left: 43%;
       bottom: 0;
+      z-index: 10;
   }
-  &--nearbyenemy-1-2 {
+  &--nearbyenemy-2 {
       left: 62%;
       bottom: 10%;
+      z-index: 10;
   }
   &.punch {
       animation-name: punch;
@@ -166,14 +170,22 @@ export default {
   &--default-1 {
       left: 57%;
       bottom: 0;
+      z-index: 1;
   }
   &--default-2 {
       left: 77%;
       bottom: 10%;
+      z-index: 1;
   }
-  &--nearbyplayer-1-1 {
+  &--nearbyenemy-1 {
       left: 32%;
       bottom: 0;
+      z-index: 10;
+  }
+  &--nearbyenemy-2 {
+      left: 18%;
+      bottom: 10%;
+      z-index: 10;
   }
   &.punch {
       animation-name: punchReverse;
