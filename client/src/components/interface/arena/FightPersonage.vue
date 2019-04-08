@@ -48,7 +48,7 @@ export default {
 	}
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 
 .personage {
   width: 150px;
@@ -195,5 +195,25 @@ export default {
 .death {
       opacity: 0;
       cursor: default;
+}
+
+@keyframes pulse {
+    0%  {transform: scaleY(1);}
+    50% {transform: scaleY(0.95);}
+    100% {transform: scaleY(1);}
+}
+@keyframes punch {
+    0%  {transform: rotate(0deg);}
+    50% {transform: rotate(10deg);}
+    100% {transform: rotate(0deg);}
+}
+@keyframes punchReverse {
+    0%  {transform: rotate(0deg);}
+    50% {transform: rotate(-10deg);}
+    100% {transform: rotate(0deg);}
+}
+@keyframes death {
+    0%  {opacity: 1;}
+    100% {opacity: 0;}
 }
 </style>

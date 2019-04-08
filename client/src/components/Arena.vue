@@ -6,7 +6,7 @@
     </div>
     
     <FightBottom />
-    <FightStatus />
+    <FightStatus v-if="isFightStatusVisible" :title="fightStatusTitle" />
     <FightMessage />
 
     <div class="arena__field field">
@@ -41,11 +41,13 @@ export default {
     return {
       isSelectEnemy: false,
       enemySelected: '',
+      fightStatusTitle: '',
+      isFightStatusVisible: false,
 
       enemies: [{
         id: 'test1',
         lvl: 5,
-        index: 0,
+        index: 0, // gen
         img: 'pers-enemy.png',
 
         str: 20,
@@ -53,19 +55,17 @@ export default {
         dex: 10,
         crit: 10,
 
-        maxHP: 500,
+        maxHP: 500, // gen
         hp: 500,
-        maxMana: 300,
+        maxMana: 300, // gen
         mana: 300,
-        maxPower: 100,
+        maxPower: 100,  // gen
         power: 90,
 
-        type: 'enemy',
+        type: 'enemy',  // gen
 
-        position: 'default',
-        state: {
-            animation: '',
-        },
+        position: 'default',  // gen
+        animation: '' // gen
       },{
         id: 'test2',
         lvl: 35,
@@ -87,9 +87,7 @@ export default {
         type: 'enemy',
 
         position: 'default',
-        state: {
-            animation: '',
-        },
+        animation: ''
       }],
       team: [{
         id: 'test3',
@@ -112,9 +110,7 @@ export default {
         type: 'team',
 
         position: 'default',
-        state: {
-            animation: '',
-        }
+        animation: ''
       },
       {
         id: 'test4',
@@ -137,10 +133,22 @@ export default {
         type: 'team',
 
         position: 'default',
-        state: {
-            animation: '',
-        }
+        animation: ''
       }]
+    }
+  },
+  created() {
+    if (false) {  // TODO: хз куда пихать и как
+        this.enemies = JSON.parse(JSON.stringify(this.getArenaInfo.enemies));
+        this.enemies.forEach((personage, index) => {
+        personage.index = index;
+        personage.type = 'enemy';
+        personage.position = 'default';
+        personage.maxHP = personage.hp;
+        personage.maxPower = personage.power;
+        personage.maxMana = personage.mana;
+        personage.img = personage.avatar;
+      });
     }
   },
   computed: {
@@ -149,7 +157,8 @@ export default {
       array.push(...this.team);
       array.push(...this.enemies);
       return array;
-    }
+    },
+    ...mapGetters('gameInfo', ['getArenaInfo'])
   },
   methods: {
     test(enemy) {
@@ -160,14 +169,15 @@ export default {
       let userArray = this.allPersonages.filter((personage) => {
         return personage.type === 'team';
       });
-      let comuterArray = this.allPersonages.filter((personage) => {
+      let computerArray = this.allPersonages.filter((personage) => {
         return personage.type !== 'team';
       });
 
+      // Вначале игры определяем, кто ходит первым
       if (!whosFirst) {
         whosFirst = this.chooseWhosFirstMove();
       }
-      whosFirst === 'team' ? this.userMove(userArray) : this.computerMove(comuterArray, userArray);
+      whosFirst === 'team' ? this.userMove(userArray, computerArray) : this.computerMove(computerArray, userArray);
     },
     chooseWhosFirstMove() {
       let maxPower = 0;
@@ -181,18 +191,18 @@ export default {
       })
       return type;
     },
-    userMove(userArray) {
+    userMove(userArray, computerArray) {
       // по очереди ходит вся команда
       if (userArray.length>0) {
-        this.teamMemberMove(userArray);
+        this.teamMemberMove(userArray, computerArray);
       } else {
         console.log('Вся команда походила');
         this.startFight('enemy');
       }
     },
-    computerMove(comuterArray, userArray) {
-      if (comuterArray.length > 0 ) {
-        this.teamMemberMove(comuterArray, userArray);
+    computerMove(computerArray, userArray) {
+      if (computerArray.length > 0 ) {
+        this.teamMemberMove(computerArray, userArray);
       } else {
         console.log('Все враги походили');
         this.startFight('team');
@@ -220,7 +230,8 @@ export default {
           // Выбор рандомного соперника, когда ходит противник
           if (isComputerTurn) {
             let opponentTeamLength = otherTeam.length;
-            this.enemySelected = otherTeam[opponentTeamLength-1].id; // TODO: исправить на рандомный. сейчас бьет последнего
+            let randomOpponent = Math.floor(Math.random() * opponentTeamLength);
+            this.enemySelected = otherTeam[randomOpponent].id;
           }
 
           // Подойти текущим персонажем к выбранному врагу
@@ -243,18 +254,18 @@ export default {
             if (currentEnemy.hp <= 0) {
               currentEnemy.hp = 0;
               console.log('враг умер');
-              if (isComputerTurn) {
-                this.team.forEach((personage, index) => {
-                  if (personage.hp < 1) {
-                    this.team.splice(index, 1);
-                  }
-                });
-              } else {
-                this.enemies.forEach((personage, index) => {
-                  if (personage.hp < 1) {
-                    this.enemies.splice(index, 1);
-                  }
-                });
+              let opponentTeamArray = isComputerTurn ? this.team : this.enemies;
+
+              opponentTeamArray.forEach((personage, index) => {
+                if (personage.hp < 1) {
+                  opponentTeamArray.splice(index, 1);
+                }
+              });
+
+              if (opponentTeamArray.length === 0) {
+                let titleMessage =  team[0].type === 'team' ? 'Победа!' : "Поражение...";
+                this.fightStatusTitle = titleMessage;
+                this.isFightStatusVisible = true;
               }
             }
 
@@ -265,7 +276,7 @@ export default {
             // ходит оставшаяся часть команды
             let newArray = team.slice(1);
             if (!isComputerTurn) {
-              this.userMove(newArray);
+              this.userMove(newArray, otherTeam);
             } else {
               this.computerMove(newArray, otherTeam);
             }
@@ -281,7 +292,7 @@ export default {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .field {
   position: absolute;
   width: 100%;
@@ -322,23 +333,5 @@ export default {
 
     
   }
-@keyframes pulse {
-    0%  {transform: scaleY(1);}
-    50% {transform: scaleY(0.95);}
-    100% {transform: scaleY(1);}
-}
-@keyframes punch {
-    0%  {transform: rotate(0deg);}
-    50% {transform: rotate(10deg);}
-    100% {transform: rotate(0deg);}
-}
-@keyframes punchReverse {
-    0%  {transform: rotate(0deg);}
-    50% {transform: rotate(-10deg);}
-    100% {transform: rotate(0deg);}
-}
-@keyframes death {
-    0%  {opacity: 1;}
-    100% {opacity: 0;}
-}
+
 </style>

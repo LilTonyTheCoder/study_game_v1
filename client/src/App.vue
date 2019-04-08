@@ -38,12 +38,14 @@ export default {
       async loadServerData() {
         try {
           this.loadingMessage = await DataService.getData();
-          // console.dir(this.loadingMessage); TODO: записывать данные во vuex
+          console.dir(this.loadingMessage);  // TODO: записывать данные во vuex
+          this.loadData(this.loadingMessage);
           this.stopLoading();
         } catch(err) {
           this.loadingMessage = err.message;
         }
-      }
+      },
+      ...mapMutations('data', ['loadData'])
     },
     created() {
         setTimeout(()=>{this.loadServerData();}, 500) // загрузка данных

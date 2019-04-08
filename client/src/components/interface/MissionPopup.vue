@@ -76,56 +76,33 @@ export default {
   components: {},
   data () {
     return {
-      missions: [
-        {
-          name: 'Отъявленные отморозки',
-          xp: 7,
-          gold: 10,
-          energyCost: 5,
-          persentPass: 50,
-          enemies: [
-            {
-              name: 'Тревор',
-              lvl: 4,
-              str: 10,
-              def: 10,
-              hp: 200,
-              avatar: 'trevor.png'
-            },
-            {
-              name: 'Амазония',
-              lvl: 5,
-              str: 10,
-              def: 10,
-              hp: 200,
-              avatar: 'amazonia.png'
-            }
-          ]
-        }
-      ]
+      missions: []
     }
   },
-  computed: {},
+  mounted() {
+    this.missions = this.getMissions;
+  },
+  computed: {
+    ...mapGetters('data', ['getMissions'])
+  },
   methods: {
     startFight(missionData) {
-      console.dir(missionData);
-      this.changeLocation('arena');
-      
-      // Вычесть energy
-      // Передать данные enemies, gold, xp, persentPass на арену
+      // Вычесть energy TODO: доделать
 
-      // Поменять компонент на arena
+      // Передаем данные на арену
+      this.setArenaInfo(missionData);
+      this.changeLocation('arena');
     },
     goBackToMain() {
       this.changeMenuScreen('MenuMainList');
     },
-    ...mapMutations('gameInfo', ['changeMenuScreen', 'changeLocation'])
+    ...mapMutations('gameInfo', ['changeMenuScreen', 'changeLocation', 'setArenaInfo'])
   },
 }
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .mission-popup {
   position: absolute;
   left: 7%;

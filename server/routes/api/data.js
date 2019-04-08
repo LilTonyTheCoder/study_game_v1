@@ -7,11 +7,14 @@ const router = express.Router();
 const personages = require('./personages');
 // Валюты
 const goods = require('./goods');
+// Список миссий
+const missions = require('./missions');
 
 
 const data = {
 	goods,
-	personages
+	personages,
+	missions
 };
 
 // Get Data

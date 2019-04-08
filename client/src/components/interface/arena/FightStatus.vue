@@ -1,65 +1,93 @@
 <template>
-  <div class="fight-status-popup hide">
+  <div class="container">
     <div class="shadow"></div>
-      <div class="fight-status-popup__img">
-        <!-- <img src="" alt=""> -->
-      </div>
-      <div class="fight-status-popup__text">
-        В бой!
-      </div>
-      <div class="fight-status-popup__reward-table reward-table">
-        <div class="reward-table__reward str">
-          <div class="reward-table__title">
-            Награда
-          </div>
-          <div class="reward-table__content">
-            <div class="reward-table__item">
-              <div class="img">
-                <img src="~img/gold-bar.png" alt="gold">
+    <div class="status">
+        <div class="status__img">
+          <!-- <img src="" alt=""> -->
+        </div>
+        <div class="status__text">
+          {{title}}
+        </div>
+        <div class="status__reward-table reward-table">
+          <div class="reward-table__reward str">
+            <div class="reward-table__title">
+              Награда
+            </div>
+            <div class="reward-table__content">
+              <div class="reward-table__item">
+                <div class="img">
+                  <img src="~img/gold-bar.png" alt="gold">
+                </div>
+                <div class="num">20</div>
               </div>
-              <div class="num">20</div>
+            </div>
+          </div>
+          <div class="reward-table__bonus str">
+            <div class="reward-table__title">
+              Бонус
+            </div>
+            <div class="reward-table__content">
+              <div class="reward-table__item">
+                <div class="img">
+                  <img src="~img/gold-bar.png" alt="gold">
+                </div>
+                <div class="num">20</div>
+              </div>
+              <div class="reward-table__item">
+                <div class="img">
+                  <img src="~img/platina-bar.png" alt="platinum">
+                </div>
+                <div class="num">0</div>
+              </div>
+              <div class="reward-table__item">
+                <div class="img">
+                  <img src="~img/fist.png" alt="fists">
+                </div>
+                <div class="num">0</div>
+              </div>
+              <div class="reward-table__item">
+                <div class="img">
+                  <img src="~img/jar2.png" alt="blue sugar">
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="reward-table__bonus str">
-          <div class="reward-table__title">
-            Бонус
-          </div>
-          <div class="reward-table__content">
-            <div class="reward-table__item">
-              <div class="img">
-                <img src="~img/gold-bar.png" alt="gold">
-              </div>
-              <div class="num">20</div>
-            </div>
-            <div class="reward-table__item">
-              <div class="img">
-                <img src="~img/platina-bar.png" alt="platinum">
-              </div>
-              <div class="num">0</div>
-            </div>
-            <div class="reward-table__item">
-              <div class="img">
-                <img src="~img/fist.png" alt="fists">
-              </div>
-              <div class="num">0</div>
-            </div>
-            <div class="reward-table__item">
-              <div class="img">
-                <img src="~img/jar2.png" alt="blue sugar">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <div class="button" @click="goToMenu">Продолжить</div>
+      
     </div>
+  </div>
 </template>
 <script>
   export default {
     name: 'FightStatus',
+    props: {
+      title: {
+        type: String,
+        default: ''
+      }
+    },
+    methods: {
+      goToMenu() {
+        this.changeLocation('menu');
+      },
+      ...mapMutations('gameInfo', ['changeLocation'])
+    }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.button {
+  padding: 20px 30px;
+  background: #eee;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.container {
+  z-index: 99;
+  position: absolute;
+  width: 100%;
+  height: 96%;
+}
 .shadow {
     position: fixed;
     width: 100%;
@@ -68,7 +96,7 @@
     left: 0;
     background: rgba(0,0,0,.8);
 }
-.fight-status-popup {
+.status {
   position: absolute;
   width: 100%;
   height: 80%;
@@ -90,6 +118,7 @@
     border: 2px solid #fff;
     padding: 10px 20px;
     width: 70%;
+    margin-bottom: 20px;
     .str {
       display: flex;
       border-bottom: 1px solid #fff;
