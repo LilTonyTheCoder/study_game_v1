@@ -1,26 +1,26 @@
 <template>
     <div class="left-bar">
-      <div class="left-bar__wrapper">
-        
-        <div class="left-bar__item">
-          <div class="left-bar__img">
-            <img src="~img/fist.png" alt="">
-          </div>
-          <div class="left-bar__text">
-            1:51:34
-          </div>
-        </div>
+        <div class="left-bar__wrapper">
 
-        <div class="left-bar__item">
-          <div class="left-bar__img">
-            <img src="~img/dragon.png" alt="">
-          </div>
-          <div class="left-bar__text">
-            0 / 5
-          </div>
-        </div>
+            <div class="left-bar__item">
+                <div class="left-bar__img">
+                    <img src="~img/fist.png" alt="">
+                </div>
+                <div class="left-bar__text">
+                    1:51:34
+                </div>
+            </div>
 
-      </div>
+            <div class="left-bar__item">
+                <div class="left-bar__img">
+                    <img src="~img/dragon.png" alt="">
+                </div>
+                <div class="left-bar__text">
+                    0 / 5
+                </div>
+            </div>
+
+        </div>
     </div>
 </template>
 

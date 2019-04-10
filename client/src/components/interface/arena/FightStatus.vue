@@ -1,79 +1,79 @@
 <template>
-  <div class="container">
-    <div class="shadow"></div>
-    <div class="status">
-        <div class="status__img">
-          <!-- <img src="" alt=""> -->
+    <div class="container">
+        <div class="shadow"></div>
+        <div class="status">
+            <div class="status__img">
+                <!-- <img src="" alt=""> -->
+            </div>
+            <div class="status__text">
+                {{title}}
+            </div>
+            <div class="status__reward-table reward-table">
+                <div class="reward-table__reward str">
+                    <div class="reward-table__title">
+                        Награда
+                    </div>
+                    <div class="reward-table__content">
+                        <div class="reward-table__item">
+                            <div class="img">
+                                <img src="~img/gold-bar.png" alt="gold">
+                            </div>
+                            <div class="num">20</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reward-table__bonus str">
+                    <div class="reward-table__title">
+                        Бонус
+                    </div>
+                    <div class="reward-table__content">
+                        <div class="reward-table__item">
+                            <div class="img">
+                                <img src="~img/gold-bar.png" alt="gold">
+                            </div>
+                            <div class="num">20</div>
+                        </div>
+                        <div class="reward-table__item">
+                            <div class="img">
+                                <img src="~img/platina-bar.png" alt="platinum">
+                            </div>
+                            <div class="num">0</div>
+                        </div>
+                        <div class="reward-table__item">
+                            <div class="img">
+                                <img src="~img/fist.png" alt="fists">
+                            </div>
+                            <div class="num">0</div>
+                        </div>
+                        <div class="reward-table__item">
+                            <div class="img">
+                                <img src="~img/jar2.png" alt="blue sugar">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="button" @click="goToMenu">Продолжить</div>
+
         </div>
-        <div class="status__text">
-          {{title}}
-        </div>
-        <div class="status__reward-table reward-table">
-          <div class="reward-table__reward str">
-            <div class="reward-table__title">
-              Награда
-            </div>
-            <div class="reward-table__content">
-              <div class="reward-table__item">
-                <div class="img">
-                  <img src="~img/gold-bar.png" alt="gold">
-                </div>
-                <div class="num">20</div>
-              </div>
-            </div>
-          </div>
-          <div class="reward-table__bonus str">
-            <div class="reward-table__title">
-              Бонус
-            </div>
-            <div class="reward-table__content">
-              <div class="reward-table__item">
-                <div class="img">
-                  <img src="~img/gold-bar.png" alt="gold">
-                </div>
-                <div class="num">20</div>
-              </div>
-              <div class="reward-table__item">
-                <div class="img">
-                  <img src="~img/platina-bar.png" alt="platinum">
-                </div>
-                <div class="num">0</div>
-              </div>
-              <div class="reward-table__item">
-                <div class="img">
-                  <img src="~img/fist.png" alt="fists">
-                </div>
-                <div class="num">0</div>
-              </div>
-              <div class="reward-table__item">
-                <div class="img">
-                  <img src="~img/jar2.png" alt="blue sugar">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="button" @click="goToMenu">Продолжить</div>
-      
     </div>
-  </div>
 </template>
 <script>
-  export default {
+export default {
     name: 'FightStatus',
     props: {
-      title: {
-        type: String,
-        default: ''
-      }
+        title: {
+            type: String,
+            default: ''
+        }
     },
     methods: {
-      goToMenu() {
-        this.changeLocation('menu');
-      },
-      ...mapMutations('gameInfo', ['changeLocation'])
+        goToMenu() {
+            this.changeLocation('menu');
+        },
+        ...mapMutations('gameInfo', ['changeLocation'])
     }
-  }
+};
 </script>
 <style lang="scss" scoped>
 .button {

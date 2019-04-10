@@ -1,32 +1,32 @@
 <template>
-  <transition name="fade">
-  	<div class="loading">
-  	  <div class="loading__shadow">
-  	  	<div class="loading__circle"></div>
-  	  </div>
-  	  <div v-if="message" class="loading__message">{{message}}</div>
-  	</div>
-  </transition>
+    <transition name="fade">
+        <div class="loading">
+            <div class="loading__shadow">
+                <div class="loading__circle"></div>
+            </div>
+            <div v-if="message" class="loading__message">{{message}}</div>
+        </div>
+    </transition>
 </template>
 
 <script>
-	export default {
-		name: 'Loading',
-		props: {
-			message: {
-				type: String,
-				default: ""
-			}
-		},
-		data() {
-			return {}
-		},
-		computed: {
-			...mapState({
-				isLoading: state => state.gameInfo.isLoading
-			})
-		}
-	}
+export default {
+    name: 'Loading',
+    props: {
+        message: {
+            type: String,
+            default: ''
+        }
+    },
+    data() {
+        return {};
+    },
+    computed: {
+        ...mapState({
+            isLoading: state => state.gameInfo.isLoading
+        })
+    }
+};
 </script>
 <style scoped lang="scss">
 .loading {
@@ -81,5 +81,5 @@
 }
 .fade-enter, .fade-leave-to {
 	opacity: 0;
-} 
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div @click="changeScreen(name)" class="item" :class="{'item--disable' : disable}">
+    <div class="item" :class="{'item--disable' : disable}" @click="changeScreen(name)">
         {{name}}
     </div>
 </template>
@@ -19,10 +19,10 @@ export default {
     },
     computed: {},
     methods: {
-      ...mapMutations('gameInfo', ['changeMenuScreen']),
-      changeScreen(name) {
-        if (name === 'Миссии') {this.changeMenuScreen('MissionPopup')}
-      }
+        ...mapMutations('gameInfo', ['changeMenuScreen']),
+        changeScreen(name) {
+            if (name === 'Миссии') { this.changeMenuScreen('MissionPopup'); }
+        }
     }
 };
 </script>

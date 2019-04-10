@@ -15,7 +15,8 @@ const missions = [
 	      hp: 200,
 	      mana: 300,
 	      power: 100,
-	      avatar: 'pers-enemy.png'
+	      avatar: 'evil-trevor',
+	      position: 'default'
 	    },
 	    {
 	      name: 'Амазония',
@@ -23,10 +24,32 @@ const missions = [
 	      lvl: 10,
 	      str: 10,
 	      def: 10,
+	      hp: 200,
+	      mana: 300,
+	      power: 100,
+	      avatar: 'evil-trevor',
+	      position: 'default'
+	    }
+	  ]
+	},
+	{
+	  name: 'Неприятная встреча',
+	  xp: 10,
+	  gold: 10,
+	  energyCost: 5,
+	  persentPass: 0,
+	  enemies: [
+	    {
+	      name: 'Тревор',
+	      id: '9onei62zn',
+	      lvl: 20,
+	      str: 1000,
+	      def: 10,
 	      hp: 2000,
 	      mana: 300,
 	      power: 100,
-	      avatar: 'pers-enemy.png'
+	      avatar: 'evil-trevor',
+	      position: 'default'
 	    }
 	  ]
 	}

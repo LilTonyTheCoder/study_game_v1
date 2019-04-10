@@ -1,19 +1,27 @@
 const personages = [
 	{
 		name: 'Тревор',
+		id: 'sf99799aw',
 		lvl: 4,
 		str: 10,
 		def: 10,
 		hp: 200,
-		avatar: 'trevor.png'
+		mana: 300,
+		power: 100,
+		avatar: 'trevor',
+		position: 'default'
 	},
 	{
+		id: 'b1og6912x',
 		name: 'Майкл',
 		lvl: 3,
-		str: 10,
+		str: 1000,
 		def: 10,
 		hp: 300,
-		avatar: 'michael.png'
+		mana: 300,
+		power: 100,
+		avatar: 'trevor',
+		position: 'default'
 	}
 ];
 

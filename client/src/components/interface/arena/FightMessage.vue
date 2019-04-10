@@ -1,13 +1,13 @@
 <template>
-	<div class="arena__bottom-popup bottom-popup hide">
-      <p class="bottom-popup__title">Удар кинжалом</p>
-      <p class="bottom-popup__text">Одиночный удар. Урон 100!</p>
-	</div>
+    <div class="arena__bottom-popup bottom-popup hide">
+        <p class="bottom-popup__title">Удар кинжалом</p>
+        <p class="bottom-popup__text">Одиночный удар. Урон 100!</p>
+    </div>
 </template>
 <script>
 export default {
-	name: 'FightMessage'
-}
+    name: 'FightMessage'
+};
 </script>
 <style lang="scss">
 	.bottom-popup {

@@ -1,296 +1,214 @@
 <template>
-	<div class="arena std-block">
-    <Header></Header>
-    <div class="arena__bg">
-      <img src="~img/locations/location1.jpeg" alt="">
-    </div>
-    
-    <FightBottom />
-    <FightStatus v-if="isFightStatusVisible" :title="fightStatusTitle" />
-    <FightMessage />
+    <div class="arena std-block">
+        <Header></Header>
+        <div class="arena__bg">
+            <img src="~img/locations/location1.jpeg" alt="">
+        </div>
 
-    <div class="arena__field field">
-      <div class="field__wrapper">
-        <FightPersonage v-for="personage in allPersonages" :key="personage.id" @attack="test" :personage="personage" />
-      </div>
+        <FightBottom />
+        <FightStatus v-if="isFightStatusVisible" :title="fightStatusTitle" />
+        <FightMessage />
+
+        <div class="arena__field field">
+            <div class="field__wrapper">
+                <FightPersonage
+                    v-for="personage in allPersonages"
+                    v-if="personage.id"
+                    :key="personage.id"
+                    :personage="personage"
+                    @attack="test"
+                />
+            </div>
+        </div>
+
+        <div class="test-btn" @click.once="startFight()">начать бой</div>
     </div>
-    
-    <div class="test-btn" @click.once="startFight()">начать бой</div>
-	</div>
-  <!-- https://www.youtube.com/watch?v=y7Cq-0rXnB0 тут пример боевки -->
+    <!-- https://www.youtube.com/watch?v=y7Cq-0rXnB0 тут пример боевки -->
 </template>
 
-
 <script>
-import Header from "./interface/Header";
-import FightStatus from "./interface/arena/FightStatus";
-import FightMessage from "./interface/arena/FightMessage";
-import FightBottom from "./interface/arena/FightBottom";
-import FightPersonage from "./interface/arena/FightPersonage"
+import Header from './interface/Header';
+import FightStatus from './interface/arena/FightStatus';
+import FightMessage from './interface/arena/FightMessage';
+import FightBottom from './interface/arena/FightBottom';
+import FightPersonage from './interface/arena/FightPersonage';
 
 export default {
-  name: 'Arena',
-  components: {
-    Header,
-    FightStatus,
-    FightMessage,
-    FightBottom,
-    FightPersonage
-  },
-  data () {
-    return {
-      isSelectEnemy: false,
-      enemySelected: '',
-      fightStatusTitle: '',
-      isFightStatusVisible: false,
-
-      enemies: [{
-        id: 'test1',
-        lvl: 5,
-        index: 0, // gen
-        img: 'pers-enemy.png',
-
-        str: 20,
-        def: 20,
-        dex: 10,
-        crit: 10,
-
-        maxHP: 500, // gen
-        hp: 500,
-        maxMana: 300, // gen
-        mana: 300,
-        maxPower: 100,  // gen
-        power: 90,
-
-        type: 'enemy',  // gen
-
-        position: 'default',  // gen
-        animation: '' // gen
-      },{
-        id: 'test2',
-        lvl: 35,
-        index: 1,
-        img: 'pers-enemy.png',
-        
-        str: 300,
-        def: 20,
-        dex: 10,
-        crit: 10,
-
-        maxHP: 500,
-        hp: 400,
-        maxMana: 300,
-        mana: 300,
-        maxPower: 100,
-        power: 100,
-
-        type: 'enemy',
-
-        position: 'default',
-        animation: ''
-      }],
-      team: [{
-        id: 'test3',
-        lvl: 5,
-        index: 0,
-        img: 'pers-test-min.png',
-
-        str: 200,
-        def: 20,
-        dex: 10,
-        crit: 10,
-
-        maxHP: 500,
-        hp: 500,
-        maxMana: 300,
-        mana: 300,
-        maxPower: 100,
-        power: 100,
-
-        type: 'team',
-
-        position: 'default',
-        animation: ''
-      },
-      {
-        id: 'test4',
-        lvl: 5,
-        index: 1,
-        img: 'pers-test-min.png',
-
-        str: 200,
-        def: 20,
-        dex: 10,
-        crit: 10,
-
-        maxHP: 500,
-        hp: 500,
-        maxMana: 300,
-        mana: 300,
-        maxPower: 100,
-        power: 100,
-
-        type: 'team',
-
-        position: 'default',
-        animation: ''
-      }]
-    }
-  },
-  created() {
-    if (false) {  // TODO: хз куда пихать и как
-        this.enemies = JSON.parse(JSON.stringify(this.getArenaInfo.enemies));
-        this.enemies.forEach((personage, index) => {
-        personage.index = index;
-        personage.type = 'enemy';
-        personage.position = 'default';
-        personage.maxHP = personage.hp;
-        personage.maxPower = personage.power;
-        personage.maxMana = personage.mana;
-        personage.img = personage.avatar;
-      });
-    }
-  },
-  computed: {
-    allPersonages() {
-      let array = [];
-      array.push(...this.team);
-      array.push(...this.enemies);
-      return array;
+    name: 'Arena',
+    components: {
+        Header,
+        FightStatus,
+        FightMessage,
+        FightBottom,
+        FightPersonage
     },
-    ...mapGetters('gameInfo', ['getArenaInfo'])
-  },
-  methods: {
-    test(enemy) {
-      this.isSelectEnemy = true;
-      this.enemySelected = enemy;
+    data() {
+        return {
+            isSelectEnemy: false,
+            enemySelected: '',
+            fightStatusTitle: '',
+            isFightStatusVisible: false,
+
+            enemies: [],
+            team: []
+        };
     },
-    startFight(whosFirst) {
-      let userArray = this.allPersonages.filter((personage) => {
-        return personage.type === 'team';
-      });
-      let computerArray = this.allPersonages.filter((personage) => {
-        return personage.type !== 'team';
-      });
-
-      // Вначале игры определяем, кто ходит первым
-      if (!whosFirst) {
-        whosFirst = this.chooseWhosFirstMove();
-      }
-      whosFirst === 'team' ? this.userMove(userArray, computerArray) : this.computerMove(computerArray, userArray);
+    mounted() {
+        // TODO: почему то свойством: 'default' не смог расширить. начались проблемы с рендерингом. Он стал некорректным.(генерация класса в бою)
+        this.enemies = this.personageGenerator(this.getArenaInfo.enemies, 'enemy');
+        this.team = this.personageGenerator(this.getPersonages, 'team');
     },
-    chooseWhosFirstMove() {
-      let maxPower = 0;
-      let type = '';
-
-      this.allPersonages.forEach((personage) => {
-        if (personage.str > maxPower) {
-          maxPower = personage.str;
-          type = personage.type;
-        }
-      })
-      return type;
+    computed: {
+        allPersonages() {
+            let array = [];
+            array.push(...this.team);
+            array.push(...this.enemies);
+            return array;
+        },
+        ...mapGetters('gameInfo', ['getArenaInfo']),
+        ...mapGetters('data', ['getPersonages'])
     },
-    userMove(userArray, computerArray) {
-      // по очереди ходит вся команда
-      if (userArray.length>0) {
-        this.teamMemberMove(userArray, computerArray);
-      } else {
-        console.log('Вся команда походила');
-        this.startFight('enemy');
-      }
-    },
-    computerMove(computerArray, userArray) {
-      if (computerArray.length > 0 ) {
-        this.teamMemberMove(computerArray, userArray);
-      } else {
-        console.log('Все враги походили');
-        this.startFight('team');
-      }
-    },
-    teamMemberMove(team, otherTeam) {
-      let isComputerTurn = team[0].type === 'enemy' ? true : false;
+    methods: {
+        personageGenerator(array, teamName) {
+            let arr = JSON.parse(JSON.stringify(array));
+            arr.forEach((personage, index) => {
+                personage.index = index;
+                personage.type = teamName;
+                personage.maxHP = personage.hp;
+                personage.maxPower = personage.power;
+                personage.maxMana = personage.mana;
+                personage.img = `personages/${personage.avatar}/ava1.png`;
+            });
 
-      // Выходит в центр
-      if (!isComputerTurn) {
-        this.moveToCenter(team[0]);
-      }
-      if (isComputerTurn) {
-        this.isSelectEnemy = true; // Не ждем хода человека
-      }
-      // Ждем, пока user нажмет на врага
-      let timer = setInterval(() => {
-        console.log('waiting for user touch');
-        if (this.isSelectEnemy) {
+            return arr;
+        },
+        test(enemy) {
+            this.isSelectEnemy = true;
+            this.enemySelected = enemy;
+        },
+        startFight(whosFirst) {
+            let userArray = this.allPersonages.filter(personage => {
+                return personage.type === 'team';
+            });
+            let computerArray = this.allPersonages.filter(personage => {
+                return personage.type !== 'team';
+            });
 
-          // Сбрасываем данные о клике
-          this.isSelectEnemy = false;
-          clearInterval(timer);
+            // Вначале игры определяем, кто ходит первым
+            if (!whosFirst) {
+                whosFirst = this.chooseWhosFirstMove();
+            }
+            whosFirst === 'team' ? this.userMove(userArray, computerArray) : this.computerMove(computerArray, userArray);
+        },
+        chooseWhosFirstMove() {
+            let maxPower = 0;
+            let type = '';
 
-          // Выбор рандомного соперника, когда ходит противник
-          if (isComputerTurn) {
-            let opponentTeamLength = otherTeam.length;
-            let randomOpponent = Math.floor(Math.random() * opponentTeamLength);
-            this.enemySelected = otherTeam[randomOpponent].id;
-          }
-
-          // Подойти текущим персонажем к выбранному врагу
-          let currentPersonage = this.allPersonages.find((personage) => {
-            return team[0].id === personage.id;
-          })
-          let currentEnemy = this.allPersonages.find((enemy) => {
-            return this.enemySelected === enemy.id;
-          })
-          currentPersonage.position = 'nearbyenemy';
-          currentPersonage.enemy = currentEnemy;
-          setTimeout(() => {
-
-            // TODO: Анимация Удара
-
-            // Отнять хп
-            currentEnemy.hp -= currentPersonage.str;
-
-            // Если враг умер - вырезаем его из массива
-            if (currentEnemy.hp <= 0) {
-              currentEnemy.hp = 0;
-              console.log('враг умер');
-              let opponentTeamArray = isComputerTurn ? this.team : this.enemies;
-
-              opponentTeamArray.forEach((personage, index) => {
-                if (personage.hp < 1) {
-                  opponentTeamArray.splice(index, 1);
+            this.allPersonages.forEach(personage => {
+                if (personage.str > maxPower) {
+                    maxPower = personage.str;
+                    type = personage.type;
                 }
-              });
-
-              if (opponentTeamArray.length === 0) {
-                let titleMessage =  team[0].type === 'team' ? 'Победа!' : "Поражение...";
-                this.fightStatusTitle = titleMessage;
-                this.isFightStatusVisible = true;
-              }
-            }
-
-            // Вернуться на default позицию
-            currentPersonage.enemy = false;
-            currentPersonage.position = 'default';
-
-            // ходит оставшаяся часть команды
-            let newArray = team.slice(1);
-            if (!isComputerTurn) {
-              this.userMove(newArray, otherTeam);
+            });
+            return type;
+        },
+        userMove(userArray, computerArray) {
+            // по очереди ходит вся команда
+            if (userArray.length > 0) {
+                this.teamMemberMove(userArray, computerArray);
             } else {
-              this.computerMove(newArray, otherTeam);
+                console.log('Вся команда походила');
+                this.startFight('enemy');
             }
-          }, 1000);
-        }
-      }, 500);  // TODO: поменять на меньшее число. 50, 100, например
-    },
-    moveToCenter(personage) {
-      personage.position = 'center';
-    }
-  },
-}
-</script>
+        },
+        computerMove(computerArray, userArray) {
+            if (computerArray.length > 0) {
+                this.teamMemberMove(computerArray, userArray);
+            } else {
+                console.log('Все враги походили');
+                this.startFight('team');
+            }
+        },
+        teamMemberMove(team, otherTeam) {
+            let isComputerTurn = team[0].type === 'enemy';
 
+            // Выходит в центр
+            if (!isComputerTurn) {
+                this.moveToCenter(team[0]);
+            }
+            if (isComputerTurn) {
+                this.isSelectEnemy = true; // Не ждем хода человека
+            }
+            // Ждем, пока user нажмет на врага
+            let timer = setInterval(() => {
+                console.log('waiting for user touch');
+                if (this.isSelectEnemy) {
+                    // Сбрасываем данные о клике
+                    this.isSelectEnemy = false;
+                    clearInterval(timer);
+
+                    // Выбор рандомного соперника, когда ходит противник
+                    if (isComputerTurn) {
+                        let opponentTeamLength = otherTeam.length;
+                        let randomOpponent = Math.floor(Math.random() * opponentTeamLength);
+                        this.enemySelected = otherTeam[randomOpponent].id;
+                    }
+
+                    // Подойти текущим персонажем к выбранному врагу
+                    let currentPersonage = this.allPersonages.find(personage => {
+                        return team[0].id === personage.id;
+                    });
+                    let currentEnemy = this.allPersonages.find(enemy => {
+                        return this.enemySelected === enemy.id;
+                    });
+                    currentPersonage.position = 'nearbyenemy';
+                    currentPersonage.enemy = currentEnemy;
+                    setTimeout(() => {
+                        // TODO: Анимация Удара
+
+                        // Отнять хп
+                        currentEnemy.hp -= currentPersonage.str;
+
+                        // Если враг умер - вырезаем его из массива
+                        if (currentEnemy.hp <= 0) {
+                            currentEnemy.hp = 0;
+                            console.log('враг умер');
+                            let opponentTeamArray = isComputerTurn ? this.team : this.enemies;
+
+                            opponentTeamArray.forEach((personage, index) => {
+                                if (personage.hp < 1) {
+                                    opponentTeamArray.splice(index, 1);
+                                }
+                            });
+
+                            if (opponentTeamArray.length === 0) {
+                                let titleMessage = team[0].type === 'team' ? 'Победа!' : 'Поражение...';
+                                this.fightStatusTitle = titleMessage;
+                                this.isFightStatusVisible = true;
+                            }
+                        }
+
+                        // Вернуться на default позицию
+                        currentPersonage.enemy = false;
+                        currentPersonage.position = 'default';
+
+                        // ходит оставшаяся часть команды
+                        let newArray = team.slice(1);
+                        if (!isComputerTurn) {
+                            this.userMove(newArray, otherTeam);
+                        } else {
+                            this.computerMove(newArray, otherTeam);
+                        }
+                    }, 1000);
+                }
+            }, 500); // TODO: поменять на меньшее число. 50, 100, например
+        },
+        moveToCenter(personage) {
+            personage.position = 'center';
+        }
+    }
+};
+</script>
 
 <style lang="scss" scoped>
 .field {
@@ -331,7 +249,6 @@ export default {
       }
     }
 
-    
   }
 
 </style>

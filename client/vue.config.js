@@ -5,7 +5,7 @@ const resolve = pathName => path.resolve(__dirname, pathName);
 
 module.exports = {
     configureWebpack: {
-        entry: resolve('src/main.js'), 
+        entry: resolve('src/main.js'),
     	plugins: [
         	new webpack.ProvidePlugin({
         		mapGetters: ['vuex', 'mapGetters'],
@@ -27,6 +27,6 @@ module.exports = {
                     target: 'http://localhost:5000'
                 }
             }
-        },
+        }
     }
 };

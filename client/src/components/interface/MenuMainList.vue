@@ -1,26 +1,26 @@
 <template>
     <div class="content">
-      <MenuSection :name="`Герои`" />
-      <MenuSection :name="`Миссии`" />
-      <MenuSection :name="`Задания`" :disable="true" />
-      <MenuSection :name="`PvP`" :disable="true" />
-      <MenuSection :name="`Подземелья`" :disable="true" />
-      <MenuSection :name="`Амуниция`" :disable="true" />
-      <MenuSection :name="`Игрок`" :disable="true" />
+        <MenuSection :name="`Герои`" />
+        <MenuSection :name="`Миссии`" />
+        <MenuSection :name="`Задания`" :disable="true" />
+        <MenuSection :name="`PvP`" :disable="true" />
+        <MenuSection :name="`Подземелья`" :disable="true" />
+        <MenuSection :name="`Амуниция`" :disable="true" />
+        <MenuSection :name="`Игрок`" :disable="true" />
     </div>
 </template>
 
 <script>
-import MenuSection from "../global/MenuSection.vue";
+import MenuSection from '../global/MenuSection.vue';
 
 export default {
     name: 'MenuMainList',
     components: {
-      MenuSection
+        MenuSection
     },
     props: {},
     computed: {
-      
+
     },
     methods: {}
 };

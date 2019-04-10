@@ -5,10 +5,11 @@ export default {
             isLoading: true,
             currentLocation: 'menu',
             currentMenuScreen: 'MenuMainList',
+            // Все данные для текущего боя
             currentArenaInfo: ''
         },
         mutations: {
-        	stopLoading (state) {
+        	stopLoading(state) {
         		state.isLoading = false;
         	},
             changeMenuScreen(state, payload) {
@@ -44,6 +45,9 @@ export default {
         getters: {
             getMissions: state => {
                 return state.missions;
+            },
+            getPersonages: state => {
+                return state.personages;
             }
         }
     }

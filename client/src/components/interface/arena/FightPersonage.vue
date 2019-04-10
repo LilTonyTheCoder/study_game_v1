@@ -1,52 +1,55 @@
 <template>
-  <div class="personage" :class="generatePersClass(personage)" @click="target(personage.id)">
-    <div class="personage__wrapper">
-      <div class="personage__icon">
-        <img :src="require(`img/${personage.img}`)" alt="">
-      </div>
-      <div class="personage__top-info">
-        <div class="personage__hp">
-          <div class="fill"
-                :style="`width: ${(personage.hp/personage.maxHP)*100}%;`"
-          ></div>
+    <div class="personage" :class="generatePersClass(personage)" @click="target(personage.id)">
+        <div class="personage__wrapper">
+            <div class="personage__icon">
+                <img :src="require(`img/${personage.img}`)" alt="">
+            </div>
+            <div class="personage__top-info">
+                <div class="personage__hp">
+                    <div
+                        class="fill"
+                        :style="`width: ${(personage.hp/personage.maxHP)*100}%;`"
+                    ></div>
+                </div>
+                <div class="personage__mana">
+                    <div
+                        class="fill"
+                        :style="`width: ${(personage.mana/personage.maxMana)*100}%;`"
+                    ></div>
+                </div>
+                <div class="personage__power">
+                    <div
+                        class="fill"
+                        :style="`width: ${(personage.power/personage.maxPower)*100}%;`"
+                    ></div>
+                </div>
+            </div>
+            <div class="personage__lvl">{{personage.lvl}}</div>
         </div>
-        <div class="personage__mana">
-          <div class="fill"
-                :style="`width: ${(personage.mana/personage.maxMana)*100}%;`"
-          ></div>
-        </div>
-        <div class="personage__power">
-          <div class="fill"
-                :style="`width: ${(personage.power/personage.maxPower)*100}%;`"
-          ></div>
-        </div>
-      </div>
-      <div class="personage__lvl">{{personage.lvl}}</div>
     </div>
-  </div>
 </template>
 <script>
 export default {
-	name: 'FightPersonage',
-	props: {
-		personage: {
-			type: Object
-		}
-	},
-	methods: {
-		generatePersClass(personage) {
-      let type = personage.type === 'enemy' ? 'enemy' : 'personage';
+    name: 'FightPersonage',
+    props: {
+        personage: {
+            type: Object
+        }
+    },
+    methods: {
+        generatePersClass(personage) {
+            let type = personage.type === 'enemy' ? 'enemy' : 'personage';
 
-      if (personage.position === 'center') return 'personage--center';
-      if (personage.position === 'nearbyenemy') return `${type}--nearbyenemy-${personage.enemy.index+1}`;
+            if (personage.position === 'center') return 'personage--center';
+            if (personage.position === 'nearbyenemy') return `${type}--nearbyenemy-${personage.enemy.index + 1}`;
 
-		  return `${type}--default-${personage.index+1}`;
-		},
-    target(id) {
-      this.$emit('attack', id);
+		  return `${type}--default-${personage.index + 1}`;
+        },
+        target(id) {
+            this.$emit('attack', id);
+        }
     }
-	}
-}
+};
 </script>
 <style lang="scss" scoped>
 

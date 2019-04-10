@@ -1,7 +1,7 @@
 <template>
     <div class="item">
         <div class="item__img">
-          <img v-if="iconSrc" :src="iconSrc" alt=""> 
+            <img v-if="iconSrc" :src="iconSrc" alt="">
         </div>
         <div class="item__text">{{name}}</div>
         <div v-if="notification" class="item__notification">{{notification}}</div>
@@ -17,17 +17,17 @@ export default {
             default: 'Раздел'
         },
         icon: {
-          type: String,
-          default: ''
+            type: String,
+            default: ''
         },
         notification: {
-          type: Number
+            type: Number
         }
     },
     computed: {
-      iconSrc() {
-        return this.icon ? require(`img/${this.icon}`) : false;
-      }
+        iconSrc() {
+            return this.icon ? require(`img/${this.icon}`) : false;
+        }
     }
 };
 </script>

@@ -1,41 +1,41 @@
 <template>
-	<div class="bottom-bar">
-      <div class="bottom-bar__wrapper">
-        <div class="bottom-bar__left">
-          <div class="bottom-bar__speed-btn btn">
-            <img src="~img/play.png" alt="">
-          </div>
-          <div class="bottom-bar__finish-btn btn">
-            <img src="~img/quick-play.png" alt="">
-          </div>
+    <div class="bottom-bar">
+        <div class="bottom-bar__wrapper">
+            <div class="bottom-bar__left">
+                <div class="bottom-bar__speed-btn btn">
+                    <img src="~img/play.png" alt="">
+                </div>
+                <div class="bottom-bar__finish-btn btn">
+                    <img src="~img/quick-play.png" alt="">
+                </div>
+            </div>
+            <div class="bottom-bar__right">
+                <div class="bottom-bar__actions actions">
+                    <div class="actions__item">
+                        <img src="~img/skill1.png" alt="">
+                        <div class="actions__num">0</div>
+                    </div>
+                    <div class="actions__item">
+                        <img src="~img/skill2.png" alt="">
+                    </div>
+                    <div class="actions__item disable">
+                        <img src="~img/skill3.png" alt="">
+                    </div>
+                    <div class="actions__item disable">
+                        <img src="~img/skill1.png" alt="">
+                    </div>
+                    <div class="actions__item disable">
+                        <img src="~img/skill2.png" alt="">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="bottom-bar__right">
-          <div class="bottom-bar__actions actions">
-            <div class="actions__item">
-              <img src="~img/skill1.png" alt="">
-              <div class="actions__num">0</div>
-            </div>
-            <div class="actions__item">
-              <img src="~img/skill2.png" alt="">
-            </div>
-            <div class="actions__item disable">
-              <img src="~img/skill3.png" alt="">
-            </div>
-            <div class="actions__item disable">
-              <img src="~img/skill1.png" alt="">
-            </div>
-            <div class="actions__item disable">
-              <img src="~img/skill2.png" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 </template>
 <script>
 export default {
-	name: "FightBottom"
-}
+    name: 'FightBottom'
+};
 </script>
 <style lang="scss">
 .bottom-bar {

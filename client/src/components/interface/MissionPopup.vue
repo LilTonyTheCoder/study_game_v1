@@ -1,12 +1,12 @@
 <template>
-	<transition name="slide">
-   <div>
-    <div class="mission-popup">
-      <div class="mission-popup__wrapper">
-        <div class="mission-popup__top">
-          <div class="mission-popup__name">1. Рождение героя</div>
-          <div class="mission-popup__back" @click="goBackToMain()">Назад</div>
-          <!-- <div class="mission-popup__second-block">
+    <transition name="slide">
+        <div>
+            <div class="mission-popup">
+                <div class="mission-popup__wrapper">
+                    <div class="mission-popup__top">
+                        <div class="mission-popup__name">1. Рождение героя</div>
+                        <div class="mission-popup__back" @click="goBackToMain()">Назад</div>
+                        <!-- <div class="mission-popup__second-block">
             <div class="mission-popup__level">
               Уровень 3
             </div>
@@ -20,87 +20,88 @@
               <div class="mission-popup__progress__fill"></div>
             </div>
           </div> -->
-          <!-- <div class="mission-popup__change-location">Сменить локацию</div> -->
-        </div>
-        <div class="mission-popup__content">
-          <div class="mission-popup__inside">
-            <div class="mission-popup__item" v-for="(mission, index) in missions">
-              <div class="mission-popup__item__info">
-                <div class="mission-popup__item__name">
-                  {{index+1}}. {{mission.name}}
-                </div>
-                <div class="mission-popup__item__progress">
-                  <div class="mission-popup__item__progress__name">
-                    {{mission.persentPass}}%
-                  </div>
-                  <div class="mission-popup__item__progress__fill"></div>
-                </div>
-                <div class="mission-popup__item__xp">
-                  <div class="img">
-                    <img src="../../assets/img/xp.png" alt="">
-                  </div>
-                  <div class="num">{{mission.xp}}</div>
-                </div>
-                <div class="mission-popup__item__gold">
-                  <div class="img"><img src="../../assets/img/gold-bar.png" alt=""></div>
-                  <div class="num">{{mission.gold}}</div>
-                </div>
-              </div>
-              <div class="mission-popup__item__monsters monsters">
-                  <div class="monsters__wrapper">
-                    <div class="monsters__one-monster"  v-for="(monster, ind) in mission.enemies">
-                      <img :src="require(`img/ava${ind+1}.png`)" alt=""> <!--  TODO: переделать картинки мин в отдельной папке должны быть с таким же назаванием -->
-                      <div class="monsters__lvl">{{monster.lvl}}</div>
+                        <!-- <div class="mission-popup__change-location">Сменить локацию</div> -->
                     </div>
-                  </div>
-              </div>
-              <div class="mission-popup__item__button button" @click="startFight(mission)">
-                <div class="button__img"><img src="../../assets/img/lightning-icon.png" alt=""></div>
-                <div class="button__num"><div class="button__innernum">{{mission.energyCost}}</div></div>
-                <div class="button__text">Битва</div>
-              </div>
+                    <div class="mission-popup__content">
+                        <div class="mission-popup__inside">
+                            <div v-for="(mission, index) in missions" class="mission-popup__item">
+                                <div class="mission-popup__item__info">
+                                    <div class="mission-popup__item__name">
+                                        {{index+1}}. {{mission.name}}
+                                    </div>
+                                    <div class="mission-popup__item__progress">
+                                        <div class="mission-popup__item__progress__name">
+                                            {{mission.persentPass}}%
+                                        </div>
+                                        <div
+                                            class="mission-popup__item__progress__fill"
+                                            :style="{width: mission.persentPass+'%'}"
+                                        ></div>
+                                    </div>
+                                    <div class="mission-popup__item__xp">
+                                        <div class="img">
+                                            <img src="../../assets/img/xp.png" alt="">
+                                        </div>
+                                        <div class="num">{{mission.xp}}</div>
+                                    </div>
+                                    <div class="mission-popup__item__gold">
+                                        <div class="img"><img src="../../assets/img/gold-bar.png" alt=""></div>
+                                        <div class="num">{{mission.gold}}</div>
+                                    </div>
+                                </div>
+                                <div class="mission-popup__item__monsters monsters">
+                                    <div class="monsters__wrapper">
+                                        <div v-for="(monster, ind) in mission.enemies"  class="monsters__one-monster">
+                                            <img :src="require(`img/personages/${monster.avatar}/icon.png`)" alt=""> <!--  TODO: переделать картинки мин в отдельной папке должны быть с таким же назаванием -->
+                                            <div class="monsters__lvl">{{monster.lvl}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mission-popup__item__button button" @click="startFight(mission)">
+                                    <div class="button__img"><img src="../../assets/img/lightning-icon.png" alt=""></div>
+                                    <div class="button__num"><div class="button__innernum">{{mission.energyCost}}</div></div>
+                                    <div class="button__text">Битва</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div> 
-  </transition>
+    </transition>
 </template>
-
 
 <script>
 
 export default {
-  name: '',
-  components: {},
-  data () {
-    return {
-      missions: []
+    name: '',
+    components: {},
+    data() {
+        return {
+            missions: []
+        };
+    },
+    mounted() {
+        this.missions = this.getMissions;
+    },
+    computed: {
+        ...mapGetters('data', ['getMissions'])
+    },
+    methods: {
+        startFight(missionData) {
+            // Вычесть energy TODO: доделать
+
+            // Передаем данные на арену
+            this.setArenaInfo(missionData);
+            this.changeLocation('arena');
+        },
+        goBackToMain() {
+            this.changeMenuScreen('MenuMainList');
+        },
+        ...mapMutations('gameInfo', ['changeMenuScreen', 'changeLocation', 'setArenaInfo'])
     }
-  },
-  mounted() {
-    this.missions = this.getMissions;
-  },
-  computed: {
-    ...mapGetters('data', ['getMissions'])
-  },
-  methods: {
-    startFight(missionData) {
-      // Вычесть energy TODO: доделать
-
-      // Передаем данные на арену
-      this.setArenaInfo(missionData);
-      this.changeLocation('arena');
-    },
-    goBackToMain() {
-      this.changeMenuScreen('MenuMainList');
-    },
-    ...mapMutations('gameInfo', ['changeMenuScreen', 'changeLocation', 'setArenaInfo'])
-  },
-}
+};
 </script>
-
 
 <style lang="scss" scoped>
 .mission-popup {

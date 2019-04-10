@@ -1,39 +1,39 @@
 <template>
-  <div class="main-menu__top">
-      <div class="main-menu__top__item main-menu__top__item__gold">
-        <div class="main-menu__top__item__count">0</div>
-      </div>
-      <div class="main-menu__top__item main-menu__top__item__platina">
-        <div class="main-menu__top__item__count">0</div>
-      </div>
-      <div class="main-menu__top__item main-menu__top__item__power">
-        <div class="main-menu__top__item__dots">
-          <div class="main-menu__top__item__one-dot --active"></div>
-          <div class="main-menu__top__item__one-dot --active"></div>
-          <div class="main-menu__top__item__one-dot --active"></div>
-          <div class="main-menu__top__item__one-dot --active"></div>
-          <div class="main-menu__top__item__one-dot --active"></div>
-          <div class="main-menu__top__item__one-dot --active"></div>
-          <div class="main-menu__top__item__one-dot --active"></div>
-          <div class="main-menu__top__item__one-dot --active"></div>
-          <div class="main-menu__top__item__one-dot"></div>
-          <div class="main-menu__top__item__one-dot"></div>
+    <div class="main-menu__top">
+        <div class="main-menu__top__item main-menu__top__item__gold">
+            <div class="main-menu__top__item__count">0</div>
         </div>
-        <div class="main-menu__top__item__count">MAX</div>
-      </div>
+        <div class="main-menu__top__item main-menu__top__item__platina">
+            <div class="main-menu__top__item__count">0</div>
+        </div>
+        <div class="main-menu__top__item main-menu__top__item__power">
+            <div class="main-menu__top__item__dots">
+                <div class="main-menu__top__item__one-dot --active"></div>
+                <div class="main-menu__top__item__one-dot --active"></div>
+                <div class="main-menu__top__item__one-dot --active"></div>
+                <div class="main-menu__top__item__one-dot --active"></div>
+                <div class="main-menu__top__item__one-dot --active"></div>
+                <div class="main-menu__top__item__one-dot --active"></div>
+                <div class="main-menu__top__item__one-dot --active"></div>
+                <div class="main-menu__top__item__one-dot --active"></div>
+                <div class="main-menu__top__item__one-dot"></div>
+                <div class="main-menu__top__item__one-dot"></div>
+            </div>
+            <div class="main-menu__top__item__count">MAX</div>
+        </div>
     </div>
 </template>
 
 <script>
 
 export default {
-  name: 'Header',
-  data () {
-    return {}
-  },
-  computed: {},
-  methods: {},
-}
+    name: 'Header',
+    data() {
+        return {};
+    },
+    computed: {},
+    methods: {}
+};
 </script>
 
 <style lang="scss">

@@ -1,9 +1,9 @@
 <template>
     <div id="app" class="app">
         <div class="app__inner">
-          <Loading :message="loadingMessage" v-if="isLoading" />
-          <MainMenu v-if="currentLocation === 'menu'" />
-          <Arena v-if="currentLocation === 'arena'" />
+            <Loading v-if="isLoading" :message="loadingMessage" />
+            <MainMenu v-if="currentLocation === 'menu'" />
+            <Arena v-if="currentLocation === 'arena'" />
         </div>
     </div>
 </template>
@@ -17,15 +17,15 @@ import Arena from './components/Arena.vue';
 
 export default {
     name: 'app',
-    data() {
-      return {
-        loadingMessage: ''
-      }
-    },
     components: {
         Loading,
         MainMenu,
         Arena
+    },
+    data() {
+        return {
+            loadingMessage: ''
+        };
     },
     computed: {
         ...mapState({
@@ -35,20 +35,20 @@ export default {
         ...mapMutations('gameInfo', ['stopLoading'])
     },
     methods: {
-      async loadServerData() {
-        try {
-          this.loadingMessage = await DataService.getData();
-          console.dir(this.loadingMessage);  // TODO: записывать данные во vuex
-          this.loadData(this.loadingMessage);
-          this.stopLoading();
-        } catch(err) {
-          this.loadingMessage = err.message;
-        }
-      },
-      ...mapMutations('data', ['loadData'])
+        async loadServerData() {
+            try {
+                this.loadingMessage = await DataService.getData();
+                console.dir(this.loadingMessage); // TODO: записывать данные во vuex
+                this.loadData(this.loadingMessage);
+                this.stopLoading();
+            } catch (err) {
+                this.loadingMessage = err.message;
+            }
+        },
+        ...mapMutations('data', ['loadData'])
     },
     created() {
-        setTimeout(()=>{this.loadServerData();}, 500) // загрузка данных
+        setTimeout(() => { this.loadServerData(); }, 500); // загрузка данных
     }
 };
 </script>
