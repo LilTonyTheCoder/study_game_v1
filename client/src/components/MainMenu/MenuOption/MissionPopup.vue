@@ -40,12 +40,12 @@
                                     </div>
                                     <div class="mission-popup__item__xp">
                                         <div class="img">
-                                            <img src="../../assets/img/xp.png" alt="">
+                                            <img src="~img/xp.png" alt="">
                                         </div>
                                         <div class="num">{{mission.xp}}</div>
                                     </div>
                                     <div class="mission-popup__item__gold">
-                                        <div class="img"><img src="../../assets/img/gold-bar.png" alt=""></div>
+                                        <div class="img"><img src="~img/gold-bar.png" alt=""></div>
                                         <div class="num">{{mission.gold}}</div>
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
                                     </div>
                                 </div>
                                 <div class="mission-popup__item__button button" @click="startFight(mission)">
-                                    <div class="button__img"><img src="../../assets/img/lightning-icon.png" alt=""></div>
+                                    <div class="button__img"><img src="~img/lightning-icon.png" alt=""></div>
                                     <div class="button__num"><div class="button__innernum">{{mission.energyCost}}</div></div>
                                     <div class="button__text">Битва</div>
                                 </div>

@@ -48,6 +48,9 @@ export default {
             },
             getPersonages: state => {
                 return state.personages;
+            },
+            getGoods: state => {
+                return state.goods;
             }
         }
     }

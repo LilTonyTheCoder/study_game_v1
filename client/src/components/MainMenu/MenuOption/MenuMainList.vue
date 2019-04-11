@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import MenuSection from '../global/MenuSection.vue';
+import MenuSection from '../interface/MenuSection.vue';
 
 export default {
     name: 'MenuMainList',

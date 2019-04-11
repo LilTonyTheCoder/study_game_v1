@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import MenuRightButton from '../global/MenuRightButton.vue';
+import MenuRightButton from './rightPanel/MenuRightButton.vue';
 
 export default {
     name: 'RightMenu',

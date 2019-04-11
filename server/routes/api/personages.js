@@ -13,14 +13,14 @@ const personages = [
 	},
 	{
 		id: 'b1og6912x',
-		name: 'Майкл',
+		name: 'Амазония',
 		lvl: 3,
 		str: 1000,
 		def: 10,
 		hp: 300,
 		mana: 300,
 		power: 100,
-		avatar: 'trevor',
+		avatar: 'amazonia',
 		position: 'default'
 	}
 ];

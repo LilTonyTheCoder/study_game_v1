@@ -27,11 +27,11 @@
 </template>
 
 <script>
-import Header from './interface/Header';
-import FightStatus from './interface/arena/FightStatus';
-import FightMessage from './interface/arena/FightMessage';
-import FightBottom from './interface/arena/FightBottom';
-import FightPersonage from './interface/arena/FightPersonage';
+import Header from './global/interface/Header';
+import FightStatus from './Arena/interface/FightStatus';
+import FightMessage from './Arena/interface/FightMessage';
+import FightBottom from './Arena/interface/FightBottom';
+import FightPersonage from './Arena/Personage/FightPersonage';
 
 export default {
     name: 'Arena',

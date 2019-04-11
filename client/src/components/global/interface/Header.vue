@@ -1,23 +1,15 @@
 <template>
     <div class="main-menu__top">
         <div class="main-menu__top__item main-menu__top__item__gold">
-            <div class="main-menu__top__item__count">0</div>
+            <div class="main-menu__top__item__count">{{getGoods.gold}}</div>
         </div>
         <div class="main-menu__top__item main-menu__top__item__platina">
-            <div class="main-menu__top__item__count">0</div>
+            <div class="main-menu__top__item__count">{{getGoods.platinum}}</div>
         </div>
         <div class="main-menu__top__item main-menu__top__item__power">
             <div class="main-menu__top__item__dots">
-                <div class="main-menu__top__item__one-dot --active"></div>
-                <div class="main-menu__top__item__one-dot --active"></div>
-                <div class="main-menu__top__item__one-dot --active"></div>
-                <div class="main-menu__top__item__one-dot --active"></div>
-                <div class="main-menu__top__item__one-dot --active"></div>
-                <div class="main-menu__top__item__one-dot --active"></div>
-                <div class="main-menu__top__item__one-dot --active"></div>
-                <div class="main-menu__top__item__one-dot --active"></div>
-                <div class="main-menu__top__item__one-dot"></div>
-                <div class="main-menu__top__item__one-dot"></div>
+                <!-- <div class="main-menu__top__item__one-dot --active"></div> -->
+                <div v-for="(power, index) in maxPower" :class="{'--active' : index<getGoods.power}" class="main-menu__top__item__one-dot"></div>
             </div>
             <div class="main-menu__top__item__count">MAX</div>
         </div>
@@ -29,9 +21,13 @@
 export default {
     name: 'Header',
     data() {
-        return {};
+        return {
+          maxPower: 10
+        };
     },
-    computed: {},
+    computed: {
+      ...mapGetters('data', ['getGoods'])
+    },
     methods: {}
 };
 </script>
@@ -97,7 +93,7 @@ export default {
         position: absolute;
         left: -10%;
         top: -30%;
-        // background: url(../assets/img/gold-bar.png) center center no-repeat;
+        background: url(~img/gold-bar.png) center center no-repeat;
         background-size: contain;
       }
       &__power {
@@ -108,13 +104,13 @@ export default {
         }
       }
       &__gold::after {
-        // background-image: url(../assets/img/gold-bar.png);
+        background-image: url(~img/gold-bar.png);
       }
       &__platina::after {
-        // background-image: url(../assets/img/platina-bar.png);
+        background-image: url(~img/platina-bar.png);
       }
       &__power::after {
-        // background-image: url(../assets/img/fist.png);
+        background-image: url(~img/fist.png);
       }
     }
   }
