@@ -9,46 +9,16 @@
                 {{title}}
             </div>
             <div class="status__reward-table reward-table">
-                <div class="reward-table__reward str">
+                <div class="reward-table__bonus str">
                     <div class="reward-table__title">
                         Награда
                     </div>
                     <div class="reward-table__content">
-                        <div class="reward-table__item">
-                            <div class="img">
-                                <img src="~img/gold-bar.png" alt="gold">
-                            </div>
-                            <div class="num">20</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="reward-table__bonus str">
-                    <div class="reward-table__title">
-                        Бонус
-                    </div>
-                    <div class="reward-table__content">
-                        <div class="reward-table__item">
-                            <div class="img">
-                                <img src="~img/gold-bar.png" alt="gold">
-                            </div>
-                            <div class="num">20</div>
-                        </div>
-                        <div class="reward-table__item">
-                            <div class="img">
-                                <img src="~img/platina-bar.png" alt="platinum">
-                            </div>
-                            <div class="num">0</div>
-                        </div>
-                        <div class="reward-table__item">
-                            <div class="img">
-                                <img src="~img/fist.png" alt="fists">
-                            </div>
-                            <div class="num">0</div>
-                        </div>
-                        <div class="reward-table__item">
-                            <div class="img">
-                                <img src="~img/jar2.png" alt="blue sugar">
-                            </div>
+                        <div class="reward-table__item" v-for="item in rewardItems">
+                          <div class="img">
+                              <img :src="require(`img/arena/${item.name}.png`)">
+                          </div>
+                          <div class="num">{{item.count}}</div>
                         </div>
                     </div>
                 </div>
@@ -65,11 +35,26 @@ export default {
         title: {
             type: String,
             default: ''
+        },
+        rewardItems: {
+            type: Array,
+            default: []
         }
+    },
+    data() {
+      return {}
     },
     methods: {
         goToMenu() {
-            this.changeLocation('menu');
+            this.addReward();
+            this.setMissionProgress(); // TODO: 
+            this.changeLocation('menu'); // TODO: 
+        },
+        addReward() {
+
+        },
+        setMissionProgress() {
+
         },
         ...mapMutations('gameInfo', ['changeLocation'])
     }
@@ -109,6 +94,7 @@ export default {
     font-size: 64px;
     color: #fff;
     text-shadow: #474747 3px 5px 2px, 0px 0px 2px rgba(28,110,164,0);
+    margin-bottom: 10px;
   }
   .reward-table {
     display: flex;
@@ -123,8 +109,10 @@ export default {
       display: flex;
       border-bottom: 1px solid #fff;
       margin-bottom: 15px;
-      &:nth-child(2) {
+      padding-bottom: 10px;
+      &:last-child {
         border-bottom: none;
+        margin-bottom: 0;
       }
     }
     &__title {

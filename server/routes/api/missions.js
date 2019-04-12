@@ -1,10 +1,22 @@
 const missions = [
 	{
 	  name: 'Отъявленные отморозки',
-	  xp: 7,
-	  gold: 10,
-	  energyCost: 5,
+	  energyCost: 1,
 	  persentPass: 50,
+	  reward: [
+	  	  {
+	  	  	name: 'gold',
+	  	  	count: 10
+	  	  },
+	  	  {
+	  	  	name: 'xp',
+	  	  	count: 7
+	  	  },
+	  	  {
+	  	  	name: 'platinum',
+	  	  	count: 0
+	  	  }	
+	  ],
 	  enemies: [
 	    {
 	      name: 'Тревор',
@@ -34,10 +46,18 @@ const missions = [
 	},
 	{
 	  name: 'Неприятная встреча',
-	  xp: 10,
-	  gold: 10,
-	  energyCost: 5,
+	  energyCost: 1,
 	  persentPass: 0,
+	  reward: [
+	  	  {
+	  	  	name: 'gold',
+	  	  	count: 10
+	  	  },
+	  	  {
+	  	  	name: 'xp',
+	  	  	count: 7
+	  	  }
+	  ],
 	  enemies: [
 	    {
 	      name: 'Тревор',

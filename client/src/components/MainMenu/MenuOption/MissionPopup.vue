@@ -38,15 +38,13 @@
                                             :style="{width: mission.persentPass+'%'}"
                                         ></div>
                                     </div>
-                                    <div class="mission-popup__item__xp">
+                                    <div class="mission-popup__items">
+                                      <div class="mission-popup__item__part" v-for="reward in mission.reward">
                                         <div class="img">
-                                            <img src="~img/xp.png" alt="">
+                                            <img :src="require(`img/arena/${reward.name}.png`)" alt="">
                                         </div>
-                                        <div class="num">{{mission.xp}}</div>
-                                    </div>
-                                    <div class="mission-popup__item__gold">
-                                        <div class="img"><img src="~img/gold-bar.png" alt=""></div>
-                                        <div class="num">{{mission.gold}}</div>
+                                        <div class="num">{{reward.count}}</div>
+                                      </div>
                                     </div>
                                 </div>
                                 <div class="mission-popup__item__monsters monsters">
@@ -215,6 +213,11 @@ export default {
     box-sizing: border-box;
     padding-top: 10px;
   }
+  &__items {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
   &__item {
     width: 100%;
     height: 100px;
@@ -223,6 +226,7 @@ export default {
     margin-bottom: 10px;
     display: flex;
     color: #fff;
+
     &__info {
       width: 40%;
       display: flex;
@@ -293,11 +297,10 @@ export default {
         z-index: 2;
       }
     }
-    &__xp {
+    &__part {
       display: flex;
       height: 32px;
       align-items: center;
-      width: 50%;
       .img {
         img {
           width: 30px;

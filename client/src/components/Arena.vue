@@ -6,7 +6,7 @@
         </div>
 
         <FightBottom />
-        <FightStatus v-if="isFightStatusVisible" :title="fightStatusTitle" />
+        <FightStatus v-if="isFightStatusVisible" :title="fightStatusTitle" :rewardItems="getArenaInfo.reward" />
         <FightMessage />
 
         <div class="arena__field field">
