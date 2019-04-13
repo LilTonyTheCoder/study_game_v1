@@ -40,6 +40,12 @@ export default {
                 state.goods = payload.goods;
                 state.missions = payload.missions;
                 state.personages = payload.personages;
+            },
+            addGoods(state, payload) {
+                state.goods[payload.name]+= payload.count;
+            },
+            changeMissionProgress(state, payload) {
+                state.missions.find(mission => mission.id === payload.id).persentPass = payload.progress;
             }
         },
         getters: {

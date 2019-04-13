@@ -1,8 +1,9 @@
 const missions = [
 	{
+	  id: 'yhaejmmrn',
 	  name: 'Отъявленные отморозки',
 	  energyCost: 1,
-	  persentPass: 50,
+	  persentPass: 0,
 	  reward: [
 	  	  {
 	  	  	name: 'gold',
@@ -14,22 +15,10 @@ const missions = [
 	  	  },
 	  	  {
 	  	  	name: 'platinum',
-	  	  	count: 0
+	  	  	count: 10
 	  	  }	
 	  ],
 	  enemies: [
-	    {
-	      name: 'Тревор',
-	      id: '9onei62zn',
-	      lvl: 4,
-	      str: 10,
-	      def: 10,
-	      hp: 200,
-	      mana: 300,
-	      power: 100,
-	      avatar: 'evil-trevor',
-	      position: 'default'
-	    },
 	    {
 	      name: 'Амазония',
 	      id: 'vn0s8admf',
@@ -45,6 +34,7 @@ const missions = [
 	  ]
 	},
 	{
+	  id: "x3fihmeym",
 	  name: 'Неприятная встреча',
 	  energyCost: 1,
 	  persentPass: 0,

@@ -8,7 +8,7 @@
             <div class="status__text">
                 {{title}}
             </div>
-            <div class="status__reward-table reward-table">
+            <div v-if="isWin" class="status__reward-table reward-table">
                 <div class="reward-table__bonus str">
                     <div class="reward-table__title">
                         Награда
@@ -24,7 +24,6 @@
                 </div>
             </div>
             <div class="button" @click="goToMenu">Продолжить</div>
-
         </div>
     </div>
 </template>
@@ -44,19 +43,40 @@ export default {
     data() {
       return {}
     },
+    computed: {
+        isWin() {
+            return this.title === 'Победа!' ? true : false;
+        },
+        ...mapGetters('gameInfo', ['getArenaInfo']),
+        ...mapGetters('data', ['getMissions'])
+    },
     methods: {
         goToMenu() {
-            this.addReward();
-            this.setMissionProgress(); // TODO: 
-            this.changeLocation('menu'); // TODO: 
+            if (this.isWin) {
+                this.addReward();
+            }
+            this.setMissionProgress();
+            this.changeLocation('menu');
         },
         addReward() {
-
+          this.rewardItems.forEach(item => {
+            if (item.name ==='xp') return;  // TODO: засчитывать опыт всем персонажам юзера
+              this.addGoods({
+                  name: item.name,
+                  count: item.count
+              });
+          });
         },
         setMissionProgress() {
-
+            if (this.isWin) {   // TODO: считать прогресс и при поражении по количеству выживших противников, но не перезаписывать, если уже была победа
+                this.changeMissionProgress({
+                    id : this.getArenaInfo.id,
+                    progress: 100
+                })
+            }
         },
-        ...mapMutations('gameInfo', ['changeLocation'])
+        ...mapMutations('gameInfo', ['changeLocation']),
+        ...mapMutations('data', ['addGoods', 'changeMissionProgress'])
     }
 };
 </script>

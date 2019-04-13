@@ -48,7 +48,7 @@ export default {
         ...mapMutations('data', ['loadData'])
     },
     created() {
-        setTimeout(() => { this.loadServerData(); }, 500); // загрузка данных
+        setTimeout(() => { this.loadServerData(); }, 10); // загрузка данных
     }
 };
 </script>
