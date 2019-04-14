@@ -7,6 +7,8 @@
 
         <MenuMainList v-if="currentMenuScreen === 'MenuMainList'" />
         <MissionPopup v-if="currentMenuScreen === 'MissionPopup'" />
+        <Heroes v-if="currentMenuScreen === 'Heroes'" />
+
 
     </div>
 </template>
@@ -18,6 +20,7 @@ import RightMenu from './MainMenu/interface/RightMenu.vue';
 import LeftMenu from './MainMenu/interface/LeftMenu.vue';
 import MenuMainList from './MainMenu/MenuOption/MenuMainList.vue';
 import MissionPopup from './MainMenu/MenuOption/MissionPopup.vue';
+import Heroes from './MainMenu/MenuOption/Heroes.vue'
 
 export default {
     name: 'MainMenu',
@@ -26,7 +29,8 @@ export default {
         RightMenu,
         LeftMenu,
         MenuMainList,
-        MissionPopup
+        MissionPopup,
+        Heroes
     },
     data() {
         return {

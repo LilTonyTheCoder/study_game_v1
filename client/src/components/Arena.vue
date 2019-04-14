@@ -44,6 +44,7 @@ export default {
     },
     data() {
         return {
+            fightTimer: '',
             isSelectEnemy: false,
             enemySelected: '',
             fightStatusTitle: '',
@@ -67,6 +68,9 @@ export default {
         },
         ...mapGetters('gameInfo', ['getArenaInfo']),
         ...mapGetters('data', ['getPersonages'])
+    },
+    beforeDestroy() {
+        clearInterval(this.fightTimer);
     },
     methods: {
         personageGenerator(array, teamName) {
@@ -140,12 +144,12 @@ export default {
                 this.isSelectEnemy = true; // Не ждем хода человека
             }
             // Ждем, пока user нажмет на врага
-            let timer = setInterval(() => {
+            this.fightTimer = setInterval(() => {
                 console.log('waiting for user touch');
                 if (this.isSelectEnemy) {
                     // Сбрасываем данные о клике
                     this.isSelectEnemy = false;
-                    clearInterval(timer);
+                    clearInterval(this.fightTimer);
 
                     // Выбор рандомного соперника, когда ходит противник
                     if (isComputerTurn) {
@@ -180,7 +184,7 @@ export default {
                                     opponentTeamArray.splice(index, 1);
                                 }
                             });
-
+                            // Конец боя
                             if (opponentTeamArray.length === 0) {
                                 let titleMessage = team[0].type === 'team' ? 'Победа!' : 'Поражение...';
                                 this.fightStatusTitle = titleMessage;

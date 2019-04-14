@@ -21,7 +21,8 @@ export default {
     methods: {
         ...mapMutations('gameInfo', ['changeMenuScreen']),
         changeScreen(name) {
-            if (name === 'Миссии') { this.changeMenuScreen('MissionPopup'); }
+            if (name === 'Миссии') { this.changeMenuScreen('MissionPopup'); };
+            if (name === 'Герои') { this.changeMenuScreen('Heroes'); };
         }
     }
 };
