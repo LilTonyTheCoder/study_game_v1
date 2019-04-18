@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { objectClone } from 'utils';
+
 import Header from './global/interface/Header';
 import FightStatus from './Arena/interface/FightStatus';
 import FightMessage from './Arena/interface/FightMessage';
@@ -50,14 +52,14 @@ export default {
             fightStatusTitle: '',
             isFightStatusVisible: false,
 
-            enemies: [],
-            team: []
+            enemies: this.personageGenerator('enemy'),
+            team: this.personageGenerator('team')
         };
     },
     mounted() {
         // TODO: почему то свойством: 'default' не смог расширить. начались проблемы с рендерингом. Он стал некорректным.(генерация класса в бою)
-        this.enemies = this.personageGenerator(this.getArenaInfo.enemies, 'enemy');
-        this.team = this.personageGenerator(this.getPersonages, 'team');
+        // this.enemies = this.personageGenerator(this.getArenaInfo.enemies, 'enemy');
+        // this.team = this.personageGenerator(this.getPersonages, 'team');
     },
     computed: {
         allPersonages() {
@@ -73,18 +75,26 @@ export default {
         clearInterval(this.fightTimer);
     },
     methods: {
-        personageGenerator(array, teamName) {
-            let arr = JSON.parse(JSON.stringify(array));
-            arr.forEach((personage, index) => {
+        getPersonagesByType(type) {
+            if (type === 'enemy') {
+                return this.$store.getters['gameInfo/getArenaInfo'].enemies;
+            } else {
+                return this.$store.getters['data/getPersonages'];
+            }
+        },
+        personageGenerator(type) {
+            const personages = this.getPersonagesByType(type);
+
+            return objectClone(personages).map((personage, index) => {
                 personage.index = index;
-                personage.type = teamName;
+                personage.type = type;
                 personage.maxHP = personage.hp;
                 personage.maxPower = personage.power;
                 personage.maxMana = personage.mana;
                 personage.img = `personages/${personage.avatar}/ava1.png`;
-            });
 
-            return arr;
+                return personage;
+            });
         },
         test(enemy) {
             this.isSelectEnemy = true;
