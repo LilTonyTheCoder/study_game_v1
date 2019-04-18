@@ -30,6 +30,33 @@ const personages = [
 		available: true
 	},
 	{
+		id: 'fasfasf',
+		name: 'Амазония',
+		lvl: 3,
+		str: 1000,
+		def: 10,
+		hp: 300,
+		mana: 300,
+		power: 100,
+		maxPower: 100,
+		xp: 277,
+		nextLvlXp: 380,
+		avatar: 'amazonia',
+		position: 'default',
+		cost: 800,
+		skills: [
+			{
+				name: 'skill1',
+				lvl: 2
+			},
+			{
+				name: 'skill2',
+				lvl: 6
+			}
+		],
+		available: true
+	},
+	{
 		id: 'b1og6912x',
 		name: 'Амазония',
 		lvl: 3,

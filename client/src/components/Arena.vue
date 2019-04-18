@@ -57,7 +57,11 @@ export default {
     mounted() {
         // TODO: почему то свойством: 'default' не смог расширить. начались проблемы с рендерингом. Он стал некорректным.(генерация класса в бою)
         this.enemies = this.personageGenerator(this.getArenaInfo.enemies, 'enemy');
-        this.team = this.personageGenerator(this.getPersonages, 'team');
+        // Фильтруем только тех, что выбрали
+        const userPersonages = this.getPersonages.filter(personage => {
+            if (this.activeTeam.includes(personage.id)) return personage;
+        });
+        this.team = this.personageGenerator(userPersonages, 'team');
     },
     computed: {
         allPersonages() {
@@ -67,7 +71,8 @@ export default {
             return array;
         },
         ...mapGetters('gameInfo', ['getArenaInfo']),
-        ...mapGetters('data', ['getPersonages'])
+        ...mapGetters('data', ['getPersonages']),
+        ...mapState('gameInfo', ['activeTeam'])
     },
     beforeDestroy() {
         clearInterval(this.fightTimer);

@@ -55,7 +55,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mission-popup__item__button button" @click="startFight(mission)">
+                                <div class="mission-popup__item__button button" @click="selectPersonages(mission)">
                                     <div class="button__img"><img src="~img/lightning-icon.png" alt=""></div>
                                     <div class="button__num"><div class="button__innernum">{{mission.energyCost}}</div></div>
                                     <div class="button__text">Битва</div>
@@ -65,17 +65,24 @@
                     </div>
                 </div>
             </div>
+            <HeroChoose :enemies="chooserEnemies" @closeChooser="closeChooser" @startFight="startFight" v-if="isChooseHeroes" />
         </div>
     </transition>
 </template>
 
 <script>
+import HeroChoose from '../interface/HeroChoose.vue';
 
 export default {
     name: '',
-    components: {},
+    components: {
+      HeroChoose
+    },
     data() {
         return {
+            isChooseHeroes: false,
+            chooserEnemies: [],
+            currentMission: {},
             missions: []
         };
     },
@@ -86,12 +93,23 @@ export default {
         ...mapGetters('data', ['getMissions'])
     },
     methods: {
-        startFight(missionData) {
+        selectPersonages(missionData) {
+            this.showHeroChooser();
+            this.chooserEnemies = missionData.enemies;
+            this.currentMission = missionData;
+        },
+        startFight() {
             // Вычесть energy TODO: доделать
 
             // Передаем данные на арену
-            this.setArenaInfo(missionData);
+            this.setArenaInfo(this.currentMission);
             this.changeLocation('arena');
+        },
+        showHeroChooser() {
+            this.isChooseHeroes = true;
+        },
+        closeChooser() {
+            this.isChooseHeroes = false;
         },
         goBackToMain() {
             this.changeMenuScreen('MenuMainList');

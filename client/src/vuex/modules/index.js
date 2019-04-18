@@ -6,7 +6,8 @@ export default {
             currentLocation: 'menu',
             currentMenuScreen: 'MenuMainList',
             // Все данные для текущего боя
-            currentArenaInfo: ''
+            currentArenaInfo: '',
+            activeTeam: [],
         },
         mutations: {
         	stopLoading(state) {
@@ -20,6 +21,12 @@ export default {
             },
             setArenaInfo(state, payload) {
                 state.currentArenaInfo = payload;
+            },
+            removeFromActiveTeam(state, payload) {
+                state.activeTeam = state.activeTeam.filter(persId => persId !== payload);
+            },
+            addToActiveTeam(state, payload) {
+                state.activeTeam.push(payload);
             }
         },
         getters: {
