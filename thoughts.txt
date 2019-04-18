@@ -1,28 +1,129 @@
 
 - Перекинуь старый компонент: Герои
 
-+ Рекомендую следующую структуру папок. Я добавил еще перспективных элементов, чтобы показать, как это может расти и развиваться
-src/components
-    - Arena
-        - interface
-            - FightBottom
-            - FightMessage
-            ...
-        - Personage
-            - StatusBar
-            - Personage
-        ...
-        - effects
-            - Explosion
-            - Blood
-            ...
-    - MainMenu
-        - interface
-            - Header
-            - LeftMenu
-            ...
-        - MenuOption
-
 - Запусти npm run lint. Поправит кучу ошибок тебе. Потом сам поправь остальные. Когда разгрузишь линтер,
 тебе будет проще писать код - он будет подсказывать, где у тебя ошибка (необъявленные переменные,
 ошибка в if и т. д.) еще до того, как ты запустил код. TODO: почему то у меня не ругается линтер( что я делаю не так?
+
+- Со структурой папок теперь все ок, единственное что, нужно поместить компонент Arena.vue в папку Arena (а то он сейчас немного оторван от того, где находится все его добро). Как тогда должна выглядеть папка:
+    - Arena
+        - interface
+            ...
+        - Personage
+            ...
+        Arena.vue { здесь компонент }
+        index.js {
+            // здесь такой код
+            export { default } from './Arena.vue';
+        }
+Таким образом, когда ты будешь делать import Arena from './Arena', то у тебя будет подтягиваться
+файл ./Arena/index.js, который будет редиректить запрос к ./Arena/Arena.vue. При этом все, что
+касается арены, в т. ч. сам компонент, будет находиться в папке Arena. А еще сократятся импорты,
+вместо:
+
+import RightMenu from './MainMenu/interface/RightMenu.vue';
+import LeftMenu from './MainMenu/interface/LeftMenu.vue';
+import MenuMainList from './MainMenu/MenuOption/MenuMainList.vue';
+import MissionPopup from './MainMenu/MenuOption/MissionPopup.vue';
+import Heroes from './MainMenu/MenuOption/Heroes.vue'
+
+будет:
+
+import RightMenu from './interface/RightMenu.vue';
+import LeftMenu from './interface/LeftMenu.vue';
+import MenuMainList from './MenuOption/MenuMainList.vue';
+import MissionPopup from './MenuOption/MissionPopup.vue';
+import Heroes from './MenuOption/Heroes.vue'
+
+Хотя тут я бы сделал так:
+
+- MainMenu
+    - interface
+        - RightMenu.vue
+        - LeftMenu.vue
+        - index.js {
+            export { default as RightMenu } from './RightMenu';
+            export { default as LeftMenu } from './LeftMenu';
+        }
+    - screens
+        - MainList.vue
+        - MissionPopup.vue
+        - Heroes.vue
+        - index.js {
+            export { default as MainList } from './MainList';
+            export { default as MissionPopup } from './MissionPopup';
+            export { default as Heroes } from './Heroes';
+        }
+    - index.js { export { default } from './MainMenu.vue'; }
+    - MainMenu.vue {
+        import * as interface from './interface';
+        import * as screens from './screens';
+
+        ...
+
+        components: {
+            ...interface,
+            ...screens
+        }
+    }
+
+Объединяя все это в папки, ты будешь четко представлять, что откуда берется и зачем там лежит.
+Будет здорово, если ты подумаешь, как избавиться от повторений строчек импорта и названий файлов
+вот в этом случае (это /src/App.vue):
+
+import MainMenu from './components/MainMenu.vue';
+import Arena from './components/Arena.vue';
+
+- Далее - вот эту тему:
+
+    <MenuMainList v-if="currentMenuScreen === 'MenuMainList'" />
+    <MissionPopup v-if="currentMenuScreen === 'MissionPopup'" />
+    <Heroes v-if="currentMenuScreen === 'Heroes'" />
+
+нужно заменить на:
+
+    <component :is="currentMenuScreen" />
+
+У тебя currentMenuScreen уже возвращает название компонента, так что грех не использовать эту
+возможность
+
+- linter у меня заработал, когда я начал сохранять файлы. То есть при запуске все было норм,
+но как только я сохранил Arena.vue - посыпались ошибки
+
+- code-review DataService
+    class DataService {
+        // Get Data
+        static getData() {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    const res = await axios.get(url);
+                    const { data } = res;
+                    resolve(data);
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+    }
+
+Можно переписать следующим образом:
+    class DataService {
+        // Get Data
+        static async getData() {
+            let response;
+            try {
+                response = await axios.get(url);
+            } catch (error) {
+                console.error(error);
+            }
+
+            return response.data;
+        }
+    }
+
+Асинхронные функции сами по себе возвращают Promise, так что здесь не обязательно его объявлять
+
+Также можно воспользоваться возможностью выставить базовый url для запросов вместо:
+    const url = '/api/data/';
+использовать:
+    https://github.com/axios/axios#creating-an-instance
