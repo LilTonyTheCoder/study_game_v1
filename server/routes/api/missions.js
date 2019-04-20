@@ -29,7 +29,6 @@ const missions = [
 	      mana: 300,
 	      power: 100,
 	      avatar: 'evil-trevor',
-	      position: 'default'
 	    }
 	  ]
 	},
@@ -59,7 +58,6 @@ const missions = [
 	      mana: 300,
 	      power: 100,
 	      avatar: 'evil-trevor',
-	      position: 'default'
 	    }
 	  ]
 	}

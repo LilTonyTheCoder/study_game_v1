@@ -7,7 +7,7 @@ export default {
             currentMenuScreen: 'MenuMainList',
             // Все данные для текущего боя
             currentArenaInfo: '',
-            activeTeam: [],
+            activeTeam: []
         },
         mutations: {
         	stopLoading(state) {
@@ -49,7 +49,7 @@ export default {
                 state.personages = payload.personages;
             },
             addGoods(state, payload) {
-                state.goods[payload.name]+= payload.count;
+                state.goods[payload.name] += payload.count;
             },
             changeMissionProgress(state, payload) {
                 state.missions.find(mission => mission.id === payload.id).persentPass = payload.progress;
@@ -57,7 +57,7 @@ export default {
             buyPersonage(state, payload) {
                 let personage = state.personages.find(personage => personage.id === payload);
                 personage.available = true;
-                state.goods.gold-= personage.cost;
+                state.goods.gold -= personage.cost;
             }
         },
         getters: {

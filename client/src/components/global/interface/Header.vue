@@ -22,11 +22,11 @@ export default {
     name: 'Header',
     data() {
         return {
-          maxPower: 10
+            maxPower: 10
         };
     },
     computed: {
-      ...mapGetters('data', ['getGoods'])
+        ...mapGetters('data', ['getGoods'])
     },
     methods: {}
 };

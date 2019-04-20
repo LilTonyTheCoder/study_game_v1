@@ -39,12 +39,12 @@
                                         ></div>
                                     </div>
                                     <div class="mission-popup__items">
-                                      <div class="mission-popup__item__part" v-for="reward in mission.reward">
-                                        <div class="img">
-                                            <img :src="require(`img/arena/${reward.name}.png`)" alt="">
+                                        <div v-for="reward in mission.reward" class="mission-popup__item__part">
+                                            <div class="img">
+                                                <img :src="require(`img/arena/${reward.name}.png`)" alt="">
+                                            </div>
+                                            <div class="num">{{reward.count}}</div>
                                         </div>
-                                        <div class="num">{{reward.count}}</div>
-                                      </div>
                                     </div>
                                 </div>
                                 <div class="mission-popup__item__monsters monsters">
@@ -65,7 +65,12 @@
                     </div>
                 </div>
             </div>
-            <HeroChoose :enemies="chooserEnemies" @closeChooser="closeChooser" @startFight="startFight" v-if="isChooseHeroes" />
+            <HeroChoose
+                v-if="isChooseHeroes"
+                :enemies="chooserEnemies"
+                @closeChooser="closeChooser"
+                @startFight="startFight"
+            />
         </div>
     </transition>
 </template>
@@ -76,7 +81,7 @@ import HeroChoose from '../interface/HeroChoose.vue';
 export default {
     name: '',
     components: {
-      HeroChoose
+        HeroChoose
     },
     data() {
         return {

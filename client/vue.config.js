@@ -18,7 +18,8 @@ module.exports = {
         resolve: {
             extensions: ['.js', '.vue'],
             alias: {
-                img: resolve('src/assets/img')
+                img: resolve('src/assets/img'),
+                utils: resolve('src/utils')
             }
         },
         devServer: {

@@ -1,111 +1,116 @@
 <template>
-	<div>
-		<div class="shadow" @click="closeChooser"></div>
-		<div class="choose">
-			<div class="choose__title">Выбор героев</div>
-			<div class="choose__container">
-				<div class="choose__my-team">
-					<div class="choose__img choose__img--can-delete" v-for="chosenId in activeTeam" @click="removePers(chosenId)">
-						<img :src="require(`img/personages/${chosenHeroAva(chosenId)}/icon.png`)"><div class="choose__lvl">{{chosenHeroLvl(chosenId)}}</div>
-					</div>
-					<div v-for="empty in emptyHeroes" class="choose__img"></div>
-				</div>
-				<div class="choose__vs">VS</div>
-				<div class="choose__enemy">
-					<div v-for="enemy in enemies" class="choose__img"><img :src="require(`img/personages/${enemy.avatar}/icon.png`)"><div class="choose__lvl">{{enemy.lvl}}</div></div>
-					<div v-for="num in emptyEnemies" class="choose__img"></div>
-				</div>
-			</div>
-			<div class="choose__title">Все мои персонажи</div>
-			<div class="choose__all-personages">
-				<div class="choose__inside">
+    <div>
+        <div class="shadow" @click="closeChooser"></div>
+        <div class="choose">
+            <div class="choose__title">Выбор героев</div>
+            <div class="choose__container">
+                <div class="choose__my-team">
+                    <div v-for="chosenId in activeTeam" class="choose__img choose__img--can-delete" @click="removePers(chosenId)">
+                        <img :src="require(`img/personages/${chosenHeroAva(chosenId)}/icon.png`)"><div class="choose__lvl">{{chosenHeroLvl(chosenId)}}</div>
+                    </div>
+                    <div v-for="empty in emptyHeroes" class="choose__img"></div>
+                </div>
+                <div class="choose__vs">VS</div>
+                <div class="choose__enemy">
+                    <div v-for="enemy in enemies" class="choose__img"><img :src="require(`img/personages/${enemy.avatar}/icon.png`)"><div class="choose__lvl">{{enemy.lvl}}</div></div>
+                    <div v-for="num in emptyEnemies" class="choose__img"></div>
+                </div>
+            </div>
+            <div class="choose__title">Все мои персонажи</div>
+            <div class="choose__all-personages">
+                <div class="choose__inside">
 
-					<div v-for="personage in getPersonages" @click="addPersonage(personage)" class="item" :class="{'item--can-add' : canAddPers(personage)}">
-						<div class="item__img">
-							<div v-if="!personage.available" class="item__img__lock">
-								<img src="~img/lock.png" alt="">
-							</div>
-							<img :src="require(`img/personages/${personage.avatar}/icon.png`)" alt="" >
-							<div class="item__lvl">{{personage.lvl}}</div>
-						</div>
-						<div v-if="personage.available" class="item__power">
-							<div class="item__power__text">{{personage.power}} / {{personage.maxPower}}</div>
-							<div class="item__power__fill" :style="{width: 100*personage.power/personage.maxPower+'%'}" ></div>
-						</div>
-					</div>
+                    <div
+                        v-for="personage in getPersonages"
+                        class="item"
+                        :class="{'item--can-add' : canAddPers(personage)}"
+                        @click="addPersonage(personage)"
+                    >
+                        <div class="item__img">
+                            <div v-if="!personage.available" class="item__img__lock">
+                                <img src="~img/lock.png" alt="">
+                            </div>
+                            <img :src="require(`img/personages/${personage.avatar}/icon.png`)" alt="" >
+                            <div class="item__lvl">{{personage.lvl}}</div>
+                        </div>
+                        <div v-if="personage.available" class="item__power">
+                            <div class="item__power__text">{{personage.power}} / {{personage.maxPower}}</div>
+                            <div class="item__power__fill" :style="{width: 100*personage.power/personage.maxPower+'%'}" ></div>
+                        </div>
+                    </div>
 
-				</div>
-			</div>
-			<div class="choose__buttons">
-				<div class="choose__button choose__start" @click="startFight">Играть</div>
-				<div class="choose__button choose__cancle" @click="closeChooser">Отмена</div>
-			</div>
-		</div>
-	</div>
+                </div>
+            </div>
+            <div class="choose__buttons">
+                <div class="choose__button choose__start" @click="startFight">Играть</div>
+                <div class="choose__button choose__cancle" @click="closeChooser">Отмена</div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 export default {
-	name: 'HeroChoose',
-	props: {
-		enemies: {
-			type: Array,
-			default: []
-		}
-	},
-	data() {
-		return {
-			maxChosen: 3,
-		}
-	},
-	computed: {
-		emptyEnemies() {
-			return this.enemies.length<=3 ? 3 - this.enemies.length : 0;
-		},
-		emptyHeroes() {
-			let {maxChosen, activeTeam} = this;
-			return activeTeam.length<=maxChosen ? maxChosen - activeTeam.length : 0;
-		},
-		...mapGetters('data', ['getPersonages']),
-		...mapState('gameInfo', ['activeTeam'])
-	},
-	methods: {
-		closeChooser() {
-			this.$emit('closeChooser');
-		},
-		addPersonage(personage) {
-			if (!personage.available || this.activeTeam.length >= this.maxChosen) return;
+    name: 'HeroChoose',
+    props: {
+        enemies: {
+            type: Array,
+            default: []
+        }
+    },
+    data() {
+        return {
+            maxChosen: 3
+        };
+    },
+    computed: {
+        emptyEnemies() {
+            return this.enemies.length <= 3 ? 3 - this.enemies.length : 0;
+        },
+        emptyHeroes() {
+            let { maxChosen, activeTeam } = this;
+            return activeTeam.length <= maxChosen ? maxChosen - activeTeam.length : 0;
+        },
+        ...mapGetters('data', ['getPersonages']),
+        ...mapState('gameInfo', ['activeTeam'])
+    },
+    methods: {
+        closeChooser() {
+            this.$emit('closeChooser');
+        },
+        addPersonage(personage) {
+            if (!personage.available || this.activeTeam.length >= this.maxChosen) return;
 
-			const isAlreadyHere = this.activeTeam.find(persId => personage.id === persId);
-			if (isAlreadyHere) return;
+            const isAlreadyHere = this.activeTeam.find(persId => personage.id === persId);
+            if (isAlreadyHere) return;
 
-			this.addToActiveTeam(personage.id);
-		},
-		chosenHeroAva(id) {
-			return this.getPersonages.find(personage => personage.id === id).avatar || '';
-		},
-		chosenHeroLvl(id) {
-			return this.getPersonages.find(personage => personage.id === id).lvl || '';
-		},
-		removePers(id) {
-			this.removeFromActiveTeam(id);
-		},
-		canAddPers(personage) {
-			if (!personage.available) return false;
-			const isAlreadyHere = this.activeTeam.find(persId => personage.id ===persId);
-			if (isAlreadyHere) return false;
-			return true;
-		},
-		startFight() {
-			if (this.activeTeam.length<1) {
-				alert('Выберете хоть кого то в бой');
-				return;
-			}
-			this.$emit('startFight');
-		},
-		...mapMutations('gameInfo', ['removeFromActiveTeam', 'addToActiveTeam'])
-	}
-}
+            this.addToActiveTeam(personage.id);
+        },
+        chosenHeroAva(id) {
+            return this.getPersonages.find(personage => personage.id === id).avatar || '';
+        },
+        chosenHeroLvl(id) {
+            return this.getPersonages.find(personage => personage.id === id).lvl || '';
+        },
+        removePers(id) {
+            this.removeFromActiveTeam(id);
+        },
+        canAddPers(personage) {
+            if (!personage.available) return false;
+            const isAlreadyHere = this.activeTeam.find(persId => personage.id === persId);
+            if (isAlreadyHere) return false;
+            return true;
+        },
+        startFight() {
+            if (this.activeTeam.length < 1) {
+                alert('Выберете хоть кого то в бой');
+                return;
+            }
+            this.$emit('startFight');
+        },
+        ...mapMutations('gameInfo', ['removeFromActiveTeam', 'addToActiveTeam'])
+    }
+};
 </script>
 
 <style scoped lang="scss">

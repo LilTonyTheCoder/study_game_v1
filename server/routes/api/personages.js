@@ -12,7 +12,6 @@ const personages = [
 		xp: 277,
 		nextLvlXp: 380,
 		avatar: 'trevor',
-		position: 'default',
 		skills: [
 			{
 				name: 'skill1',
@@ -42,7 +41,6 @@ const personages = [
 		xp: 277,
 		nextLvlXp: 380,
 		avatar: 'amazonia',
-		position: 'default',
 		cost: 800,
 		skills: [
 			{
@@ -69,7 +67,6 @@ const personages = [
 		xp: 277,
 		nextLvlXp: 380,
 		avatar: 'amazonia',
-		position: 'default',
 		cost: 800,
 		skills: [
 			{

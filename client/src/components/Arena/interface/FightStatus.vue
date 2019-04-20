@@ -14,11 +14,11 @@
                         Награда
                     </div>
                     <div class="reward-table__content">
-                        <div class="reward-table__item" v-for="item in rewardItems">
-                          <div class="img">
-                              <img :src="require(`img/arena/${item.name}.png`)">
-                          </div>
-                          <div class="num">{{item.count}}</div>
+                        <div v-for="item in rewardItems" class="reward-table__item">
+                            <div class="img">
+                                <img :src="require(`img/arena/${item.name}.png`)">
+                            </div>
+                            <div class="num">{{item.count}}</div>
                         </div>
                     </div>
                 </div>
@@ -41,11 +41,11 @@ export default {
         }
     },
     data() {
-      return {}
+        return {};
     },
     computed: {
         isWin() {
-            return this.title === 'Победа!' ? true : false;
+            return this.title === 'Победа!';
         },
         ...mapGetters('gameInfo', ['getArenaInfo']),
         ...mapGetters('data', ['getMissions'])
@@ -59,20 +59,20 @@ export default {
             this.changeLocation('menu');
         },
         addReward() {
-          this.rewardItems.forEach(item => {
-            if (item.name ==='xp') return;  // TODO: засчитывать опыт всем персонажам юзера
-              this.addGoods({
-                  name: item.name,
-                  count: item.count
-              });
-          });
+            this.rewardItems.forEach(item => {
+                if (item.name === 'xp') return; // TODO: засчитывать опыт всем персонажам юзера
+                this.addGoods({
+                    name: item.name,
+                    count: item.count
+                });
+            });
         },
         setMissionProgress() {
-            if (this.isWin) {   // TODO: считать прогресс и при поражении по количеству выживших противников, но не перезаписывать, если уже была победа
+            if (this.isWin) { // TODO: считать прогресс и при поражении по количеству выживших противников, но не перезаписывать, если уже была победа
                 this.changeMissionProgress({
-                    id : this.getArenaInfo.id,
+                    id: this.getArenaInfo.id,
                     progress: 100
-                })
+                });
             }
         },
         ...mapMutations('gameInfo', ['changeLocation']),

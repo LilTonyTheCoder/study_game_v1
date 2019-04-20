@@ -1,105 +1,110 @@
 <template>
-	
-	<div class="heroes__popup">
-		<div class="heroes__close" @click="goBackToMain()" >X</div>
-		<div class="heroes__top">
-			<div class="heroes__avatars">
-				<div class="heroes__avatars__wrapper">
-					<div class="heroes__avatars__item" :class="{'--active' : currentActive === index}" v-for="(personage, index) in getPersonages" @click="changeCurrent(index)">
-						<div class="heroes__avatars__item__img">
-							<div v-if="!personage.available" class="heroes__avatars__item__img__lock">
-								<img src="~img/lock.png" alt="">
-							</div>
-							<img :src="require(`img/personages/${personage.avatar}/icon.png`)" alt="">
-						</div>
-						<div class="heroes__avatars__item__power">
-							<div class="heroes__avatars__item__power__text">{{personage.power}} / {{personage.maxPower}}</div>
-							<div class="heroes__avatars__item__power__fill" :style="{width: persentPowerPersonage(personage)+'%'}"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="heroes__study-button">
-				<img src="~img/box.png" alt="">
-				<div>Обучение</div>
-			</div>
-		</div>
-		<div class="heroes__bottom">
-			<div class="heroes__bottom__left">
-				<div class="heroes__bottom__avatar">
-					<img :src="require(`img/personages/${currentPersonage.avatar}/big-ava.png`)" alt="">
-					<div class="heroes__bottom__skin-button">
-						<img src="" alt="">
-					</div>
-				</div>
-				<div class="heroes__bottom__skills">
-					<div class="heroes__bottom__skills__name">
-						Навык
-					</div>
-					<div class="heroes__bottom__skills__container">
-						<div class="heroes__bottom__skills__item" v-for="skill in currentPersonage.skills">
-							<img :src="require(`img/skills/${skill.name}.png`)" alt="">
-							<span>{{skill.lvl}}</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="heroes__bottom__right">
-			<div class="heroes__bottom__name">
-				{{currentPersonage.name}}
-				<div class="heroes__bottom__level">Уровень {{currentPersonage.lvl}}</div>
-			</div>
-			<div class="heroes__bottom__bars" v-if="currentPersonage.available">
-				<div class="heroes__bottom__energy">
-					<img src="~img/lightning-icon.png" alt="">
-					<div class="heroes__bottom__ebar">
-						{{currentPersonage.power}} / {{currentPersonage.maxPower}}
-						<div class="heroes__bottom__ebar__fill"  :style="{width: persentPowerPersonage(currentPersonage)+'%'}"></div>
-					</div>
-				</div>
-				<div class="heroes__bottom__timer">
-					<div class="plus-button">+</div>
-					<div>0:47</div>
-				</div>
-				<div class="heroes__bottom__xp">
-					<img src="~img/xp.png" alt="">
-					<div class="heroes__bottom__xpbar">
-						{{currentPersonage.xp}} / {{currentPersonage.nextLvlXp}}
-						<div class="heroes__bottom__xpbar__fill" :style="{width: 100*currentPersonage.xp/currentPersonage.nextLvlXp + '%'}"></div>
-					</div>
-				</div>
-			</div>
-			<div class="heroes__bottom__params" v-if="currentPersonage.available">
-				<div class="left">
-					
-				<div class="heroes__bottom__params__names">
-					<div>atk</div>
-					<div>def</div>
-				</div>
-				<div class="heroes__bottom__params__numbers">
-					<div>{{currentPersonage.str}}</div>
-					<div>{{currentPersonage.def}}</div>
-				</div>
-			
-				</div>
-				<div class="right">
-				<div class="heroes__bottom__params__names">
-					<div>HP</div>
-					<div>MP</div>
-				</div>
-				<div class="heroes__bottom__params__numbers">
-					<div>{{currentPersonage.hp}}</div>
-					<div>{{currentPersonage.mana}}</div>
-				</div>
-				</div>
-			</div>
-			<div class="heroes__bottom__description" v-if="!currentPersonage.available">
-				Амазония - классная тетка. Но у тебя ее нет. Бегает по лесам, стреляет из лука, что еще надо? Бери ее немедленно!
-			</div>
-			<div class="heroes__bottom__cost" v-if="!currentPersonage.available">
-				<img src="~img/gold-bar.png" alt="">{{currentPersonage.cost}} <button @click="buyPers(currentPersonage)">Нанять</button>
-			</div>
-				<!-- <div class="heroes__bottom__right__tabs">
+
+    <div class="heroes__popup">
+        <div class="heroes__close" @click="goBackToMain()" >X</div>
+        <div class="heroes__top">
+            <div class="heroes__avatars">
+                <div class="heroes__avatars__wrapper">
+                    <div
+                        v-for="(personage, index) in getPersonages"
+                        class="heroes__avatars__item"
+                        :class="{'--active' : currentActive === index}"
+                        @click="changeCurrent(index)"
+                    >
+                        <div class="heroes__avatars__item__img">
+                            <div v-if="!personage.available" class="heroes__avatars__item__img__lock">
+                                <img src="~img/lock.png" alt="">
+                            </div>
+                            <img :src="require(`img/personages/${personage.avatar}/icon.png`)" alt="">
+                        </div>
+                        <div class="heroes__avatars__item__power">
+                            <div class="heroes__avatars__item__power__text">{{personage.power}} / {{personage.maxPower}}</div>
+                            <div class="heroes__avatars__item__power__fill" :style="{width: persentPowerPersonage(personage)+'%'}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="heroes__study-button">
+                <img src="~img/box.png" alt="">
+                <div>Обучение</div>
+            </div>
+        </div>
+        <div class="heroes__bottom">
+            <div class="heroes__bottom__left">
+                <div class="heroes__bottom__avatar">
+                    <img :src="require(`img/personages/${currentPersonage.avatar}/big-ava.png`)" alt="">
+                    <div class="heroes__bottom__skin-button">
+                        <img src="" alt="">
+                    </div>
+                </div>
+                <div class="heroes__bottom__skills">
+                    <div class="heroes__bottom__skills__name">
+                        Навык
+                    </div>
+                    <div class="heroes__bottom__skills__container">
+                        <div v-for="skill in currentPersonage.skills" class="heroes__bottom__skills__item">
+                            <img :src="require(`img/skills/${skill.name}.png`)" alt="">
+                            <span>{{skill.lvl}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="heroes__bottom__right">
+                <div class="heroes__bottom__name">
+                    {{currentPersonage.name}}
+                    <div class="heroes__bottom__level">Уровень {{currentPersonage.lvl}}</div>
+                </div>
+                <div v-if="currentPersonage.available" class="heroes__bottom__bars">
+                    <div class="heroes__bottom__energy">
+                        <img src="~img/lightning-icon.png" alt="">
+                        <div class="heroes__bottom__ebar">
+                            {{currentPersonage.power}} / {{currentPersonage.maxPower}}
+                            <div class="heroes__bottom__ebar__fill"  :style="{width: persentPowerPersonage(currentPersonage)+'%'}"></div>
+                        </div>
+                    </div>
+                    <div class="heroes__bottom__timer">
+                        <div class="plus-button">+</div>
+                        <div>0:47</div>
+                    </div>
+                    <div class="heroes__bottom__xp">
+                        <img src="~img/xp.png" alt="">
+                        <div class="heroes__bottom__xpbar">
+                            {{currentPersonage.xp}} / {{currentPersonage.nextLvlXp}}
+                            <div class="heroes__bottom__xpbar__fill" :style="{width: 100*currentPersonage.xp/currentPersonage.nextLvlXp + '%'}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="currentPersonage.available" class="heroes__bottom__params">
+                    <div class="left">
+
+                        <div class="heroes__bottom__params__names">
+                            <div>atk</div>
+                            <div>def</div>
+                        </div>
+                        <div class="heroes__bottom__params__numbers">
+                            <div>{{currentPersonage.str}}</div>
+                            <div>{{currentPersonage.def}}</div>
+                        </div>
+
+                    </div>
+                    <div class="right">
+                        <div class="heroes__bottom__params__names">
+                            <div>HP</div>
+                            <div>MP</div>
+                        </div>
+                        <div class="heroes__bottom__params__numbers">
+                            <div>{{currentPersonage.hp}}</div>
+                            <div>{{currentPersonage.mana}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="!currentPersonage.available" class="heroes__bottom__description">
+                    Амазония - классная тетка. Но у тебя ее нет. Бегает по лесам, стреляет из лука, что еще надо? Бери ее немедленно!
+                </div>
+                <div v-if="!currentPersonage.available" class="heroes__bottom__cost">
+                    <img src="~img/gold-bar.png" alt="">{{currentPersonage.cost}} <button @click="buyPers(currentPersonage)">Нанять</button>
+                </div>
+                <!-- <div class="heroes__bottom__right__tabs">
 					<div class="heroes__bottom__right__tabs__name">
 						<div class="inner  --active">
 							Амуниция
@@ -111,7 +116,7 @@
 						</div>
 					</div>
 				</div> -->
-				<!-- <div class="heroes__bottom__right__container">
+                <!-- <div class="heroes__bottom__right__container">
 					<div class="heroes__bottom__right__amunition">
 						<div class="heroes__bottom__right__amunition__item">
 							<img src="~img/amu1.png" alt="">
@@ -135,31 +140,30 @@
 						</div>
 					</div>
 				</div> -->
-			</div>
-		</div>
-	</div>
-	
-</template>
+            </div>
+        </div>
+    </div>
 
+</template>
 
 <script>
 export default {
-  name: 'Heroes',
-  components: {},
-  data () {
-    return {
-    	currentActive: 0,
-    }
-  },
-  computed: {
+    name: 'Heroes',
+    components: {},
+    data() {
+        return {
+    	currentActive: 0
+        };
+    },
+    computed: {
   	currentPersonage() {
   		return this.getPersonages[this.currentActive];
   	},
   	...mapGetters('data', ['getPersonages', 'getGoods'])
-  },
-  methods: {
+    },
+    methods: {
   	persentPowerPersonage(personage) {
-  		return 100*personage.power/personage.maxPower;
+  		return 100 * personage.power / personage.maxPower;
   	},
   	goBackToMain() {
   	    this.changeMenuScreen('MenuMainList');
@@ -173,10 +177,9 @@ export default {
   	},
   	...mapMutations('gameInfo', ['changeMenuScreen']),
   	...mapMutations('data', ['buyPersonage'])
-  }
-}
+    }
+};
 </script>
-
 
 <style lang="scss">
 $topHeight: 90px;
