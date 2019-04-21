@@ -171,7 +171,7 @@ export default {
             return 100 * personage.power / personage.maxPower;
         },
         goBackToMain() {
-            this.changeMenuScreen('MenuMainList');
+            this.changeMenuScreen('MainList');
         },
         changeCurrent(index) {
             this.currentActive = index;

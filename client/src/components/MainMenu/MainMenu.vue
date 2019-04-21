@@ -5,7 +5,7 @@
         <LeftMenu />
         <RightMenu />
 
-        <MenuMainList v-if="currentMenuScreen === 'MenuMainList'" />
+        <MainList v-if="currentMenuScreen === 'MainList'" />
         <MissionPopup v-if="currentMenuScreen === 'MissionPopup'" />
         <Heroes v-if="currentMenuScreen === 'Heroes'" />
 
@@ -14,26 +14,20 @@
 
 <script>
 
-import Header from './global/interface/Header.vue';
-import RightMenu from './MainMenu/interface/RightMenu.vue';
-import LeftMenu from './MainMenu/interface/LeftMenu.vue';
-import MenuMainList from './MainMenu/MenuOption/MenuMainList.vue';
-import MissionPopup from './MainMenu/MenuOption/MissionPopup.vue';
-import Heroes from './MainMenu/MenuOption/Heroes.vue';
+import Header from '../global/interface/Header.vue';
+import * as interfaces from './interface';
+import * as screens from './screens';
 
 export default {
     name: 'MainMenu',
     components: {
         Header,
-        RightMenu,
-        LeftMenu,
-        MenuMainList,
-        MissionPopup,
-        Heroes
+        ...interfaces,
+        ...screens
     },
     data() {
         return {
-            // currentMenuScreen: 'MenuMainList'
+            // currentMenuScreen: 'MainList'
         };
     },
     computed: {

@@ -9,18 +9,13 @@
 </template>
 
 <script>
-import Loading from './components/Loading.vue';
 import DataService from './DataService';
-
-import MainMenu from './components/MainMenu.vue';
-import Arena from './components/Arena.vue';
+import * as components from './components';
 
 export default {
     name: 'app',
     components: {
-        Loading,
-        MainMenu,
-        Arena
+        ...components
     },
     data() {
         return {

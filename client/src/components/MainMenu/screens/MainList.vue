@@ -14,7 +14,7 @@
 import MenuSection from '../interface/MenuSection.vue';
 
 export default {
-    name: 'MenuMainList',
+    name: 'MainList',
     components: {
         MenuSection
     },

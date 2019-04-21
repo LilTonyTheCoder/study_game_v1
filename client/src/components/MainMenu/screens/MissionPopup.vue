@@ -129,7 +129,7 @@ export default {
             this.isChooseHeroes = false;
         },
         goBackToMain() {
-            this.changeMenuScreen('MenuMainList');
+            this.changeMenuScreen('MainList');
         },
         ...mapMutations('gameInfo', ['changeMenuScreen', 'changeLocation', 'setArenaInfo'])
     }

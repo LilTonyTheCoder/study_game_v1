@@ -4,7 +4,7 @@ export default {
         state: {
             isLoading: true,
             currentLocation: 'menu',
-            currentMenuScreen: 'MenuMainList',
+            currentMenuScreen: 'MainList',
             // Все данные для текущего боя
             currentArenaInfo: '',
             activeTeam: []

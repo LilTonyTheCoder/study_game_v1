@@ -27,11 +27,11 @@
 
 <script>
 import { objectClone } from 'utils';
-import Header from './global/interface/Header';
-import FightStatus from './Arena/interface/FightStatus';
-import FightMessage from './Arena/interface/FightMessage';
-import FightBottom from './Arena/interface/FightBottom';
-import FightPersonage from './Arena/Personage/FightPersonage';
+import Header from '../global/interface/Header';
+import FightStatus from './interface/FightStatus';
+import FightMessage from './interface/FightMessage';
+import FightBottom from './interface/FightBottom';
+import FightPersonage from './Personage/FightPersonage';
 
 export default {
     name: 'Arena',
