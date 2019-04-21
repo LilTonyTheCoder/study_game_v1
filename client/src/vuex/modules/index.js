@@ -10,9 +10,9 @@ export default {
             activeTeam: []
         },
         mutations: {
-        	stopLoading(state) {
-        		state.isLoading = false;
-        	},
+            stopLoading(state) {
+                state.isLoading = false;
+            },
             changeMenuScreen(state, payload) {
                 state.currentMenuScreen = payload;
             },

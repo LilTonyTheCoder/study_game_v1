@@ -13,7 +13,6 @@
             <div class="field__wrapper">
                 <FightPersonage
                     v-for="personage in allPersonages"
-                    v-if="personage.id"
                     :key="personage.id"
                     :personage="personage"
                     @attack="test"
@@ -52,7 +51,7 @@ export default {
             isFightStatusVisible: false,
 
             enemies: this.personageGenerator('enemy'),
-            team: this.personageGenerator('team'),
+            team: this.personageGenerator('team')
         };
     },
     computed: {
@@ -72,14 +71,14 @@ export default {
         getPersonagesByType(type) {
             if (type === 'enemy') {
                 return this.$store.getters['gameInfo/getArenaInfo'].enemies;
-            } else {
-                const activeTeam = this.$store.state.gameInfo.activeTeam;
-                // Фильтруем по тем, кого выбрали в бой
-                const userPersonages = this.$store.getters['data/getPersonages'].filter(personage => {
-                    if (activeTeam.includes(personage.id)) return personage;
-                });
-                return userPersonages;
             }
+            const { activeTeam } = this.$store.state.gameInfo;
+            // Фильтруем по тем, кого выбрали в бой
+            const userPersonages = this.$store.getters['data/getPersonages'].filter(personage => {
+                if (activeTeam.includes(personage.id)) return personage;
+                return false;
+            });
+            return userPersonages;
         },
         personageGenerator(type) {
             const personages = this.getPersonagesByType(type);
@@ -248,7 +247,7 @@ export default {
   line-height: 40px;
   border-radius: 6px;
 }
-	.arena {
+.arena {
     &__bg {
       position: absolute;
       top: 0;

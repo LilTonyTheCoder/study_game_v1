@@ -34,6 +34,9 @@ export default {
         }),
         ...mapMutations('gameInfo', ['stopLoading'])
     },
+    created() {
+        setTimeout(() => { this.loadServerData(); }, 10); // загрузка данных
+    },
     methods: {
         async loadServerData() {
             try {
@@ -46,9 +49,6 @@ export default {
             }
         },
         ...mapMutations('data', ['loadData'])
-    },
-    created() {
-        setTimeout(() => { this.loadServerData(); }, 10); // загрузка данных
     }
 };
 </script>

@@ -33,9 +33,9 @@ export default {
     width: 65px;
     background: rgba(0,0,0,.3);
     &__wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
   }
 </style>

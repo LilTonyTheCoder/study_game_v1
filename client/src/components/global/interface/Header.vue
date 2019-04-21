@@ -9,7 +9,12 @@
         <div class="main-menu__top__item main-menu__top__item__power">
             <div class="main-menu__top__item__dots">
                 <!-- <div class="main-menu__top__item__one-dot --active"></div> -->
-                <div v-for="(power, index) in maxPower" :class="{'--active' : index<getGoods.power}" class="main-menu__top__item__one-dot"></div>
+                <div
+                    v-for="(power, index) in maxPower"
+                    :key="index"
+                    :class="{'--active' : index<getGoods.power}"
+                    class="main-menu__top__item__one-dot"
+                ></div>
             </div>
             <div class="main-menu__top__item__count">MAX</div>
         </div>
@@ -33,7 +38,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .main-menu {
+.main-menu {
     &__top {
     position: relative;
     top: 0;
@@ -114,5 +119,5 @@ export default {
       }
     }
   }
-  }
+}
 </style>

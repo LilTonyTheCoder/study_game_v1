@@ -43,7 +43,7 @@ export default {
             if (personage.position === 'center') return 'personage--center';
             if (personage.position === 'nearbyenemy') return `${type}--nearbyenemy-${personage.enemy.index + 1}`;
 
-		  return `${type}--default-${personage.index + 1}`;
+            return `${type}--default-${personage.index + 1}`;
         },
         target(id) {
             this.$emit('attack', id);

@@ -14,7 +14,11 @@
                         Награда
                     </div>
                     <div class="reward-table__content">
-                        <div v-for="item in rewardItems" class="reward-table__item">
+                        <div
+                            v-for="item in rewardItems"
+                            :key="item"
+                            class="reward-table__item"
+                        >
                             <div class="img">
                                 <img :src="require(`img/arena/${item.name}.png`)">
                             </div>
@@ -32,12 +36,12 @@ export default {
     name: 'FightStatus',
     props: {
         title: {
-            type: String,
-            default: ''
+            type: String
+            // default: '' // PASHA: почему линтер ругается? (даже если через функцию делать - тоже ругается)
         },
         rewardItems: {
-            type: Array,
-            default: []
+            type: Array
+            // default: []
         }
     },
     data() {

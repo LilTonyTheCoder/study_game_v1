@@ -24,7 +24,11 @@
                     </div>
                     <div class="mission-popup__content">
                         <div class="mission-popup__inside">
-                            <div v-for="(mission, index) in missions" class="mission-popup__item">
+                            <div
+                                v-for="(mission, index) in missions"
+                                :key="mission.id"
+                                class="mission-popup__item"
+                            >
                                 <div class="mission-popup__item__info">
                                     <div class="mission-popup__item__name">
                                         {{index+1}}. {{mission.name}}
@@ -39,7 +43,11 @@
                                         ></div>
                                     </div>
                                     <div class="mission-popup__items">
-                                        <div v-for="reward in mission.reward" class="mission-popup__item__part">
+                                        <div
+                                            v-for="(reward, index) in mission.reward"
+                                            :key="index"
+                                            class="mission-popup__item__part"
+                                        >
                                             <div class="img">
                                                 <img :src="require(`img/arena/${reward.name}.png`)" alt="">
                                             </div>
@@ -49,7 +57,11 @@
                                 </div>
                                 <div class="mission-popup__item__monsters monsters">
                                     <div class="monsters__wrapper">
-                                        <div v-for="(monster, ind) in mission.enemies"  class="monsters__one-monster">
+                                        <div
+                                            v-for="monster in mission.enemies"
+                                            :key="monster.id"
+                                            class="monsters__one-monster"
+                                        >
                                             <img :src="require(`img/personages/${monster.avatar}/icon.png`)" alt=""> <!--  TODO: переделать картинки мин в отдельной папке должны быть с таким же назаванием -->
                                             <div class="monsters__lvl">{{monster.lvl}}</div>
                                         </div>
@@ -91,11 +103,11 @@ export default {
             missions: []
         };
     },
-    mounted() {
-        this.missions = this.getMissions;
-    },
     computed: {
         ...mapGetters('data', ['getMissions'])
+    },
+    mounted() {
+        this.missions = this.getMissions;
     },
     methods: {
         selectPersonages(missionData) {
