@@ -120,7 +120,7 @@ export default {
 
             // Передаем данные на арену
             this.setArenaInfo(this.currentMission);
-            this.changeLocation('arena');
+            this.changeLocation('Arena');
         },
         showHeroChooser() {
             this.isChooseHeroes = true;

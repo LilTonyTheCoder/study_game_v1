@@ -51,7 +51,7 @@ export default {
         isWin() {
             return this.title === 'Победа!';
         },
-        ...mapGetters('gameInfo', ['getArenaInfo']),
+        ...mapState('gameInfo', ['currentArenaInfo']),
         ...mapGetters('data', ['getMissions'])
     },
     methods: {
@@ -60,7 +60,7 @@ export default {
                 this.addReward();
             }
             this.setMissionProgress();
-            this.changeLocation('menu');
+            this.changeLocation('MainMenu');
         },
         addReward() {
             this.rewardItems.forEach(item => {
@@ -74,7 +74,7 @@ export default {
         setMissionProgress() {
             if (this.isWin) { // TODO: считать прогресс и при поражении по количеству выживших противников, но не перезаписывать, если уже была победа
                 this.changeMissionProgress({
-                    id: this.getArenaInfo.id,
+                    id: this.currentArenaInfo.id,
                     progress: 100
                 });
             }

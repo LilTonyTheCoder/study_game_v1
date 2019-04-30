@@ -5,10 +5,7 @@
         <LeftMenu />
         <RightMenu />
 
-        <MainList v-if="currentMenuScreen === 'MainList'" />
-        <MissionPopup v-if="currentMenuScreen === 'MissionPopup'" />
-        <Heroes v-if="currentMenuScreen === 'Heroes'" />
-
+        <component :is="currentMenuScreen" />
     </div>
 </template>
 

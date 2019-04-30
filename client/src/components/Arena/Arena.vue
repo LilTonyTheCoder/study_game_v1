@@ -6,7 +6,7 @@
         </div>
 
         <FightBottom />
-        <FightStatus v-if="isFightStatusVisible" :title="fightStatusTitle" :rewardItems="getArenaInfo.reward" />
+        <FightStatus v-if="isFightStatusVisible" :title="fightStatusTitle" :rewardItems="currentArenaInfo.reward" />
         <FightMessage />
 
         <div class="arena__field field">
@@ -61,8 +61,7 @@ export default {
             array.push(...this.enemies);
             return array;
         },
-        ...mapGetters('gameInfo', ['getArenaInfo']),
-        ...mapState('gameInfo', ['activeTeam'])
+        ...mapState('gameInfo', ['activeTeam', 'currentArenaInfo'])
     },
     beforeDestroy() {
         clearInterval(this.fightTimer);
@@ -70,7 +69,7 @@ export default {
     methods: {
         getPersonagesByType(type) {
             if (type === 'enemy') {
-                return this.$store.getters['gameInfo/getArenaInfo'].enemies;
+                return this.$store.state.gameInfo.currentArenaInfo.enemies;
             }
             const { activeTeam } = this.$store.state.gameInfo;
             // Фильтруем по тем, кого выбрали в бой

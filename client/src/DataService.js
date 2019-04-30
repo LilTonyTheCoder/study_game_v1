@@ -4,16 +4,15 @@ const url = '/api/data/';
 
 class DataService {
     // Get Data
-    static getData() {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const res = await axios.get(url);
-                const { data } = res;
-                resolve(data);
-            } catch (err) {
-                reject(err);
-            }
-        });
+    static async getData() {
+        let response;
+        try {
+            response = await axios.get(url);
+        } catch (error) {
+            console.error(error);
+        }
+
+        return response.data;
     }
 }
 

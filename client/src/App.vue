@@ -2,8 +2,7 @@
     <div id="app" class="app">
         <div class="app__inner">
             <Loading v-if="isLoading" :message="loadingMessage" />
-            <MainMenu v-if="currentLocation === 'menu'" />
-            <Arena v-if="currentLocation === 'arena'" />
+            <component :is="currentLocation" />
         </div>
     </div>
 </template>
