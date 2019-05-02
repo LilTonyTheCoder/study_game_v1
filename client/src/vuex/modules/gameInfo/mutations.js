@@ -17,4 +17,4 @@ export default {
     addToActiveTeam(state, payload) {
         state.activeTeam.push(payload);
     }
-}
+};

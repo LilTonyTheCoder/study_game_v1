@@ -15,4 +15,4 @@ export default {
         personage.available = true;
         state.goods.gold -= personage.cost;
     }
-}
+};

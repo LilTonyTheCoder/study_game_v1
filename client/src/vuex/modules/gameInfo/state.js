@@ -5,4 +5,4 @@ export default {
     // Все данные для текущего боя
     currentArenaInfo: '',
     activeTeam: []
-}
+};

@@ -5,22 +5,14 @@
                 <img :src="require(`img/${personage.img}`)" alt="">
             </div>
             <div class="personage__top-info">
-                <div class="personage__hp">
+                <div
+                    v-for="line in personageLines"
+                    :key="line"
+                    :class="[`personage__${line}`]"
+                >
                     <div
                         class="fill"
-                        :style="`width: ${(personage.hp/personage.maxHP)*100}%;`"
-                    ></div>
-                </div>
-                <div class="personage__mana">
-                    <div
-                        class="fill"
-                        :style="`width: ${(personage.mana/personage.maxMana)*100}%;`"
-                    ></div>
-                </div>
-                <div class="personage__power">
-                    <div
-                        class="fill"
-                        :style="`width: ${(personage.power/personage.maxPower)*100}%;`"
+                        :style="`width: ${generateFillWidth(line)}%;`"
                     ></div>
                 </div>
             </div>
@@ -36,6 +28,11 @@ export default {
             type: Object
         }
     },
+    data() {
+        return {
+            personageLines: ['hp', 'mana', 'power']
+        };
+    },
     methods: {
         generatePersClass(personage) {
             let type = personage.type === 'enemy' ? 'enemy' : 'personage';
@@ -47,6 +44,15 @@ export default {
         },
         target(id) {
             this.$emit('attack', id);
+        },
+        generateFillWidth(paramName) {
+            const { personage } = this;
+
+            if (paramName === 'hp') return (personage.hp / personage.maxHP) * 100;
+            if (paramName === 'mana') return (personage.mana / personage.maxMana) * 100;
+            if (paramName === 'power') return (personage.power / personage.maxPower) * 100;
+
+            return 100;
         }
     }
 };
