@@ -3,25 +3,8 @@
         <div>
             <div class="mission-popup">
                 <div class="mission-popup__wrapper">
-                    <div class="mission-popup__top">
-                        <div class="mission-popup__name">1. Рождение героя</div>
-                        <div class="mission-popup__back" @click="goBackToMain()">Назад</div>
-                        <!-- <div class="mission-popup__second-block">
-            <div class="mission-popup__level">
-              Уровень 3
-            </div>
-            <div class="mission-popup__stars">
-              <img src="../../assets/img/star.png" alt="">
-              <img src="../../assets/img/star.png" alt="">
-              <img src="../../assets/img/star.png" alt="">
-            </div>
-            <div class="mission-popup__progress">
-              <div class="mission-popup__progress__name">50 %</div>
-              <div class="mission-popup__progress__fill"></div>
-            </div>
-          </div> -->
-                        <!-- <div class="mission-popup__change-location">Сменить локацию</div> -->
-                    </div>
+                    <MissionsTitle />
+
                     <div class="mission-popup__content">
                         <div class="mission-popup__inside">
                             <div
@@ -88,12 +71,14 @@
 </template>
 
 <script>
-import HeroChoose from '../interface/HeroChoose.vue';
+import HeroChoose from '../../interface/HeroChoose.vue';
+import * as MissionPopupComponents from './parts';
 
 export default {
     name: '',
     components: {
-        HeroChoose
+        HeroChoose,
+        ...MissionPopupComponents
     },
     data() {
         return {
@@ -128,10 +113,7 @@ export default {
         closeChooser() {
             this.isChooseHeroes = false;
         },
-        goBackToMain() {
-            this.changeMenuScreen('MainList');
-        },
-        ...mapMutations('gameInfo', ['changeMenuScreen', 'changeLocation', 'setArenaInfo'])
+        ...mapMutations('gameInfo', ['changeLocation', 'setArenaInfo'])
     }
 };
 </script>
@@ -149,87 +131,6 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-  }
-  &__top {
-    box-sizing: border-box;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background: rgba(0,0,0,.7);
-    display: flex;
-    align-items: center;
-    color: #fff;
-    padding: 0 20px;
-    justify-content: space-between; // потом убрать
-  }
-  &__name {
-    font-size: 22px;
-    width: 40%;
-  }
-  &__back {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 10px;
-    background: #2C315C;
-    cursor: pointer;
-  }
-  &__second-block {
-    display: flex;
-    width: 40%;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    padding: 0 20px;
-    justify-content: flex-end;
-  }
-  &__change-location {
-    width: 20%;
-    font-size: 14px;
-    background: #FAAA0B;
-    color: #432721;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 3px 0;
-  }
-  &__level {
-    width: 50%;
-  }
-  &__stars {
-    width: 50%;
-    img {
-      width: 20px;
-    }
-  }
-  &__progress {
-    margin-top: 5px;
-    position: relative;
-    width: 70%;
-    border-radius: 5px;
-    // background: #8ADB00;
-    border: 1px solid #fff;
-    height: 20px;
-    &__name {
-      position: absolute;
-      width: 100%;
-      text-align: center;
-      z-index: 2;
-      font-size: 14px;
-      height: 100%;
-      line-height: 20px;
-    }
-    &__fill {
-      position: absolute;
-      right: 0;
-      top: 0;
-      height: 100%;
-      width: 50%;
-      border-radius: 5px;
-
-      background: #8ADB00;
-    }
   }
   &__content {
     position: absolute;
@@ -341,9 +242,6 @@ export default {
           width: 30px;
           margin-right: 10px;
         }
-      }
-      .num {
-
       }
     }
     &__gold {

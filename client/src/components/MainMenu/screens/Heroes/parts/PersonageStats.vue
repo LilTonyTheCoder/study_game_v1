@@ -27,7 +27,7 @@
         </div>
 
         <div v-if="currentPersonage.available" class="params">
-            <div v-for="block in stats" :key="block" class="params__block">
+            <div v-for="(block, index) in stats" :key="index" class="params__block">
                 <div class="params__names">
                     <div v-for='statName in block' :key="statName">{{statName}}</div>
                 </div>
