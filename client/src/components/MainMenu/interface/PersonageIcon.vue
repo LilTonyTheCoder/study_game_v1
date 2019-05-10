@@ -4,14 +4,17 @@
         :class="{'item--can-add' : canAddPers}"
         @click="addPersonage(personage)"
     >
-        <div class="item__img">
+        <div
+            class="item__img"
+            :class="{'item__img--active' : isActive}"
+        >
             <div v-if="!personage.available" class="item__img__lock">
                 <img src="~img/lock.png" alt="">
             </div>
             <img :src="require(`img/personages/${personage.avatar}/icon.png`)" alt="" >
             <div class="item__lvl">{{personage.lvl}}</div>
         </div>
-        <div v-if="personage.available" class="item__power">
+        <div class="item__power">
             <div class="item__power__text">{{personage.power}} / {{personage.maxPower}}</div>
             <div class="item__power__fill" :style="{width: 100*personage.power/personage.maxPower+'%'}" ></div>
         </div>
@@ -25,7 +28,11 @@ export default {
         personage: {
             type: Object
         },
-        canAddPers: {
+        canAddPers: { // Используется только в HeroChoose
+            type: Boolean,
+            default: false
+        },
+        isActive: { // Используется только в Heroes
             type: Boolean,
             default: false
         }
@@ -35,7 +42,7 @@ export default {
             this.$emit('addPersonage', personage);
         }
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -62,9 +69,6 @@ export default {
             line-height: 24px;
         }
     }
-    &.--active {
-        box-shadow: 0 0 13px #335fff, 0 0 13px #335fff, 0 0 13px #fff;
-    }
     &__lvl {
         position: absolute;
         right: 0;
@@ -88,6 +92,9 @@ export default {
         height: 60px;
         box-sizing: border-box;
         position: relative;
+        &--active {
+            box-shadow: 0 0 13px #335fff, 0 0 13px #335fff, 0 0 13px #fff;
+        }
         &__lock {
             position: absolute;
             top: 0;
@@ -143,4 +150,3 @@ export default {
     }
 }
 </style>
-

@@ -9,12 +9,15 @@ const personages = require('./personages');
 const goods = require('./goods');
 // Список миссий
 const missions = require('./missions');
+// Список скиллов
+const skills = require('./skills');
 
 
 const data = {
 	goods,
 	personages,
-	missions
+	missions,
+	skills
 };
 
 // Get Data

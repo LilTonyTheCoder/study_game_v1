@@ -16,7 +16,7 @@
                     <div class="reward-table__content">
                         <div
                             v-for="item in rewardItems"
-                            :key="item"
+                            :key="item.name"
                             class="reward-table__item"
                         >
                             <div class="img">
@@ -36,12 +36,12 @@ export default {
     name: 'FightStatus',
     props: {
         title: {
-            type: String
-            // default: '' // PASHA: почему линтер ругается? (даже если через функцию делать - тоже ругается)
+            type: String,
+            default: ''
         },
         rewardItems: {
-            type: Array
-            // default: []
+            type: Array,
+            default: []
         }
     },
     data() {

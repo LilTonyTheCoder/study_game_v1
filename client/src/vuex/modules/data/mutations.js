@@ -3,6 +3,7 @@ export default {
         state.goods = payload.goods;
         state.missions = payload.missions;
         state.personages = payload.personages;
+        state.skills = payload.skills;
     },
     addGoods(state, payload) {
         state.goods[payload.name] += payload.count;

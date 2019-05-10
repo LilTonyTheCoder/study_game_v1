@@ -5,8 +5,16 @@
             <img src="~img/locations/location1.jpeg" alt="">
         </div>
 
-        <FightBottom />
-        <FightStatus v-if="isFightStatusVisible" :title="fightStatusTitle" :rewardItems="currentArenaInfo.reward" />
+        <FightBottom
+            :personageId="currentActivePersonageId"
+            :currentActiveSkill="currentActiveSkill"
+            @selectCurrentSkillActive="currentActiveSkill = $event"
+        />
+        <FightStatus
+            v-if="isFightStatusVisible"
+            :title="fightStatusTitle"
+            :rewardItems="currentArenaInfo.reward"
+        />
         <FightMessage />
 
         <div class="arena__field field">
@@ -50,6 +58,9 @@ export default {
             fightStatusTitle: '',
             isFightStatusVisible: false,
 
+            currentActivePersonageId: '',
+            currentActiveSkill: 0,
+
             enemies: this.personageGenerator('enemy'),
             team: this.personageGenerator('team')
         };
@@ -67,6 +78,16 @@ export default {
         clearInterval(this.fightTimer);
     },
     methods: {
+        calculateDamage(personage) {
+            console.dir(personage);
+            let currentSkillName = personage.skills[this.currentActiveSkill].name;
+            let skillInData = skills.find(skill => skill.name === currentSkillName);
+
+            let damage = skillInData.damageCalc(personage.str);
+            personage.mana -= skillInData.manaCost;
+
+            return damage;
+        },
         getPersonagesByType(type) {
             if (type === 'enemy') {
                 return this.$store.state.gameInfo.currentArenaInfo.enemies;
@@ -144,6 +165,9 @@ export default {
         teamMemberMove(team, otherTeam) {
             let isComputerTurn = team[0].type === 'enemy';
 
+            // Активный прием сбрасываем
+            this.currentActiveSkill = 0;
+
             // Выходит в центр
             if (!isComputerTurn) {
                 this.moveToCenter(team[0]);
@@ -158,6 +182,7 @@ export default {
                     // Сбрасываем данные о клике
                     this.isSelectEnemy = false;
                     clearInterval(this.fightTimer);
+                    this.currentActivePersonageId = '';
 
                     // Выбор рандомного соперника, когда ходит противник
                     if (isComputerTurn) {
@@ -179,7 +204,7 @@ export default {
                         // TODO: Анимация Удара
 
                         // Отнять хп
-                        currentEnemy.hp -= currentPersonage.str;
+                        currentEnemy.hp -= this.calculateDamage(currentPersonage);
 
                         // Если враг умер - вырезаем его из массива
                         if (currentEnemy.hp <= 0) {
@@ -217,6 +242,7 @@ export default {
         },
         moveToCenter(personage) {
             personage.position = 'center';
+            this.currentActivePersonageId = personage.id;
         }
     }
 };

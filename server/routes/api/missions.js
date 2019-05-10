@@ -28,7 +28,13 @@ const missions = [
 	      hp: 200,
 	      mana: 300,
 	      power: 100,
-	      avatar: 'evil-trevor',
+				avatar: 'evil-trevor',
+				skills: [
+					{
+						name: 'default-hit',
+						lvl: 1
+					}
+				],
 	    }
 	  ]
 	},
@@ -57,7 +63,13 @@ const missions = [
 	      hp: 2000,
 	      mana: 300,
 	      power: 100,
-	      avatar: 'evil-trevor',
+				avatar: 'evil-trevor',
+				skills: [
+					{
+						name: 'default-hit',
+						lvl: 1
+					}
+				],
 	    }
 	  ]
 	}

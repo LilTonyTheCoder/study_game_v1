@@ -5,13 +5,14 @@
             <div class="heroes__avatars">
                 <div class="heroes__avatars__wrapper">
                     <div
-                         v-for="(personage, index) in getPersonages"
+                        v-for="(personage, index) in getPersonages"
                         :key="index"
-                        @click="changeCurrent(index)"
                         class="personage_block"
+                        @click="changeCurrent(index)"
                     >
                         <PersonageIcon
                             :personage="personage"
+                            :isActive="currentActive===index"
                         />
                     </div>
                     <!-- <div

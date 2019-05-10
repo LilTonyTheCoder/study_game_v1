@@ -41,14 +41,13 @@
                         :key="personage.id"
                         class="mr25"
                     >
-                        <PersonageIcon 
-                            
+                        <PersonageIcon
+
                             :personage="personage"
-                            @addPersonage="addPersonage(personage)"
                             :canAddPers="canAddPers(personage)"
+                            @addPersonage="addPersonage(personage)"
                         />
                     </div>
-                    
 
                 </div>
             </div>

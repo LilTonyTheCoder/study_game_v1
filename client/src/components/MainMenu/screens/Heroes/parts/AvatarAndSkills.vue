@@ -16,7 +16,7 @@
                     :key="index"
                     class="skills__item"
                 >
-                    <img :src="require(`img/skills/${skill.name}.png`)" alt="">
+                    <img :src="skillsImg(skill.name)" alt="">
                     <span>{{skill.lvl}}</span>
                 </div>
             </div>
@@ -30,6 +30,15 @@ export default {
     props: {
         currentPersonage: {
             type: Object
+        }
+    },
+    methods: {
+        skillsImg(skillName) {
+            let skillSrc = require('img/skills/skill1.png'); // TODO: default skill img
+            try {
+                skillSrc = require(`img/skills/${skillName}.png`);
+            } catch (error) {}
+            return skillSrc;
         }
     }
 };

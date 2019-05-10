@@ -1,5 +1,6 @@
 export default {
     goods: '',
     missions: '',
-    personages: ''
+    personages: '',
+    skills: ''
 };

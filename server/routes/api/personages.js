@@ -14,6 +14,10 @@ const personages = [
 		avatar: 'trevor',
 		skills: [
 			{
+				name: 'default-hit',
+				lvl: 1
+			},
+			{
 				name: 'skill1',
 				lvl: 2
 			},
