@@ -1,8 +1,26 @@
 <template>
-    <div class="personage" :class="generatePersClass(personage)" @click="target(personage.id)">
+    <div
+        class="personage"
+        :class="generatePersClass(personage)"
+        @click="target(personage.id)"
+    >
         <div class="personage__wrapper">
+            <!-- анимация скилла атакующего -->
+            <div
+                v-if="personage.isNowDoingHit"
+                :class="[`doing-skill__${personage.animationName}`]"
+            ></div>
+            <!-- анимация повреждения от атакующего -->
+            <div
+                v-if="personage.damagedAnimation"
+                :class="[`damage-from-skill`]"
+            ></div>
+
             <div class="personage__icon">
-                <img :src="require(`img/${personage.img}`)" alt="">
+                <img
+                    :src="require(`img/${personage.img}`)"
+                    :class="generateDamageAnimation(personage)"
+                >
             </div>
             <div class="personage__top-info">
                 <div
@@ -53,6 +71,13 @@ export default {
             if (paramName === 'power') return (personage.power / personage.maxPower) * 100;
 
             return 100;
+        },
+        generateDamageAnimation(personage) {
+            if (personage.type === 'team') {
+                return { 'personage__damaged--reverse': personage.damagedAnimation };
+            }
+            return { 'personage__damaged': personage.damagedAnimation };
+            // return {'personage__damaged' : true};
         }
     }
 };
@@ -60,19 +85,23 @@ export default {
 <style lang="scss" scoped>
 
 .personage {
-  width: 150px;
-  height: 180px;
+  // width: 150px;
+  // height: 180px;
+  width: 240px;
+  height: 250px;
   position: absolute;
   bottom: 0;
   cursor: pointer;
   transition: .3s;
   &__wrapper {
     position: relative;
+    width: 100%;
+    height: 100%;
   }
   &__icon {
     position: absolute;
     top: 30px;
-    width: 100%;
+    width: 150px;
     animation-name: pulse;
     animation-duration: .8s;
     animation-iteration-count: infinite;
@@ -81,8 +110,26 @@ export default {
       width: 100%;
     }
   }
+  &__damaged {
+      filter: brightness(100);
+      transform: rotate(15deg);
+      &::after {
+          display: block;
+          content: '';
+          width: 50px;
+          height: 50px;
+          background: red;
+          position: absolute;
+          left: 0;
+          top: 0;
+      }
+      &--reverse {
+        filter: brightness(100);
+        transform: rotate(-15deg);
+      }
+  }
   &__top-info {
-    width: 60%;
+    width: 90px;
     height: 21px;
     background: #eee;
     position: absolute;
@@ -224,5 +271,56 @@ export default {
 @keyframes death {
     0%  {opacity: 1;}
     100% {opacity: 0;}
+}
+</style>
+
+<style lang="scss" scoped>
+.damage-from-skill {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    left: 20px;
+    top: 20px;
+    background: url('~img/skills-animation/damage/hit.png') no-repeat;
+    background-size: contain;
+    z-index: 9;
+    animation-name: damage;
+    animation-duration: .3s;
+    opacity: 0.6;
+    transform-origin: center center;
+}
+.doing-skill {
+  &__amazonia-hit {
+    position: relative;
+    width: 100%;
+    height: 170px;
+    left: 20px;
+    background: url("~img/skills-animation/amazonia-skills.png") no-repeat;
+    background-size: contain;
+    z-index: 9;
+    &::after {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      content: '';
+      display: block;
+      background: #fff;
+      left: 86px;
+      top: 66px;
+    }
+    animation-name: amazonia-hit;
+    animation-duration: .8s;
+    transform-origin: center center;
+  }
+}
+
+@keyframes amazonia-hit {
+    0%  {transform: scale(0.5);}
+    100% {transform: scale(1);}
+}
+@keyframes damage {
+    0%  {transform: scale(0.8);}
+    100% {transform: scale(1);}
 }
 </style>

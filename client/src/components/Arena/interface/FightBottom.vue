@@ -15,11 +15,11 @@
                         v-for="(skill, index) in personageSkills(personageId)"
                         :key="index"
                         :class="{
-                                    'disable' : isSkillDisable(skill.name),
-                                    'active' : isSkillActive(index)
-                                }"
-                        @click="selectCurrentSkillActive(index, skill.name)"
+                            'disable' : isSkillDisable(skill.name),
+                            'active' : isSkillActive(index)
+                        }"
                         class="actions__item"
+                        @click="selectCurrentSkillActive(index, skill.name)"
                     >
                         <img :src="skillImg(skill.name)" alt="">
                         <div class="actions__lvl">{{skill.lvl}}</div>
@@ -67,8 +67,8 @@ export default {
             return index === this.currentActiveSkill;
         },
         selectCurrentSkillActive(index, skillName) {
-            if ( this.isSkillDisable(skillName) ) return;
-            this.$emit('selectCurrentSkillActive', index)
+            if (this.isSkillDisable(skillName)) return;
+            this.$emit('selectCurrentSkillActive', index);
         }
     }
 };

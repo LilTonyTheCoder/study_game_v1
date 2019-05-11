@@ -48,7 +48,7 @@ const personages = [
 		cost: 800,
 		skills: [
 			{
-				name: 'skill1',
+				name: 'amazonia-hit',
 				lvl: 2
 			},
 			{

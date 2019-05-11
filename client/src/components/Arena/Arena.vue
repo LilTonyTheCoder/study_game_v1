@@ -1,7 +1,10 @@
 <template>
     <div class="arena std-block">
         <Header></Header>
-        <div class="arena__bg">
+        <div
+            class="arena__bg"
+            :class="[`shake-bg--${shakeBgAnimation}`]"
+        >
             <img src="~img/locations/location1.jpeg" alt="">
         </div>
 
@@ -17,7 +20,10 @@
         />
         <FightMessage />
 
-        <div class="arena__field field">
+        <div
+            class="arena__field field"
+            :class="[`shake-bg--${shakeBgAnimation}`]"
+        >
             <div class="field__wrapper">
                 <FightPersonage
                     v-for="personage in allPersonages"
@@ -57,6 +63,7 @@ export default {
             enemySelected: '',
             fightStatusTitle: '',
             isFightStatusVisible: false,
+            shakeBgAnimation: '',
 
             currentActivePersonageId: '',
             currentActiveSkill: 0,
@@ -111,6 +118,9 @@ export default {
                 personage.maxMana = personage.mana;
                 personage.img = `personages/${personage.avatar}/ava1.png`;
                 personage.position = 'default';
+                personage.isNowDoingHit = false;
+                personage.animationName = '';
+                personage.damagedAnimation = false;
 
                 return personage;
             });
@@ -191,58 +201,90 @@ export default {
                         this.enemySelected = otherTeam[randomOpponent].id;
                     }
 
-                    // Подойти текущим персонажем к выбранному врагу
+                    // Создаем необходимые переменные
                     let currentPersonage = this.allPersonages.find(personage => {
                         return team[0].id === personage.id;
                     });
                     let currentEnemy = this.allPersonages.find(enemy => {
                         return this.enemySelected === enemy.id;
                     });
-                    currentPersonage.position = 'nearbyenemy';
-                    currentPersonage.enemy = currentEnemy;
+                    let currentSkillName = currentPersonage.skills[this.currentActiveSkill].name;
+                    let skillInData = skills.find(skill => skill.name === currentSkillName);
+
+                    // Подойти текущим персонажем к выбранному врагу
+                    if (!skillInData.dontComeClose) { // есть скиллы, где не нужно подходить
+                        currentPersonage.position = 'nearbyenemy';
+                        currentPersonage.enemy = currentEnemy;
+                    }
+
                     setTimeout(() => {
-                        // TODO: Анимация Удара
+                        // Анимация Удара
+                        currentPersonage.isNowDoingHit = true;
+                        currentPersonage.animationName = currentSkillName;
+                        let animationDuration = skillInData.animationDuration || 500;
 
-                        // Отнять хп
-                        currentEnemy.hp -= this.calculateDamage(currentPersonage);
+                        // Анимация получения повреждений после анимации атаки
+                        setTimeout(() => {
+                            this.shakeBg(currentEnemy.type);
+                            currentPersonage.isNowDoingHit = false;
+                            currentEnemy.damagedAnimation = true;
+                        }, animationDuration);
 
-                        // Если враг умер - вырезаем его из массива
-                        if (currentEnemy.hp <= 0) {
-                            currentEnemy.hp = 0;
-                            console.log('враг умер');
-                            let opponentTeamArray = isComputerTurn ? this.team : this.enemies;
+                        // После двух анимаций продолжение
+                        setTimeout(() => {
+                            currentEnemy.damagedAnimation = false;
 
-                            opponentTeamArray.forEach((personage, index) => {
-                                if (personage.hp < 1) {
-                                    opponentTeamArray.splice(index, 1);
+                            // Отнять хп
+                            currentEnemy.hp -= this.calculateDamage(currentPersonage);
+
+                            // Если враг умер - вырезаем его из массива
+                            if (currentEnemy.hp <= 0) {
+                                currentEnemy.hp = 0;
+                                console.log('враг умер');
+                                let opponentTeamArray = isComputerTurn ? this.team : this.enemies;
+
+                                opponentTeamArray.forEach((personage, index) => {
+                                    if (personage.hp < 1) {
+                                        opponentTeamArray.splice(index, 1);
+                                    }
+                                });
+                                // Конец боя
+                                if (opponentTeamArray.length === 0) {
+                                    let titleMessage = team[0].type === 'team' ? 'Победа!' : 'Поражение...';
+                                    this.fightStatusTitle = titleMessage;
+                                    this.isFightStatusVisible = true;
                                 }
-                            });
-                            // Конец боя
-                            if (opponentTeamArray.length === 0) {
-                                let titleMessage = team[0].type === 'team' ? 'Победа!' : 'Поражение...';
-                                this.fightStatusTitle = titleMessage;
-                                this.isFightStatusVisible = true;
                             }
-                        }
 
-                        // Вернуться на default позицию
-                        currentPersonage.enemy = false;
-                        currentPersonage.position = 'default';
+                            // Вернуться на default позицию
+                            currentPersonage.enemy = false;
+                            currentPersonage.position = 'default';
 
-                        // ходит оставшаяся часть команды
-                        let newArray = team.slice(1);
-                        if (!isComputerTurn) {
-                            this.userMove(newArray, otherTeam);
-                        } else {
-                            this.computerMove(newArray, otherTeam);
-                        }
-                    }, 1000);
+                            // ходит оставшаяся часть команды
+                            let newArray = team.slice(1);
+                            if (!isComputerTurn) {
+                                this.userMove(newArray, otherTeam);
+                            } else {
+                                this.computerMove(newArray, otherTeam);
+                            }
+                        }, animationDuration + 300); // 300 мс длится анимация получения повреждений
+                    });
                 }
             }, 500); // TODO: поменять на меньшее число. 50, 100, например
         },
         moveToCenter(personage) {
             personage.position = 'center';
             this.currentActivePersonageId = personage.id;
+        },
+        shakeBg(enemyType) {
+            if (enemyType === 'enemy') {
+                this.shakeBgAnimation = 'normal';
+            } else {
+                this.shakeBgAnimation = 'reverse';
+            }
+            setTimeout(() => {
+                this.shakeBgAnimation = '';
+            }, 300);
         }
     }
 };
@@ -288,5 +330,25 @@ export default {
     }
 
   }
+.shake-bg--normal {
+    animation-name: shake-bg;
+    animation-duration: .3s;
+}
+.shake-bg--reverse {
+    animation-name: shake-bg-reverse;
+    animation-duration: .3s;
+}
 
+@keyframes shake-bg {
+    0%  {transform: translateX(0px);}
+    33% {transform: translateX(30px);}
+    66% {transform: translateX(-10px);}
+    100% {transform: translateX(0px);}
+}
+@keyframes shake-bg-reverse {
+    0%  {transform: translateX(0px);}
+    33% {transform: translateX(-30px);}
+    66% {transform: translateX(10px);}
+    100% {transform: translateX(0px);}
+}
 </style>
