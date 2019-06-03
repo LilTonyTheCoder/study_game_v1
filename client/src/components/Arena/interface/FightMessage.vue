@@ -1,12 +1,29 @@
 <template>
-    <div class="arena__bottom-popup bottom-popup hide">
-        <p class="bottom-popup__title">Удар кинжалом</p>
-        <p class="bottom-popup__text">Одиночный удар. Урон 100!</p>
+    <div class="arena__bottom-popup bottom-popup">
+        <p class="bottom-popup__title">{{skillName}}</p>
+        <p class="bottom-popup__text">{{skillVerbName}}. Урон {{skillDamage}}!</p>
     </div>
 </template>
 <script>
 export default {
-    name: 'FightMessage'
+    name: 'FightMessage',
+    props: {
+        currentSkillObj: {
+            type: Object
+        },
+        skillDamage: {
+            type: Number
+        }
+    },
+    computed: {
+        skillName() {
+            return this.currentSkillObj.nameRus;
+        },
+        skillVerbName() {
+            return this.currentSkillObj.verb;
+        },
+        ...mapState('data', ['personages'])
+    }
 };
 </script>
 <style lang="scss">

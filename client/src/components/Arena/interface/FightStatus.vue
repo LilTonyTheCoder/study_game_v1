@@ -3,7 +3,7 @@
         <div class="shadow"></div>
         <div class="status">
             <div class="status__img">
-                <!-- <img src="" alt=""> -->
+                <!-- <img :src="require(`img/arena/start-fight.png`)" alt=""> -->
             </div>
             <div class="status__text">
                 {{title}}
@@ -90,6 +90,7 @@ export default {
   background: #eee;
   border-radius: 5px;
   cursor: pointer;
+  position: relative;
 }
 .container {
   z-index: 99;
@@ -114,13 +115,26 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  &__img {
+      position: absolute;
+      top: 125px;
+  }
   &__text {
+    width: 665px;
+    height: 218px;
     font-size: 64px;
     color: #fff;
     text-shadow: #474747 3px 5px 2px, 0px 0px 2px rgba(28,110,164,0);
     margin-bottom: 10px;
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('~img/arena/start-fight.png') 0 20px no-repeat;
   }
   .reward-table {
+    position: relative;
     display: flex;
     flex-direction: column;
     color: #fff;

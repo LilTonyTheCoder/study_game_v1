@@ -9,10 +9,10 @@
                     <img src="~img/quick-play.png" alt="">
                 </div>
             </div>
-            <div v-if="personageId" class="bottom-bar__right">
+            <div v-if="personageId && personageSkills()" class="bottom-bar__right">
                 <div class="bottom-bar__actions actions">
                     <div
-                        v-for="(skill, index) in personageSkills(personageId)"
+                        v-for="(skill, index) in personageSkills()"
                         :key="index"
                         :class="{
                             'disable' : isSkillDisable(skill.name),
@@ -49,7 +49,8 @@ export default {
         personageSkills() {
             let currentPersonage = this.personages.find(personage => personage.id === this.personageId);
             console.dir(currentPersonage);
-            return currentPersonage.skills;
+            if ( currentPersonage ) return currentPersonage.skills;
+            return false;
         },
         skillImg(skillName) {
             let skillSrc = require('img/skills/skill1.png'); // TODO: default skill img

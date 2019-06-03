@@ -5,6 +5,10 @@
         @click="target(personage.id)"
     >
         <div class="personage__wrapper">
+            <div
+                v-if="personage.damagedNumAnimation"
+                class="damage-num"
+            >-{{personage.currentDamage}}</div>
             <!-- анимация скилла атакующего -->
             <div
                 v-if="personage.isNowDoingHit"
@@ -55,7 +59,7 @@ export default {
         generatePersClass(personage) {
             let type = personage.type === 'enemy' ? 'enemy' : 'personage';
 
-            if (personage.position === 'center') return 'personage--center';
+            if (personage.position === 'center') return `${type}--center`;
             if (personage.position === 'nearbyenemy') return `${type}--nearbyenemy-${personage.enemy.index + 1}`;
 
             return `${type}--default-${personage.index + 1}`;
@@ -223,6 +227,10 @@ export default {
   }
 }
 .enemy {
+  &--center {
+    left: 45%;
+    bottom: 0;
+  }
   &--default-1 {
       left: 57%;
       bottom: 0;
@@ -252,6 +260,21 @@ export default {
       opacity: 0;
       cursor: default;
 }
+.damage-num {
+  color: #fff;
+  font-size: 42px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  left: 40px;
+  z-index: 10;
+  text-shadow: 0px 0px 8px #000;
+  transition: .3s;
+  animation-name: damage-num;
+  animation-duration: 1.2s;
+  animation-fill-mode: forwards
+//   animation-iteration-count: infinite;
+}
 
 @keyframes pulse {
     0%  {transform: scaleY(1);}
@@ -271,6 +294,11 @@ export default {
 @keyframes death {
     0%  {opacity: 1;}
     100% {opacity: 0;}
+}
+@keyframes damage-num {
+    0% {opacity: 0;transform: scale(4);}
+    20% {opacity: 1;transform: scale(1);}
+    100% {opacity: 0; transform: translateY(-30px)}
 }
 </style>
 

@@ -11,14 +11,20 @@
         <FightBottom
             :personageId="currentActivePersonageId"
             :currentActiveSkill="currentActiveSkill"
-            @selectCurrentSkillActive="currentActiveSkill = $event"
+            @selectCurrentSkillActive="selectCurrentSkillActive($event)"
         />
         <FightStatus
             v-if="isFightStatusVisible"
             :title="fightStatusTitle"
             :rewardItems="currentArenaInfo.reward"
         />
-        <FightMessage />
+        <transition name="slide">
+            <FightMessage
+                v-if="isMessageVisible"
+                :currentSkillObj="currentSkillObj"
+                :skillDamage="damageNum"
+            />
+        </transition>
 
         <div
             class="arena__field field"
@@ -64,6 +70,9 @@ export default {
             fightStatusTitle: '',
             isFightStatusVisible: false,
             shakeBgAnimation: '',
+            isMessageVisible: false,
+            damageNum: 0,
+            currentSkillObj: {},
 
             currentActivePersonageId: '',
             currentActiveSkill: 0,
@@ -85,6 +94,13 @@ export default {
         clearInterval(this.fightTimer);
     },
     methods: {
+        selectCurrentSkillActive(num) {
+            this.currentActiveSkill = num;
+            // Если один соперник - сразу же его бьем
+            if (this.enemies.length === 1) {
+                this.isSelectEnemy = true;
+            }
+        },
         calculateDamage(personage) {
             console.dir(personage);
             let currentSkillName = personage.skills[this.currentActiveSkill].name;
@@ -121,6 +137,8 @@ export default {
                 personage.isNowDoingHit = false;
                 personage.animationName = '';
                 personage.damagedAnimation = false;
+                personage.damagedNumAnimation = false;
+                personage.currentDamage = 0;
 
                 return personage;
             });
@@ -179,11 +197,12 @@ export default {
             this.currentActiveSkill = 0;
 
             // Выходит в центр
-            if (!isComputerTurn) {
-                this.moveToCenter(team[0]);
-            }
+            this.moveToCenter(team[0]);
+
             if (isComputerTurn) {
-                this.isSelectEnemy = true; // Не ждем хода человека
+                setTimeout(() => {
+                    this.isSelectEnemy = true; // Не ждем хода человека
+                }, 1000)
             }
             // Ждем, пока user нажмет на врага
             this.fightTimer = setInterval(() => {
@@ -194,6 +213,9 @@ export default {
                     clearInterval(this.fightTimer);
                     this.currentActivePersonageId = '';
 
+                    if (otherTeam.length === 1) {
+                        this.enemySelected = otherTeam[0].id;
+                    }
                     // Выбор рандомного соперника, когда ходит противник
                     if (isComputerTurn) {
                         let opponentTeamLength = otherTeam.length;
@@ -210,6 +232,7 @@ export default {
                     });
                     let currentSkillName = currentPersonage.skills[this.currentActiveSkill].name;
                     let skillInData = skills.find(skill => skill.name === currentSkillName);
+                    this.currentSkillObj = skillInData;
 
                     // Подойти текущим персонажем к выбранному врагу
                     if (!skillInData.dontComeClose) { // есть скиллы, где не нужно подходить
@@ -218,6 +241,8 @@ export default {
                     }
 
                     setTimeout(() => {
+                        let calculateDamage = this.calculateDamage(currentPersonage);
+
                         // Анимация Удара
                         currentPersonage.isNowDoingHit = true;
                         currentPersonage.animationName = currentSkillName;
@@ -226,16 +251,24 @@ export default {
                         // Анимация получения повреждений после анимации атаки
                         setTimeout(() => {
                             this.shakeBg(currentEnemy.type);
+                            this.isMessageVisible = true;
                             currentPersonage.isNowDoingHit = false;
                             currentEnemy.damagedAnimation = true;
+                            currentEnemy.currentDamage = calculateDamage;
+                            this.damageNum = calculateDamage;    // нужно будет избавиться
+                            currentEnemy.damagedNumAnimation = true;
                         }, animationDuration);
+
+                        setTimeout(() => {
+                            currentEnemy.damagedNumAnimation = false;
+                        }, animationDuration + 1200);
 
                         // После двух анимаций продолжение
                         setTimeout(() => {
                             currentEnemy.damagedAnimation = false;
 
                             // Отнять хп
-                            currentEnemy.hp -= this.calculateDamage(currentPersonage);
+                            currentEnemy.hp -= calculateDamage;
 
                             // Если враг умер - вырезаем его из массива
                             if (currentEnemy.hp <= 0) {
@@ -255,19 +288,23 @@ export default {
                                     this.isFightStatusVisible = true;
                                 }
                             }
-
+                        }, animationDuration + 300); // 300 мс длится анимация получения повреждений
+                        setTimeout(() => {
+                            this.isMessageVisible = false;
                             // Вернуться на default позицию
                             currentPersonage.enemy = false;
                             currentPersonage.position = 'default';
 
-                            // ходит оставшаяся часть команды
-                            let newArray = team.slice(1);
-                            if (!isComputerTurn) {
-                                this.userMove(newArray, otherTeam);
-                            } else {
-                                this.computerMove(newArray, otherTeam);
-                            }
-                        }, animationDuration + 300); // 300 мс длится анимация получения повреждений
+                            setTimeout(() => {
+                                // ходит оставшаяся часть команды
+                                let newArray = team.slice(1);
+                                if (!isComputerTurn) {
+                                    this.userMove(newArray, otherTeam);
+                                } else {
+                                    this.computerMove(newArray, otherTeam);
+                                }
+                            }, 1000);
+                        }, animationDuration + 300 + 1000);
                     });
                 }
             }, 500); // TODO: поменять на меньшее число. 50, 100, например
@@ -350,5 +387,12 @@ export default {
     33% {transform: translateX(-30px);}
     66% {transform: translateX(10px);}
     100% {transform: translateX(0px);}
+}
+.slide-enter-active, .slide-leave-active {
+    transition: .5s;
+}
+.slide-enter {
+    opacity: 0;
+    transform: translateY(-100px);
 }
 </style>
