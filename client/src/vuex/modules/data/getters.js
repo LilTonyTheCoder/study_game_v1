@@ -7,5 +7,8 @@ export default {
     },
     getGoods: state => {
         return state.goods;
+    },
+    getMissionsNew: state => {
+    	return state.missionsNew;
     }
 };

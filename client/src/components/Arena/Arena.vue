@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="test-btn" @click.once="startFight()">начать бой</div>
+        <!-- <div class="test-btn" @click.once="startFight()">начать бой</div> -->
     </div>
     <!-- https://www.youtube.com/watch?v=y7Cq-0rXnB0 тут пример боевки -->
 </template>
@@ -90,6 +90,9 @@ export default {
         },
         ...mapState('gameInfo', ['activeTeam', 'currentArenaInfo'])
     },
+    mounted() {
+        this.startFight();
+    },
     beforeDestroy() {
         clearInterval(this.fightTimer);
     },
@@ -104,7 +107,7 @@ export default {
         calculateDamage(personage) {
             console.dir(personage);
             let currentSkillName = personage.skills[this.currentActiveSkill].name;
-            let skillInData = skills.find(skill => skill.name === currentSkillName);
+            let skillInData = window.skills.find(skill => skill.name === currentSkillName);
 
             let damage = skillInData.damageCalc(personage.str);
             personage.mana -= skillInData.manaCost;
@@ -202,7 +205,10 @@ export default {
             if (isComputerTurn) {
                 setTimeout(() => {
                     this.isSelectEnemy = true; // Не ждем хода человека
-                }, 1000)
+                }, 1000);
+            }
+            if (this.enemies.length === 0) {
+                return;
             }
             // Ждем, пока user нажмет на врага
             this.fightTimer = setInterval(() => {
@@ -231,7 +237,7 @@ export default {
                         return this.enemySelected === enemy.id;
                     });
                     let currentSkillName = currentPersonage.skills[this.currentActiveSkill].name;
-                    let skillInData = skills.find(skill => skill.name === currentSkillName);
+                    let skillInData = window.skills.find(skill => skill.name === currentSkillName);
                     this.currentSkillObj = skillInData;
 
                     // Подойти текущим персонажем к выбранному врагу
@@ -255,7 +261,7 @@ export default {
                             currentPersonage.isNowDoingHit = false;
                             currentEnemy.damagedAnimation = true;
                             currentEnemy.currentDamage = calculateDamage;
-                            this.damageNum = calculateDamage;    // нужно будет избавиться
+                            this.damageNum = calculateDamage; // нужно будет избавиться
                             currentEnemy.damagedNumAnimation = true;
                         }, animationDuration);
 

@@ -51,7 +51,7 @@ export default {
         isWin() {
             return this.title === 'Победа!';
         },
-        ...mapState('gameInfo', ['currentArenaInfo']),
+        ...mapState('gameInfo', ['currentArenaInfo', 'selectedMissionId']),
         ...mapGetters('data', ['getMissions'])
     },
     methods: {
@@ -74,6 +74,7 @@ export default {
         setMissionProgress() {
             if (this.isWin) { // TODO: считать прогресс и при поражении по количеству выживших противников, но не перезаписывать, если уже была победа
                 this.changeMissionProgress({
+                    child: this.selectedMissionId,
                     id: this.currentArenaInfo.id,
                     progress: 100
                 });

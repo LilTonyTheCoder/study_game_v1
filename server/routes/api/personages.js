@@ -2,7 +2,7 @@ const personages = [
 	{
 		name: 'Треворз',
 		id: 'sf99799aw',
-		lvl: 4,
+		lvl: 5,
 		str: 10,
 		def: 10,
 		hp: 200,
@@ -18,7 +18,7 @@ const personages = [
 				lvl: 1
 			},
 			{
-				name: 'skill1',
+				name: 'burn-down',
 				lvl: 2
 			},
 			{

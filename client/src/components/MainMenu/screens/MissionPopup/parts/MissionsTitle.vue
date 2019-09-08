@@ -1,8 +1,9 @@
 <template>
     <div class="top">
-        <div class="name">1. Рождение героя</div>
-        <div class="back">Сменить локацию</div>
-        <div class="back" @click="goBackToMain()">Назад</div>
+        <div v-if="titleType === 'child'" class="name">{{missionIndex + missionTitle}}</div>
+        <div v-else class="name">Меняем локацию</div>
+        <div v-if="titleType === 'child'" class="back" @click="changeMissionsParent()">Сменить локацию</div>
+        <div v-if="titleType === 'child'" class="back" @click="goBackToMain()">Назад</div>
         <!-- <div class="second-block">
 <div class="level">
 Уровень 3
@@ -23,9 +24,35 @@
 <script>
 export default {
     name: 'MissionsTitle',
+    props: {
+        titleType: {
+            type: String
+        }
+    },
+    computed: {
+        missionIndex() {
+            if (!this.getMissionsNew.regularMissions) return;
+            const index = this.getMissionsNew.regularMissions.findIndex(item => item.id === this.selectedMissionId);
+            if (index !== -1) return index + 1 + '. ';
+            return '';
+        },
+        missionTitle() {
+            if (!this.getMissionsNew.regularMissions) return;
+            let missionItem = this.getMissionsNew.regularMissions.find(item => item.id === this.selectedMissionId);
+            if (missionItem) return missionItem.name;
+            missionItem = this.getMissionsNew.specialMissions.find(item => item.id === this.selectedMissionId);
+            if (missionItem) return missionItem.name;
+            return this.getMissionsNew.regularMissions[0].name;
+        },
+        ...mapGetters('data', ['getMissions', 'getMissionsNew']),
+        ...mapState('gameInfo', ['selectedMissionId'])
+    },
     methods: {
         goBackToMain() {
             this.changeMenuScreen('MainList');
+        },
+        changeMissionsParent() {
+            this.$emit('changeMissionsParent');
         },
         ...mapMutations('gameInfo', ['changeMenuScreen'])
     }

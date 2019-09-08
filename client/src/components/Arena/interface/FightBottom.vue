@@ -49,7 +49,7 @@ export default {
         personageSkills() {
             let currentPersonage = this.personages.find(personage => personage.id === this.personageId);
             console.dir(currentPersonage);
-            if ( currentPersonage ) return currentPersonage.skills;
+            if (currentPersonage) return currentPersonage.skills;
             return false;
         },
         skillImg(skillName) {
@@ -61,7 +61,7 @@ export default {
         },
         isSkillDisable(skillName) {
             let currentPersonage = this.personages.find(personage => personage.id === this.personageId);
-            let currentSkill = skills.find(skill => skill.name === skillName);
+            let currentSkill = window.skills.find(skill => skill.name === skillName);
             return currentPersonage.mana < currentSkill.manaCost;
         },
         isSkillActive(index) {

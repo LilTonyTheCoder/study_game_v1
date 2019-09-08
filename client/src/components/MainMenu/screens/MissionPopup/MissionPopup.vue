@@ -2,8 +2,8 @@
     <transition name="slide">
         <div>
             <div class="mission-popup">
-                <div class="mission-popup__wrapper">
-                    <MissionsTitle />
+                <div v-if="currentMissionScreen === 'child'" class="mission-popup__wrapper">
+                    <MissionsTitle :titleType="'child'" @changeMissionsParent="changeMissionsParent"/>
 
                     <div class="mission-popup__content">
                         <div class="mission-popup__inside">
@@ -59,6 +59,29 @@
                         </div>
                     </div>
                 </div>
+
+                <div v-if="currentMissionScreen=== 'parent'" class="mission-popup__wrapper">
+                    <MissionsTitle :titleType="'parent'" @changeMissionsParent="changeMissionsParent"/>
+                    <div class="mission-popup__content">
+                        <div class="mission-popup__slider slider">
+                            <div class="slider__inner">
+                                <div
+                                    v-for="(child, index) in missionsNew.regularMissions"
+                                    :key="index"
+                                    class="slider__child"
+                                    :class="{'available' : isAvailable(index)}"
+                                    @click="selectChildMission(child.id)"
+                                >
+                                    {{index+1 + '. ' + child.name}}
+                                    <div class="slider__img">
+                                        <img :src="require(`img/missions/${child.img}`)" alt="">
+                                    </div>
+                                    <div v-if="child.recommended" class="slider__recommended">{{child.recommended}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <HeroChoose
                 v-if="isChooseHeroes"
@@ -85,14 +108,30 @@ export default {
             isChooseHeroes: false,
             chooserEnemies: [],
             currentMission: {},
-            missions: []
+            missionsNew: {},
+            currentMissionScreen: 'child'
         };
     },
     computed: {
-        ...mapGetters('data', ['getMissions'])
+        missions() {
+            if (!this.missionsNew.allItems) return;
+            const missionItem = this.missionsNew.allItems.find(item => item.id === this.selectedMissionId);
+            if (missionItem) return missionItem.items;
+            return this.missionsNew.allItems[0].items;
+        },
+        currentRegularMissionIndex() {
+            const lastActiveMissionId = this.getMissionsNew.currentRegularMission;
+            return this.getMissionsNew.regularMissions.findIndex(mission => {
+                return mission.id === lastActiveMissionId;
+            });
+        },
+        ...mapGetters('data', ['getMissions', 'getMissionsNew']),
+        ...mapState('gameInfo', ['selectedMissionId'])
     },
     mounted() {
-        this.missions = this.getMissions;
+        this.missionsNew = this.getMissionsNew;
+        if (!this.selectedMissionId) this.changeSelectedMission(this.missionsNew.allItems[0].id);
+        this.checkMissionStatus();
     },
     methods: {
         selectPersonages(missionData) {
@@ -113,7 +152,28 @@ export default {
         closeChooser() {
             this.isChooseHeroes = false;
         },
-        ...mapMutations('gameInfo', ['changeLocation', 'setArenaInfo'])
+        changeMissionsParent() {
+            console.log('Меняем локацию');
+            this.currentMissionScreen = 'parent';
+        },
+        selectChildMission(missionId) {
+            this.currentMissionScreen = 'child';
+            this.changeSelectedMission(missionId);
+        },
+        isAvailable(index) {
+            return this.currentRegularMissionIndex >= index;
+        },
+        checkMissionStatus() {
+            const lastActiveMissionId = this.getMissionsNew.currentRegularMission;
+            const mission = this.getMissionsNew.allItems.find(el => { return el.id === lastActiveMissionId; });
+            const isAllItemsPassed = mission.items.every(item => item.persentPass === 100);
+            if (isAllItemsPassed) {
+            // Все items текущей миссии пройдены, меняем currentRegularMission
+                this.changeCurrentRegMision(this.getMissionsNew.regularMissions[this.currentRegularMissionIndex + 1].id);
+            }
+        },
+        ...mapMutations('gameInfo', ['changeLocation', 'setArenaInfo', 'changeSelectedMission']),
+        ...mapMutations('data', ['changeCurrentRegMision'])
     }
 };
 </script>
@@ -291,6 +351,51 @@ export default {
           color: #432721;
         }
       }
+    }
+  }
+  .slider {
+    width: 100%;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    &__inner {
+      width: 100%;
+      overflow: scroll;
+      display: flex;
+      height: 250px;
+      align-items: center;
+    }
+    &__child {
+      width: 530px;
+      height: 150px;
+      margin-right: 20px;
+      border: 2px solid #eee;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      filter: brightness(0.3);
+      &.available {
+        filter: none;
+      }
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    &__status {
+      position: absolute;
+      bottom: -40px;
+      left: 0;
+    }
+    &__img {
+      width: 100%;
+      img {
+        width: 100%;
+      }
+    }
+    &__recommended {
+      position: absolute;
+      bottom: -23px;
+      left: 0;
     }
   }
 }

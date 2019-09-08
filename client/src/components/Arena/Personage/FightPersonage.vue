@@ -341,6 +341,16 @@ export default {
     animation-duration: .8s;
     transform-origin: center center;
   }
+  &__burn-down {
+    position: relative;
+    width: 100%;
+    height: 230px;
+    left: 170px;
+    top: -60px;
+    background: url("~img/skills-animation/burn-down/burn-down.gif") no-repeat;
+    background-size: contain;
+    z-index: 9;
+  }
 }
 
 @keyframes amazonia-hit {

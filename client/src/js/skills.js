@@ -39,6 +39,17 @@ const skills = [
         damageCalc(str) {
             return 15;
         }
+    },
+    {
+        name: 'burn-down',
+        manaCost: 10,
+        nameRus: 'Маленький взрыв',
+        verb: 'Бууум',
+        dontComeClose: true,
+        animationDuration: 1000,
+        damageCalc(str) {
+            return str * 5;
+        }
     }
 ];
 
