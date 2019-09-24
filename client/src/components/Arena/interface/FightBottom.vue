@@ -40,6 +40,9 @@ export default {
         currentActiveSkill: {
             type: Number,
             default: 0
+        },
+        allPersonages: {
+            type: Array
         }
     },
     computed: {
@@ -47,7 +50,7 @@ export default {
     },
     methods: {
         personageSkills() {
-            let currentPersonage = this.personages.find(personage => personage.id === this.personageId);
+            let currentPersonage = this.allPersonages.find(personage => personage.id === this.personageId);
             console.dir(currentPersonage);
             if (currentPersonage) return currentPersonage.skills;
             return false;
@@ -60,9 +63,9 @@ export default {
             return skillSrc;
         },
         isSkillDisable(skillName) {
-            let currentPersonage = this.personages.find(personage => personage.id === this.personageId);
+            let currentPersonage = this.allPersonages.find(personage => personage.id === this.personageId);
             let currentSkill = window.skills.find(skill => skill.name === skillName);
-            return currentPersonage.mana < currentSkill.manaCost;
+            return currentPersonage.currentMana < currentSkill.manaCost;
         },
         isSkillActive(index) {
             return index === this.currentActiveSkill;
@@ -82,6 +85,7 @@ export default {
   left: 0;
   height: 50px;
   display: flex;
+  z-index: 2;
   &__wrapper {
     position: relative;
     display: flex;

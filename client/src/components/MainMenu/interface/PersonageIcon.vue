@@ -11,12 +11,12 @@
             <div v-if="!personage.available" class="item__img__lock">
                 <img src="~img/lock.png" alt="">
             </div>
-            <img :src="require(`img/personages/${personage.avatar}/icon.png`)" alt="" >
+            <img :src="personageImgUrl(personage.avatar)" >
             <div class="item__lvl">{{personage.lvl}}</div>
         </div>
         <div class="item__power">
-            <div class="item__power__text">{{personage.power}} / {{personage.maxPower}}</div>
-            <div class="item__power__fill" :style="{width: 100*personage.power/personage.maxPower+'%'}" ></div>
+            <div class="item__power__text">{{personage.attributes.energy}} / {{maximumEnergy}}</div>
+            <div class="item__power__fill" :style="{width: 100*personage.attributes.energy/maximumEnergy+'%'}" ></div>
         </div>
     </div>
 </template>
@@ -37,9 +37,19 @@ export default {
             default: false
         }
     },
+    computed: {
+        ...mapState('data', ['maximumEnergy'])
+    },
     methods: {
         addPersonage(personage) {
             this.$emit('addPersonage', personage);
+        },
+        personageImgUrl(url) {
+            try {
+                return require(`img/personages/${url}/icon.png`);
+            } catch (e) {
+                return require('img/personages/no-avatar.jpeg');
+            }
         }
     }
 };
@@ -92,6 +102,10 @@ export default {
         height: 60px;
         box-sizing: border-box;
         position: relative;
+        & > img {
+            width: 60px;
+            height: 60px;
+        }
         &--active {
             box-shadow: 0 0 13px #335fff, 0 0 13px #335fff, 0 0 13px #fff;
         }
@@ -146,6 +160,7 @@ export default {
             background: #ff7d00;
             top: 0;
             left: 0;
+            transition: .3s;
         }
     }
 }

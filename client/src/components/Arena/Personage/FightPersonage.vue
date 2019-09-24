@@ -52,7 +52,7 @@ export default {
     },
     data() {
         return {
-            personageLines: ['hp', 'mana', 'power']
+            personageLines: ['hp', 'mana']
         };
     },
     methods: {
@@ -70,9 +70,8 @@ export default {
         generateFillWidth(paramName) {
             const { personage } = this;
 
-            if (paramName === 'hp') return (personage.hp / personage.maxHP) * 100;
-            if (paramName === 'mana') return (personage.mana / personage.maxMana) * 100;
-            if (paramName === 'power') return (personage.power / personage.maxPower) * 100;
+            if (paramName === 'hp') return (personage.currentHP / personage.maxHP) * 100;
+            if (paramName === 'mana') return (personage.currentMana / personage.maxMana) * 100;
 
             return 100;
         },
@@ -134,15 +133,14 @@ export default {
   }
   &__top-info {
     width: 90px;
-    height: 21px;
+    height: 20px;
     background: #eee;
     position: absolute;
     top: 4px;
-    left: 25%;
+    left: 26px;
     display: flex;
     flex-direction: column;
     border: 1px solid #000;
-    border-radius: 6px;
     overflow: hidden;
   }
   &__lvl {
@@ -162,7 +160,7 @@ export default {
   }
   &__hp {
     width: 100%;
-    height: 7px;
+    height: 10px;
     border-bottom: 1px solid #000;
     position: relative;
     .fill {
@@ -174,8 +172,7 @@ export default {
   }
   &__mana {
     width: 100%;
-    height: 7px;
-    border-bottom: 1px solid #000;
+    height: 10px;
     position: relative;
     .fill {
       position: absolute;
@@ -184,21 +181,10 @@ export default {
       height: 100%;
     }
   }
-  &__power {
-    width: 100%;
-    height: 7px;
-    position: relative;
-    .fill {
-      position: absolute;
-      background: #F4A70E;
-      width: 20%;
-      height: 100%;
-    }
-  }
 }
 .personage {
   &--default-1 {
-    left: 17%;
+    left: 22%;
     bottom: 0%;
     z-index: 1;
   }
@@ -207,18 +193,28 @@ export default {
     bottom: 10%;
     z-index: 1;
   }
+  &--default-3 {
+    left: 9%;
+    bottom: -12%;
+    z-index: 1;
+  }
   &--center {
     left: 35%;
     bottom: 0;
   }
   &--nearbyenemy-1 {
-      left: 43%;
+      left: 48%;
       bottom: 0;
       z-index: 10;
   }
   &--nearbyenemy-2 {
       left: 62%;
       bottom: 10%;
+      z-index: 10;
+  }
+  &--nearbyenemy-3 {
+      left: 57%;
+      bottom: -12%;
       z-index: 10;
   }
   &.punch {
@@ -241,14 +237,24 @@ export default {
       bottom: 10%;
       z-index: 1;
   }
+  &--default-3 {
+      left: 72%;
+      bottom: -12%;
+      z-index: 1;
+  }
   &--nearbyenemy-1 {
-      left: 32%;
+      left: 37%;
       bottom: 0;
       z-index: 10;
   }
   &--nearbyenemy-2 {
       left: 18%;
       bottom: 10%;
+      z-index: 10;
+  }
+  &--nearbyenemy-3 {
+      left: 24%;
+      bottom: -12%;
       z-index: 10;
   }
   &.punch {

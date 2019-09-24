@@ -9,32 +9,25 @@
             <div class="energy">
                 <img src="~img/lightning-icon.png" alt="">
                 <div class="ebar">
-                    {{currentPersonage.power}} / {{currentPersonage.maxPower}}
+                    {{currentPersonage.attributes.energy}} / {{maximumEnergy}}
                     <div class="ebar__fill"  :style="{width: persentPowerPersonage(currentPersonage)+'%'}"></div>
                 </div>
             </div>
             <div class="timer">
                 <div class="plus-button">+</div>
-                <div>0:47</div>
+                <div>{{getFullRecoverEnergyTime}}</div>
             </div>
             <div class="xp">
                 <img src="~img/xp.png" alt="">
                 <div class="xpbar">
-                    {{currentPersonage.xp}} / {{currentPersonage.nextLvlXp}}
-                    <div class="xpbar__fill" :style="{width: 100*currentPersonage.xp/currentPersonage.nextLvlXp + '%'}"></div>
+                    {{currentPersonage.attributes.xp}} / {{experienceNeed}}
+                    <div class="xpbar__fill" :style="experineceBarStyle"></div>
                 </div>
             </div>
         </div>
 
         <div v-if="currentPersonage.available" class="params">
-            <div v-for="(block, index) in stats" :key="index" class="params__block">
-                <div class="params__names">
-                    <div v-for='statName in block' :key="statName">{{statName}}</div>
-                </div>
-                <div class="params__numbers">
-                    <div v-for='statName in block' :key="statName">{{currentPersonage[statName]}}</div>
-                </div>
-            </div>
+            <div v-for="(value, key) in currentPersonage.stats" :key="key" class="params__block">{{key}} : {{calculateParam(key, value, currentPersonage.lvl)}}</div>
         </div>
 
         <div v-if="!currentPersonage.available" class="description">
@@ -49,6 +42,9 @@
 </template>
 
 <script>
+import expTable from 'js/expTable';
+import getParam from 'js/getParam';
+
 export default {
     name: 'PersonageStats',
     props: {
@@ -57,23 +53,52 @@ export default {
         }
     },
     data() {
-        return {
-            stats: [
-                ['str', 'def'],
-                ['hp', 'mana']
-            ]
-        };
+        return {};
     },
     computed: {
-        ...mapGetters('data', ['getGoods'])
+        prevExperienceNeed() {
+            let prevLvlExp = expTable[this.currentPersonage.lvl - 1];
+            if (prevLvlExp) return prevLvlExp;
+            return 0; // когда уже на последнем уровне
+        },
+        experienceNeed() {
+            let nextLvlExp = expTable[this.currentPersonage.lvl];
+            if (nextLvlExp) return nextLvlExp;
+            return 99999; // когда уже на последнем уровне
+        },
+        experineceBarStyle() {
+            const { currentPersonage, experienceNeed, prevExperienceNeed } = this;
+            return { width: 100 * (currentPersonage.attributes.xp - prevExperienceNeed) / (experienceNeed - prevExperienceNeed) + '%' };
+        },
+        getFullRecoverEnergyTime() {
+            if (this.currentPersonage.attributes.energy === this.maximumEnergy) return;
+            const energyTicker = this.tickers.find(el => el.name === 'addEnergy');
+            const oneSecondTicker = this.tickers.find(el => el.name === 'oneSecondPass');
+            let totalSec = ((this.maximumEnergy - this.currentPersonage.attributes.energy) / energyTicker.prop) * energyTicker.interval;
+            let decreaseSec = oneSecondTicker.lastTime - energyTicker.lastTime;
+            if (decreaseSec < 0) decreaseSec = 0;
+            totalSec -= decreaseSec;
+            totalSec = Math.round(totalSec / 1000);
+            let min = Math.floor(totalSec / 60);
+            if (min < 10) min = '0' + min;
+            let sec = totalSec % 60;
+            if (sec < 10) sec = '0' + sec;
+            return `${min} : ${sec}`;
+        },
+        ...mapGetters('data', ['getGoods']),
+        ...mapState('data', ['maximumEnergy']),
+        ...mapState('gameInfo', ['tickers'])
     },
     methods: {
         persentPowerPersonage(personage) {
-            return 100 * personage.power / personage.maxPower;
+            return 100 * personage.attributes.energy / this.maximumEnergy;
         },
         buyPers(personage) {
             if (personage.cost >= this.getGoods.gold) return alert('Не хватает бабла');
             this.buyPersonage(personage.id);
+        },
+        calculateParam(key, value, lvl) {
+            return getParam(key, value, lvl);
         },
         ...mapMutations('data', ['buyPersonage'])
     }
@@ -135,6 +160,7 @@ export default {
         width: 80%;
         border-radius: 6px;
         z-index: -1;
+        transition: .3s;
     }
 }
 .timer {
@@ -179,15 +205,15 @@ export default {
         width: 90%;
         border-radius: 6px;
         z-index: -1;
+        transition: .3s;
     }
 }
 .params {
-    display: flex;
     margin-bottom: 10px;
+    color: #fff;
+    font-size: 18px;
     &__block {
-        display: flex;
-        width: 50%;
-        color: #fff;
+        margin-bottom: 10px;
     }
     &__names {
         background: grey;

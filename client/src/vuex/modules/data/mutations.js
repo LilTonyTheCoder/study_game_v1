@@ -2,7 +2,6 @@ export default {
     loadData(state, payload) {
         state.goods = payload.goods;
         state.personages = payload.personages;
-        state.skills = payload.skills;
         state.missionsNew = payload.missionsNew;
     },
     addGoods(state, payload) {
@@ -19,5 +18,24 @@ export default {
     },
     changeCurrentRegMision(state, payload) {
         state.missionsNew.currentRegularMission = payload;
+    },
+    addExperience(state, payload) {
+        payload.activeTeam.forEach(persId => {
+            let personageInState = state.personages.find(el => el.id === persId);
+            personageInState.attributes.xp += payload.xp;
+        });
+    },
+    subtractEnergy(state, payload) {
+        payload.activeTeam.forEach(persId => {
+            let personageInState = state.personages.find(el => el.id === persId);
+            personageInState.attributes.energy -= payload.energy;
+        });
+    },
+    increaseEnergy(state, payload) {
+        state.personages.forEach(personage => {
+            if (personage.attributes.energy >= state.maximumEnergy) return;
+            personage.attributes.energy += payload;
+            if (personage.attributes.energy >= state.maximumEnergy) personage.attributes.energy = state.maximumEnergy;
+        });
     }
 };

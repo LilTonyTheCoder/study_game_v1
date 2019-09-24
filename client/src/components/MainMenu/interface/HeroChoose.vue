@@ -11,7 +11,7 @@
                         class="choose__img choose__img--can-delete"
                         @click="removePers(chosenId)"
                     >
-                        <img :src="require(`img/personages/${chosenHeroAva(chosenId)}/icon.png`)"><div class="choose__lvl">{{chosenHeroLvl(chosenId)}}</div>
+                        <img :src="personageImgUrl(chosenId)"><div class="choose__lvl">{{chosenHeroLvl(chosenId)}}</div>
                     </div>
                     <div
                         v-for="empty in emptyHeroes"
@@ -70,6 +70,9 @@ export default {
     props: {
         enemies: {
             type: Array
+        },
+        currentMission: {
+            type: Object
         }
     },
     data() {
@@ -88,20 +91,21 @@ export default {
         ...mapGetters('data', ['getPersonages']),
         ...mapState('gameInfo', ['activeTeam'])
     },
+    mounted() {
+        this.removeUncorrectPersonagesFromActiveTeam();
+    },
     methods: {
         closeChooser() {
             this.$emit('closeChooser');
         },
         addPersonage(personage) {
             if (!personage.available || this.activeTeam.length >= this.maxChosen) return;
+            if (personage.attributes.energy < this.currentMission.energyCost) return;
 
             const isAlreadyHere = this.activeTeam.find(persId => personage.id === persId);
             if (isAlreadyHere) return;
 
             this.addToActiveTeam(personage.id);
-        },
-        chosenHeroAva(id) {
-            return this.getPersonages.find(personage => personage.id === id).avatar || '';
         },
         chosenHeroLvl(id) {
             return this.getPersonages.find(personage => personage.id === id).lvl || '';
@@ -111,8 +115,11 @@ export default {
         },
         canAddPers(personage) {
             if (!personage.available) return false;
+            if (personage.attributes.energy < this.currentMission.energyCost) return false;
+
             const isAlreadyHere = this.activeTeam.find(persId => personage.id === persId);
             if (isAlreadyHere) return false;
+            if (this.emptyHeroes === 0) return false;
             return true;
         },
         startFight() {
@@ -121,6 +128,23 @@ export default {
                 return;
             }
             this.$emit('startFight');
+        },
+        personageImgUrl(id) {
+            const url = this.getPersonages.find(personage => personage.id === id).avatar || '';
+            try {
+                return require(`img/personages/${url}/icon.png`);
+            } catch (e) {
+                return require('img/personages/no-avatar.jpeg');
+            }
+        },
+        removeUncorrectPersonagesFromActiveTeam() {
+            let uncorrectActivePersonages = [];
+            this.activeTeam.forEach(persId => {
+                const persInState = this.getPersonages.find(pers => pers.id === persId);
+                const persEnergy = persInState.attributes.energy;
+                if (persEnergy < this.currentMission.energyCost) uncorrectActivePersonages.push(persInState.id);
+            });
+            uncorrectActivePersonages.forEach(id => this.removeFromActiveTeam(id));
         },
         ...mapMutations('gameInfo', ['removeFromActiveTeam', 'addToActiveTeam'])
     }
@@ -191,6 +215,10 @@ export default {
         cursor: pointer;
         background: radial-gradient(#000, #333);
         position: relative;
+        img {
+            width: 60px;
+            height: 60px;
+        }
         &--can-delete {
             &::after {
                 display: block;

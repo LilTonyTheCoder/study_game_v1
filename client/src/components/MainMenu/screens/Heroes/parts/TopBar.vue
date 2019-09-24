@@ -63,9 +63,6 @@ export default {
         goBackToMain() {
             this.changeMenuScreen('MainList');
         },
-        persentPowerPersonage(personage) {
-            return 100 * personage.power / personage.maxPower;
-        },
         changeCurrent(index) {
             this.$emit('changeCurrent', index);
         },
@@ -98,7 +95,7 @@ export default {
         color: #fff;
     }
     &__top {
-        height: 90px;
+        height: 120px;
         display: flex;
     }
     &__study-button {

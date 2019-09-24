@@ -19,5 +19,9 @@ export default {
     },
     changeSelectedMission(state, payload) {
         state.selectedMissionId = payload;
+    },
+    updateTicker(state, payload) {
+        let ticker = state.tickers.find(ticker => ticker.name === payload.name);
+        ticker.lastTime = payload.lastTime;
     }
 };

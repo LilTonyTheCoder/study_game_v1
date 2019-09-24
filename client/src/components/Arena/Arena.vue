@@ -11,6 +11,7 @@
         <FightBottom
             :personageId="currentActivePersonageId"
             :currentActiveSkill="currentActiveSkill"
+            :allPersonages="allPersonages"
             @selectCurrentSkillActive="selectCurrentSkillActive($event)"
         />
         <FightStatus
@@ -52,6 +53,7 @@ import FightStatus from './interface/FightStatus';
 import FightMessage from './interface/FightMessage';
 import FightBottom from './interface/FightBottom';
 import FightPersonage from './Personage/FightPersonage';
+import getParam from 'js/getParam';
 
 export default {
     name: 'Arena',
@@ -78,7 +80,17 @@ export default {
             currentActiveSkill: 0,
 
             enemies: this.personageGenerator('enemy'),
-            team: this.personageGenerator('team')
+            team: this.personageGenerator('team'),
+            allTimers: {
+                mainInterval: 100,
+                startDelay: 500, // задержка при mounted компонента
+                enemyMoveDelay: 500, // задежка при каждом ходе соперника
+                defaultAnimationDuration: 500, // если не указана продолжительность анимации скилла - будет это значение
+                takeDamageAnimation: 1200, // запутался, что это
+                damageAnimation: 300, // анимация получения повреждения
+                switchingTeammetes: 500, // время анимация смены персонажей комманды
+                shakeBgTimer: 300
+            }
         };
     },
     computed: {
@@ -91,7 +103,9 @@ export default {
         ...mapState('gameInfo', ['activeTeam', 'currentArenaInfo'])
     },
     mounted() {
-        this.startFight();
+        setTimeout(() => {
+            this.startFight();
+        }, this.allTimers.startDelay);
     },
     beforeDestroy() {
         clearInterval(this.fightTimer);
@@ -109,8 +123,9 @@ export default {
             let currentSkillName = personage.skills[this.currentActiveSkill].name;
             let skillInData = window.skills.find(skill => skill.name === currentSkillName);
 
-            let damage = skillInData.damageCalc(personage.str);
-            personage.mana -= skillInData.manaCost;
+            const getStr = getParam('strength', personage.stats.strength, personage.lvl);
+            let damage = skillInData.damageCalc(getStr);
+            personage.currentMana -= skillInData.manaCost;
 
             return damage;
         },
@@ -132,9 +147,13 @@ export default {
             return objectClone(personages).map((personage, index) => {
                 personage.index = index;
                 personage.type = type;
-                personage.maxHP = personage.hp;
-                personage.maxPower = personage.power;
-                personage.maxMana = personage.mana;
+
+                personage.maxHP = getParam('stamina', personage.stats.stamina, personage.lvl);
+                personage.currentHP = getParam('stamina', personage.stats.stamina, personage.lvl);
+
+                personage.currentMana = getParam('intelligence', personage.stats.intelligence, personage.lvl);
+                personage.maxMana = getParam('intelligence', personage.stats.intelligence, personage.lvl);
+
                 personage.img = `personages/${personage.avatar}/ava1.png`;
                 personage.position = 'default';
                 personage.isNowDoingHit = false;
@@ -147,6 +166,8 @@ export default {
             });
         },
         test(enemy) {
+            let uncorrectSelect = this.team.find(el => el.id === enemy); // выбрал свою же команду
+            if (uncorrectSelect) return;
             this.isSelectEnemy = true;
             this.enemySelected = enemy;
         },
@@ -169,8 +190,9 @@ export default {
             let type = '';
 
             this.allPersonages.forEach(personage => {
-                if (personage.str > maxPower) {
-                    maxPower = personage.str;
+                const getStr = getParam('strength', personage.stats.strength, personage.lvl);
+                if (getStr > maxPower) {
+                    maxPower = getStr;
                     type = personage.type;
                 }
             });
@@ -205,7 +227,7 @@ export default {
             if (isComputerTurn) {
                 setTimeout(() => {
                     this.isSelectEnemy = true; // Не ждем хода человека
-                }, 1000);
+                }, this.allTimers.enemyMoveDelay);
             }
             if (this.enemies.length === 0) {
                 return;
@@ -252,7 +274,7 @@ export default {
                         // Анимация Удара
                         currentPersonage.isNowDoingHit = true;
                         currentPersonage.animationName = currentSkillName;
-                        let animationDuration = skillInData.animationDuration || 500;
+                        let animationDuration = skillInData.animationDuration || this.allTimers.defaultAnimationDuration;
 
                         // Анимация получения повреждений после анимации атаки
                         setTimeout(() => {
@@ -267,23 +289,23 @@ export default {
 
                         setTimeout(() => {
                             currentEnemy.damagedNumAnimation = false;
-                        }, animationDuration + 1200);
+                        }, animationDuration + this.allTimers.takeDamageAnimation);
 
                         // После двух анимаций продолжение
                         setTimeout(() => {
                             currentEnemy.damagedAnimation = false;
 
                             // Отнять хп
-                            currentEnemy.hp -= calculateDamage;
+                            currentEnemy.currentHP -= calculateDamage;
 
                             // Если враг умер - вырезаем его из массива
-                            if (currentEnemy.hp <= 0) {
-                                currentEnemy.hp = 0;
+                            if (currentEnemy.currentHP <= 0) {
+                                currentEnemy.currentHP = 0;
                                 console.log('враг умер');
                                 let opponentTeamArray = isComputerTurn ? this.team : this.enemies;
 
                                 opponentTeamArray.forEach((personage, index) => {
-                                    if (personage.hp < 1) {
+                                    if (personage.currentHP < 1) {
                                         opponentTeamArray.splice(index, 1);
                                     }
                                 });
@@ -294,7 +316,7 @@ export default {
                                     this.isFightStatusVisible = true;
                                 }
                             }
-                        }, animationDuration + 300); // 300 мс длится анимация получения повреждений
+                        }, animationDuration + this.allTimers.damageAnimation); // 300 мс длится анимация получения повреждений
                         setTimeout(() => {
                             this.isMessageVisible = false;
                             // Вернуться на default позицию
@@ -309,11 +331,11 @@ export default {
                                 } else {
                                     this.computerMove(newArray, otherTeam);
                                 }
-                            }, 1000);
-                        }, animationDuration + 300 + 1000);
+                            }, this.allTimers.switchingTeammetes);
+                        }, animationDuration + this.allTimers.damageAnimation + this.allTimers.switchingTeammetes);
                     });
                 }
-            }, 500); // TODO: поменять на меньшее число. 50, 100, например
+            }, this.allTimers.mainInterval);
         },
         moveToCenter(personage) {
             personage.position = 'center';
@@ -327,7 +349,7 @@ export default {
             }
             setTimeout(() => {
                 this.shakeBgAnimation = '';
-            }, 300);
+            }, this.allTimers.shakeBgTimer);
         }
     }
 };

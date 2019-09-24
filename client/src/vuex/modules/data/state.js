@@ -2,6 +2,6 @@ export default {
     goods: '',
     missions: '',
     personages: '',
-    skills: '',
-    missionsNew: ''
+    missionsNew: '',
+    maximumEnergy: 120
 };

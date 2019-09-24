@@ -2,9 +2,10 @@ import Vue from 'vue';
 import App from './App.vue';
 import store from './vuex/store';
 import './scss/index.scss';
-import jsFiles from './js/skills.js';
+import skills from './js/skills.js';
+// import expTable from './js/expTable.js';
 
-window.skills = jsFiles;
+window.skills = skills;
 window.store = store; // TODO: is it correct?
 
 Vue.config.productionTip = false;

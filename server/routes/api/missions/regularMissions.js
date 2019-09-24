@@ -10,12 +10,12 @@ const regularMissions = [
 		id: 'e6ebd50e7',
 		recommended: 'Рекомендуемый уровень героя: 4',
 		img: 'regular/2.png'
-	},
-	{
-		name: 'Старый напарник',
-		id: 'ee882a728',
-		recommended: 'Рекомендуемый уровень героя: 7',
-		img: 'regular/3.png'
+	// },
+	// {
+	// 	name: 'Старый напарник',
+	// 	id: 'ee882a728',
+	// 	recommended: 'Рекомендуемый уровень героя: 7',
+	// 	img: 'regular/3.png'
 	// },
 	// {
 	// 	name: 'Где же доктор?',

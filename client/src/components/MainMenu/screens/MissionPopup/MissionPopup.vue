@@ -70,13 +70,14 @@
                                     :key="index"
                                     class="slider__child"
                                     :class="{'available' : isAvailable(index)}"
-                                    @click="selectChildMission(child.id)"
+                                    @click="selectChildMission(child.id, isAvailable(index))"
                                 >
-                                    {{index+1 + '. ' + child.name}}
                                     <div class="slider__img">
                                         <img :src="require(`img/missions/${child.img}`)" alt="">
                                     </div>
-                                    <div v-if="child.recommended" class="slider__recommended">{{child.recommended}}</div>
+                                    <div class="slider__name">name: {{index+1 + '. ' + child.name}}</div>
+                                    <div v-if="child.recommended" class="slider__recommended">recomended: {{child.recommended}}</div>
+                                    <div>status: {{getMissionStatus(child, index)}}</div>
                                 </div>
                             </div>
                         </div>
@@ -86,6 +87,7 @@
             <HeroChoose
                 v-if="isChooseHeroes"
                 :enemies="chooserEnemies"
+                :currentMission="currentMission"
                 @closeChooser="closeChooser"
                 @startFight="startFight"
             />
@@ -109,7 +111,8 @@ export default {
             chooserEnemies: [],
             currentMission: {},
             missionsNew: {},
-            currentMissionScreen: 'child'
+            currentMissionScreen: 'child',
+            currentMissionPassed: false
         };
     },
     computed: {
@@ -126,7 +129,7 @@ export default {
             });
         },
         ...mapGetters('data', ['getMissions', 'getMissionsNew']),
-        ...mapState('gameInfo', ['selectedMissionId'])
+        ...mapState('gameInfo', ['selectedMissionId', 'activeTeam'])
     },
     mounted() {
         this.missionsNew = this.getMissionsNew;
@@ -140,8 +143,9 @@ export default {
             this.currentMission = missionData;
         },
         startFight() {
-            // Вычесть energy TODO: доделать
-
+            // Вычесть energy
+            const { energyCost } = this.currentMission;
+            this.subtractEnergy({ activeTeam: this.activeTeam, energy: energyCost });
             // Передаем данные на арену
             this.setArenaInfo(this.currentMission);
             this.changeLocation('Arena');
@@ -156,7 +160,8 @@ export default {
             console.log('Меняем локацию');
             this.currentMissionScreen = 'parent';
         },
-        selectChildMission(missionId) {
+        selectChildMission(missionId, isAvailable) {
+            if (!isAvailable) return;
             this.currentMissionScreen = 'child';
             this.changeSelectedMission(missionId);
         },
@@ -169,11 +174,21 @@ export default {
             const isAllItemsPassed = mission.items.every(item => item.persentPass === 100);
             if (isAllItemsPassed) {
             // Все items текущей миссии пройдены, меняем currentRegularMission
-                this.changeCurrentRegMision(this.getMissionsNew.regularMissions[this.currentRegularMissionIndex + 1].id);
+                if (this.getMissionsNew.regularMissions[this.currentRegularMissionIndex + 1]) {
+                    this.changeCurrentRegMision(this.getMissionsNew.regularMissions[this.currentRegularMissionIndex + 1].id);
+                } else {
+                    this.currentMissionPassed = true;
+                }
             }
         },
+        getMissionStatus(mission, index) {
+            if (!this.isAvailable(index)) return 'close';
+            if (this.isAvailable(index + 1)) return 'passed';
+            if (this.currentMissionPassed) return 'passed';
+            return 'open';
+        },
         ...mapMutations('gameInfo', ['changeLocation', 'setArenaInfo', 'changeSelectedMission']),
-        ...mapMutations('data', ['changeCurrentRegMision'])
+        ...mapMutations('data', ['changeCurrentRegMision', 'subtractEnergy'])
     }
 };
 </script>
@@ -369,7 +384,7 @@ export default {
       width: 530px;
       height: 150px;
       margin-right: 20px;
-      border: 2px solid #eee;
+      // border: 2px solid #eee;
       position: relative;
       cursor: pointer;
       flex-shrink: 0;
@@ -392,11 +407,8 @@ export default {
         width: 100%;
       }
     }
-    &__recommended {
-      position: absolute;
-      bottom: -23px;
-      left: 0;
-    }
+    &__name {}
+    &__recommended {}
   }
 }
 /* .slide-enter-active, .slide-leave-active {

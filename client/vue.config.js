@@ -19,7 +19,8 @@ module.exports = {
             extensions: ['.js', '.vue'],
             alias: {
                 img: resolve('src/assets/img'),
-                utils: resolve('src/utils')
+                utils: resolve('src/utils'),
+                js: resolve('src/js')
             }
         },
         devServer: {

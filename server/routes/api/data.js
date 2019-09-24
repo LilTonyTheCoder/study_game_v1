@@ -7,15 +7,12 @@ const router = express.Router();
 const personages = require('./personages');
 // Валюты
 const goods = require('./goods');
-// Список скиллов
-const skills = require('./skills');
 // Новый список миссий
 const missionsNew = require('./missionsNew');
 
 const data = {
 	goods,
 	personages,
-	skills,
 	missionsNew
 };
 

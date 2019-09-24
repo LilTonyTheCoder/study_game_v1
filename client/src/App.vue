@@ -3,6 +3,7 @@
         <div class="app__inner">
             <Loading v-if="isLoading" :message="loadingMessage" />
             <component :is="currentLocation" />
+            <TimerCompo />
         </div>
     </div>
 </template>

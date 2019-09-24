@@ -2,8 +2,8 @@ const mission_e6ebd50e7 = {
 	id: 'e6ebd50e7',
 	items: [
 		{
-		  id: 'yhaejmmrn',
-		  name: 'Отъявленные отморозки 2',
+		  id: 'fbe072664',
+		  name: 'Отъявленные отморозки 1',
 		  energyCost: 1,
 		  persentPass: 0,
 		  reward: [
@@ -24,12 +24,15 @@ const mission_e6ebd50e7 = {
 		    {
 		      name: 'Амазония',
 		      id: 'vn0s8admf',
-		      lvl: 10,
-		      str: 10,
-		      def: 10,
-		      hp: 200,
-		      mana: 300,
-		      power: 100,
+		      stats: {
+					strength: 5,
+					deffence: 10,
+					agility: 1,
+					instinct: 1,
+					stamina: 10,
+					intelligence: 10
+			  },
+		      lvl: 1,
 					avatar: 'evil-trevor',
 					skills: [
 						{
@@ -37,34 +40,39 @@ const mission_e6ebd50e7 = {
 							lvl: 1
 						}
 					],
-		    }
-		  ]
-		},
-		{
-		  id: "x3fihmeym",
-		  name: 'Неприятная встреча 2',
-		  energyCost: 1,
-		  persentPass: 0,
-		  reward: [
-		  	  {
-		  	  	name: 'gold',
-		  	  	count: 10
-		  	  },
-		  	  {
-		  	  	name: 'xp',
-		  	  	count: 7
-		  	  }
-		  ],
-		  enemies: [
+		    },
 		    {
-		      name: 'Тревор',
-		      id: '9onei62zn',
-		      lvl: 20,
-		      str: 1000,
-		      def: 10,
-		      hp: 2000,
-		      mana: 300,
-		      power: 100,
+		      name: 'Амазония',
+		      id: 'd27b84c0e',
+		      stats: {
+					strength: 5,
+					deffence: 10,
+					agility: 1,
+					instinct: 1,
+					stamina: 10,
+					intelligence: 10
+			  },
+		      lvl: 1,
+					avatar: 'evil-trevor',
+					skills: [
+						{
+							name: 'default-hit',
+							lvl: 1
+						}
+					],
+		    },
+		    {
+		      name: 'Амазония',
+		      id: 'b47cd1055',
+		      stats: {
+					strength: 5,
+					deffence: 10,
+					agility: 1,
+					instinct: 1,
+					stamina: 10,
+					intelligence: 10
+			  },
+		      lvl: 1,
 					avatar: 'evil-trevor',
 					skills: [
 						{

@@ -32,6 +32,8 @@
     </div>
 </template>
 <script>
+import expTable from 'js/expTable';
+
 export default {
     name: 'FightStatus',
     props: {
@@ -41,7 +43,7 @@ export default {
         },
         rewardItems: {
             type: Array,
-            default: []
+            default: () => []
         }
     },
     data() {
@@ -51,20 +53,24 @@ export default {
         isWin() {
             return this.title === 'Победа!';
         },
-        ...mapState('gameInfo', ['currentArenaInfo', 'selectedMissionId']),
-        ...mapGetters('data', ['getMissions'])
+        ...mapState('gameInfo', ['currentArenaInfo', 'selectedMissionId', 'activeTeam']),
+        ...mapGetters('data', ['getMissions', 'getPersonages'])
     },
     methods: {
         goToMenu() {
             if (this.isWin) {
                 this.addReward();
             }
+            this.checkNewLevels(); // Проверка, мб кто то получил новый уровень
             this.setMissionProgress();
             this.changeLocation('MainMenu');
         },
         addReward() {
             this.rewardItems.forEach(item => {
-                if (item.name === 'xp') return; // TODO: засчитывать опыт всем персонажам юзера
+                if (item.name === 'xp') { // засчитываем опыт всем персонажам юзера
+                    this.addExperience({ activeTeam: this.activeTeam, xp: item.count });
+                    return;
+                }
                 this.addGoods({
                     name: item.name,
                     count: item.count
@@ -80,8 +86,16 @@ export default {
                 });
             }
         },
+        checkNewLevels() {
+            this.getPersonages.forEach(personage => {
+                if (personage.attributes.xp >= expTable[personage.lvl]) {
+                    personage.lvl += 1;
+                    alert(personage.name + ' получил новый уровень ' + personage.lvl + '!');
+                }
+            });
+        },
         ...mapMutations('gameInfo', ['changeLocation']),
-        ...mapMutations('data', ['addGoods', 'changeMissionProgress'])
+        ...mapMutations('data', ['addGoods', 'changeMissionProgress', 'addExperience'])
     }
 };
 </script>

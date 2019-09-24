@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="avatar">
-            <img :src="require(`img/personages/${currentPersonage.avatar}/big-ava.png`)" alt="">
+            <img :src="require(`img/personages/${currentPersonage.avatar}/ava1.png`)" alt="">
             <div class="skin-button">
                 <img src="" alt="">
             </div>
