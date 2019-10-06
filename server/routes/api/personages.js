@@ -12,7 +12,7 @@ const personages = [
 		},
 		attributes: {
 			energy: 10,
-			xp: 199
+			xp: 250
 		},
 		lvl: 2,
 		avatar: 'trevor',
@@ -48,10 +48,10 @@ const personages = [
 		},
 		attributes: {
 			energy: 20,
-			xp: 200
+			xp: 199
 		},
 		name: 'Амазония',
-		lvl: 2,
+		lvl: 1,
 		avatar: 'amazonia',
 		cost: 800,
 		skills: [

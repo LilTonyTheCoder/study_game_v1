@@ -1,5 +1,5 @@
 const goods = {
-	gold: 12 ,
+	gold: 1200,
 	platinum: 10,
 	power: 8
 };

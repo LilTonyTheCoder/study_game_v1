@@ -26,8 +26,7 @@ export default {
         ...mapState({
             isLoading: state => state.gameInfo.isLoading,
             currentLocation: state => state.gameInfo.currentLocation
-        }),
-        ...mapMutations('gameInfo', ['stopLoading'])
+        })
     },
     created() {
         setTimeout(() => { this.loadServerData(); }, 10); // загрузка данных
@@ -42,7 +41,8 @@ export default {
                 this.loadingMessage = err.message;
             }
         },
-        ...mapMutations('data', ['loadData'])
+        ...mapMutations('data', ['loadData']),
+        ...mapMutations('gameInfo', ['stopLoading'])
     }
 };
 </script>

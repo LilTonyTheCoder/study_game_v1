@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="timer">
-                <div class="plus-button">+</div>
+                <div v-if="!isEnergyFull" @click="buyFullEnergy()" class="plus-button">+</div>
                 <div>{{getFullRecoverEnergyTime}}</div>
             </div>
             <div class="xp">
@@ -70,8 +70,11 @@ export default {
             const { currentPersonage, experienceNeed, prevExperienceNeed } = this;
             return { width: 100 * (currentPersonage.attributes.xp - prevExperienceNeed) / (experienceNeed - prevExperienceNeed) + '%' };
         },
+        isEnergyFull() {
+            return this.currentPersonage.attributes.energy === this.maximumEnergy;
+        },
         getFullRecoverEnergyTime() {
-            if (this.currentPersonage.attributes.energy === this.maximumEnergy) return;
+            if (this.isEnergyFull) return;
             const energyTicker = this.tickers.find(el => el.name === 'addEnergy');
             const oneSecondTicker = this.tickers.find(el => el.name === 'oneSecondPass');
             let totalSec = ((this.maximumEnergy - this.currentPersonage.attributes.energy) / energyTicker.prop) * energyTicker.interval;
@@ -100,7 +103,23 @@ export default {
         calculateParam(key, value, lvl) {
             return getParam(key, value, lvl);
         },
-        ...mapMutations('data', ['buyPersonage'])
+        buyFullEnergy() {
+            const lvl = this.currentPersonage.lvl;
+            const energyTicker = this.tickers.find(el => el.name === 'addEnergy');
+            let intervalsNeeded = ((this.maximumEnergy - this.currentPersonage.attributes.energy) / energyTicker.prop);
+            const price = intervalsNeeded*lvl*10;
+            const agree = confirm(`Для полного восстановления энергии нужно ${price} золота. Оплатить?`);
+            if (agree) {
+                if (price>this.getGoods.gold) {
+                    alert('Не хватает золота');
+                } else {
+                    this.addGoods({name: 'gold', count: -price});
+                    this.addEnergyToOnePersonage({id: this.currentPersonage.id, amount: 9999});
+                }
+                return;
+            }
+        },
+        ...mapMutations('data', ['buyPersonage', 'addGoods', 'addEnergyToOnePersonage'])
     }
 };
 </script>

@@ -31,6 +31,11 @@ export default {
             personageInState.attributes.energy -= payload.energy;
         });
     },
+    addEnergyToOnePersonage(state, payload) {
+        const personageInState = state.personages.find(personage => personage.id === payload.id);
+        personageInState.attributes.energy += payload.amount;
+        if (personageInState.attributes.energy>state.maximumEnergy) personageInState.attributes.energy = state.maximumEnergy;
+    },
     increaseEnergy(state, payload) {
         state.personages.forEach(personage => {
             if (personage.attributes.energy >= state.maximumEnergy) return;

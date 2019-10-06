@@ -35,7 +35,7 @@
                     </div> -->
                 </div>
             </div>
-            <div class="heroes__study-button">
+            <div @click="goToLearningCompo()" class="heroes__study-button">
                 <img src="~img/box.png" alt="">
                 <div>Обучение</div>
             </div>
@@ -65,6 +65,9 @@ export default {
         },
         changeCurrent(index) {
             this.$emit('changeCurrent', index);
+        },
+        goToLearningCompo() {
+            this.changeMenuScreen('LearningCompo');
         },
         ...mapMutations('gameInfo', ['changeMenuScreen'])
     }
@@ -107,6 +110,7 @@ export default {
         font-weight: bold;
         box-sizing: border-box;
         padding: 10px 0;
+        cursor: pointer;
         img {
             width: 50px;
         }
