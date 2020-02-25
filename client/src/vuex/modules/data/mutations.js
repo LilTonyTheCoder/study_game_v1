@@ -42,5 +42,9 @@ export default {
             personage.attributes.energy += payload;
             if (personage.attributes.energy >= state.maximumEnergy) personage.attributes.energy = state.maximumEnergy;
         });
+    },
+    startPersonageTraining(state, id) {
+        let personage = state.personages.find(personage => personage.id === id);
+        personage.trainingStartsAt = new Date();
     }
 };

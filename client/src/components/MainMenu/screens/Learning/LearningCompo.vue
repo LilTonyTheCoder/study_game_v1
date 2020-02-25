@@ -4,13 +4,21 @@
         <div class="learning__title">Тренировка <div class="learning__subtitle">Прокачай героя по максимуму</div></div>
         <div class="learning__slider">
             <div class="learning__wrapper">
-                <div v-for="personage in getNoneMaxPersonages" class="learning__item item">
-                    <div class="item__name">{{personage.name}}</div>
-                    <div class="item__img"><img :src="require(`img/personages/${personage.avatar}/ava1.png`)" alt=""></div>
-                    <div class="item__lvl">Уровень {{personage.lvl}} -> Уровень {{personage.lvl+1}}</div>
+                <div v-for="personage in noneMaxLvlPersonages" class="learning__item item">
+                    <div class="item__name">{{ personage.name }}</div>
+                    <div class="item__img"><img :src="require(`img/personages/${ personage.avatar }/ava1.png`)" alt=""></div>
+                    <div class="item__lvl">Уровень {{ personage.lvl }} -> Уровень {{ personage.lvl + 1 }}</div>
                     <div class="item__timer">00 : 05 : 00</div>
-                    <div class="item__gold">cost: {{trainingPrice}}</div>
-                    <div @click="trainPersonage(personage.id)" class="item__btn">Тренировать</div>
+                    <div class="item__gold">cost: {{ trainingPrice }}</div>
+
+                    <div
+                        v-if="!personage.trainingStartsAt"
+                        @click="trainPersonage(personage.id)"
+                        class="item__btn"
+                    >
+                        Тренировать
+                    </div>
+                    <div v-else>Тренируемся</div>
                 </div>
             </div>
         </div>
@@ -25,20 +33,14 @@
             }
         },
         computed: {
-            getAvailablesPersonages() {
-                return this.getPersonages.filter(el => el.available);
+            maxLvl() {
+                const levelsArray = this.getAvailablesPersonages.map(el => el.lvl)
+                return Math.max.apply(null, levelsArray);
             },
-            getMaxLvl() {
-                let maxLvl = 1;
-                this.getAvailablesPersonages.forEach(personage => {
-                    if (personage.lvl>maxLvl) maxLvl = personage.lvl;
-                })
-                return maxLvl;
+            noneMaxLvlPersonages() {
+                return this.getAvailablesPersonages.filter(el => el.lvl < this.maxLvl);
             },
-            getNoneMaxPersonages() {
-                return this.getAvailablesPersonages.filter(el => el.lvl<this.getMaxLvl);
-            },
-            ...mapGetters('data', ['getPersonages', 'getGoods'])
+            ...mapGetters('data', ['getAvailablesPersonages', 'getGoods'])
         },
         methods: {
             goBackToHeroes() {
@@ -48,10 +50,12 @@
                 if (this.trainingPrice > this.getGoods.gold) {
                     alert('Не хватает денег');
                 } else {
-                    console.log('Начинаем тренировочку');
+                    console.log('Starts training');
+                    this.startPersonageTraining(id)
                 }
             },
-            ...mapMutations('gameInfo', ['changeMenuScreen'])
+            ...mapMutations('gameInfo', ['changeMenuScreen']),
+            ...mapMutations('data', ['startPersonageTraining'])
         }
     }
 </script>
