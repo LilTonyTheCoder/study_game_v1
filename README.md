@@ -1,13 +1,13 @@
-# Tonys Game
+# Anthony's game
 
-> A Vue.js projec
+> A Vue.js project
 
 ## Build Setup
 ``` bash
-# 1. Поднимаем 'сервер'. В корневой директории команды: 
+# 1. Поднимаем 'сервер'. В корневой директории. Команды: 
 npm i
 npm run dev
-# 2. Поднимаем vue приложение. В папке client команды:
+# 2. Поднимаем vue приложение. В папке client. Команды:
 npm i
 npm run dev
 # 3. Заходим в браузере localhost:8080
