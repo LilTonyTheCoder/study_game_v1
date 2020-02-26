@@ -1,6 +1,6 @@
 <template>
     <div class="learning">
-        <div @click="goBackToHeroes()" class="learning__close">X</div>
+        <div class="learning__close" @click="goBackToHeroes()">X</div>
         <div class="learning__title">Тренировка <div class="learning__subtitle">Прокачай героя по максимуму</div></div>
         <div class="learning__slider">
             <div class="learning__wrapper">
@@ -8,13 +8,13 @@
                     <div class="item__name">{{ personage.name }}</div>
                     <div class="item__img"><img :src="require(`img/personages/${ personage.avatar }/ava1.png`)" alt=""></div>
                     <div class="item__lvl">Уровень {{ personage.lvl }} -> Уровень {{ personage.lvl + 1 }}</div>
-                    <div class="item__timer">00 : 05 : 00</div>
+                    <div class="item__timer">{{ learningTimer(personage.id) }}</div>
                     <div class="item__gold">cost: {{ trainingPrice }}</div>
 
                     <div
                         v-if="!personage.trainingStartsAt"
-                        @click="trainPersonage(personage.id)"
                         class="item__btn"
+                        @click="trainPersonage(personage.id)"
                     >
                         Тренировать
                     </div>
@@ -25,39 +25,64 @@
     </div>
 </template>
 <script>
-    export default {
-        name: 'LearningCompo',
-        data() {
-            return {
-                trainingPrice: 100
+export default {
+    name: 'LearningCompo',
+    data() {
+        return {
+            trainingPrice: 100,
+            noneMaxLvlPersonages: [],
+        };
+    },
+    computed: {
+        maxLvl() {
+            const levelsArray = this.getAvailablesPersonages.map(el => el.lvl);
+            return Math.max.apply(null, levelsArray);
+        },
+        ...mapGetters('data', ['getAvailablesPersonages', 'getGoods']),
+        ...mapState('gameInfo', ['tickers'])
+    },
+
+    mounted() {
+        this.setPersonagesToData()
+    },
+
+    methods: {
+        setPersonagesToData() {
+            this.noneMaxLvlPersonages = this.getAvailablesPersonages.filter(el => el.lvl < this.maxLvl);
+        },
+        goBackToHeroes() {
+            this.changeMenuScreen('Heroes');
+        },
+        trainPersonage(id) {
+            if (this.trainingPrice > this.getGoods.gold) {
+                alert('Не хватает денег');
+            } else {
+                console.log('Starts training');
+                this.startPersonageTraining(id);
+                this.setPersonagesToData()
             }
         },
-        computed: {
-            maxLvl() {
-                const levelsArray = this.getAvailablesPersonages.map(el => el.lvl)
-                return Math.max.apply(null, levelsArray);
-            },
-            noneMaxLvlPersonages() {
-                return this.getAvailablesPersonages.filter(el => el.lvl < this.maxLvl);
-            },
-            ...mapGetters('data', ['getAvailablesPersonages', 'getGoods'])
+        learningTimer(personageId) {
+            const currentPersonage = this.getAvailablesPersonages.find(el => el.id === personageId)
+
+            if (!currentPersonage) return '00 : 03 : 00';
+            if (!currentPersonage.trainingStartsAt) return '00 : 03 : 00';
+
+            const energyTicker = currentPersonage.trainingStartsAt
+            const oneSecondTicker = this.tickers.find(el => el.name === 'oneSecondPass');
+
+            let totalSec = this.oneSecondTicker.lastTime - this.energyTicker
+            totalSec = Math.round(totalSec / 1000);
+            let min = Math.floor(totalSec / 60);
+            if (min < 10) min = '0' + min;
+            let sec = totalSec % 60;
+            if (sec < 10) sec = '0' + sec;
+            return `${min} : ${sec}`;
         },
-        methods: {
-            goBackToHeroes() {
-                this.changeMenuScreen('Heroes');
-            },
-            trainPersonage(id) {
-                if (this.trainingPrice > this.getGoods.gold) {
-                    alert('Не хватает денег');
-                } else {
-                    console.log('Starts training');
-                    this.startPersonageTraining(id)
-                }
-            },
-            ...mapMutations('gameInfo', ['changeMenuScreen']),
-            ...mapMutations('data', ['startPersonageTraining'])
-        }
+        ...mapMutations('gameInfo', ['changeMenuScreen']),
+        ...mapMutations('data', ['startPersonageTraining'])
     }
+};
 </script>
 <style scoped lang="scss">
     .learning {

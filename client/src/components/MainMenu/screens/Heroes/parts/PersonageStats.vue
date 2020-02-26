@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="timer">
-                <div v-if="!isEnergyFull" @click="buyFullEnergy()" class="plus-button">+</div>
+                <div v-if="!isEnergyFull" class="plus-button" @click="buyFullEnergy()">+</div>
                 <div>{{getFullRecoverEnergyTime}}</div>
             </div>
             <div class="xp">
@@ -104,19 +104,18 @@ export default {
             return getParam(key, value, lvl);
         },
         buyFullEnergy() {
-            const lvl = this.currentPersonage.lvl;
+            const { lvl } = this.currentPersonage;
             const energyTicker = this.tickers.find(el => el.name === 'addEnergy');
             let intervalsNeeded = ((this.maximumEnergy - this.currentPersonage.attributes.energy) / energyTicker.prop);
-            const price = intervalsNeeded*lvl*10;
+            const price = intervalsNeeded * lvl * 10;
             const agree = confirm(`Для полного восстановления энергии нужно ${price} золота. Оплатить?`);
             if (agree) {
-                if (price>this.getGoods.gold) {
+                if (price > this.getGoods.gold) {
                     alert('Не хватает золота');
                 } else {
-                    this.addGoods({name: 'gold', count: -price});
-                    this.addEnergyToOnePersonage({id: this.currentPersonage.id, amount: 9999});
+                    this.addGoods({ name: 'gold', count: -price });
+                    this.addEnergyToOnePersonage({ id: this.currentPersonage.id, amount: 9999 });
                 }
-                return;
             }
         },
         ...mapMutations('data', ['buyPersonage', 'addGoods', 'addEnergyToOnePersonage'])

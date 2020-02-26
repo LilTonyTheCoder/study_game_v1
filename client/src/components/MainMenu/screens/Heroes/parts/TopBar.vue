@@ -35,7 +35,7 @@
                     </div> -->
                 </div>
             </div>
-            <div @click="goToLearningCompo()" class="heroes__study-button">
+            <div class="heroes__study-button" @click="goToLearningCompo()">
                 <img src="~img/box.png" alt="">
                 <div>Обучение</div>
             </div>
